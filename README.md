@@ -84,8 +84,16 @@ Notes:
   its own; the state built by the preceding programs of the sequence is
   required. Use `repro/repro.kernsight.prog` (the full 49-program
   sequence, executed in file order).
-- `repro/repro.cprog` is the generated C reproducer for the full sequence
-  (compiles with `gcc -x c -O2 -pthread -o repro repro.cprog`).
+- `repro/repro.cprog` is the generated C reproducer for the full sequence.
+  It compiles (`gcc -x c -O2 -pthread -o repro repro.cprog`) but **does
+  not reproduce the hang**: the generated program loops the sequence in a
+  single process and never exits on its own; running it for 20+ minutes
+  and killing it at several points to force the exit path did not trigger
+  the hang in 4 attempts
+  (`logs/serial-7.3-c-repro-no-trigger.log`), while the syz program
+  sequence reproduced 2/2 in the same environment. The syz-text sequence
+  executed by `syz-execprog` (whose executor processes exit through the
+  usual `do_exit()` -> fput() path) remains the reliable reproducer.
 
 ## Repository layout
 
@@ -96,6 +104,7 @@ repro/repro.cprog                 generated C reproducer for the sequence
 logs/vtpm-sysrq-t-all-tasks.txt   sysrq-t task dump with the kworker stack
 logs/serial-7.3-manual-repro.log  manual replay: hung task + tpm timeouts + recovery
 logs/serial-7.3-auto-repro.log    automated state-primed reproduction (verified=true)
+logs/serial-7.3-c-repro-no-trigger.log C reproducer runs (no trigger, 4 attempts)
 logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no trigger)
 logs/report-7.3-*.txt, logs/log-7.3-*.txt  the 4 campaign instances
 logs/crash-title.txt              crash title
