@@ -1,0 +1,150 @@
+INFO: task syz.5.527:24814 blocked for more than 143 seconds.
+      Not tainted 7.3.0-kernsight-kasan #1
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz.5.527       state:D stack:27224 pid:24814 tgid:24814 ppid:16996  task_flags:0x400040 flags:0x00080002
+Call Trace:
+ <TASK>
+ context_switch build/kernel/sched/core.c:5533 [inline]
+ __schedule+0x134d/0x6880 build/kernel/sched/core.c:7284
+ __schedule_loop build/kernel/sched/core.c:7361 [inline]
+ schedule+0xec/0x2d0 build/kernel/sched/core.c:7376
+ schedule_timeout+0x24a/0x290 build/kernel/time/sleep_timeout.c:75
+ do_wait_for_common build/kernel/sched/completion.c:100 [inline]
+ __wait_for_common+0x1d3/0x4e0 build/kernel/sched/completion.c:121
+ __flush_work+0x6ab/0xd90 build/kernel/workqueue.c:4448
+ vtpm_proxy_work_stop build/drivers/char/tpm/tpm_vtpm_proxy.c:470 [inline]
+ vtpm_proxy_delete_device build/drivers/char/tpm/tpm_vtpm_proxy.c:590 [inline]
+ vtpm_proxy_fops_release+0xa8/0x1d0 build/drivers/char/tpm/tpm_vtpm_proxy.c:239
+ __fput+0x408/0xb60 build/fs/file_table.c:512
+ task_work_run+0x170/0x260 build/kernel/task_work.c:233
+ resume_user_mode_work build/include/linux/resume_user_mode.h:50 [inline]
+ __exit_to_user_mode_loop build/kernel/entry/common.c:70 [inline]
+ exit_to_user_mode_loop+0x254/0x650 build/kernel/entry/common.c:101
+ __exit_to_user_mode_prepare build/include/linux/irq-entry-common.h:207 [inline]
+ syscall_exit_to_user_mode_prepare build/include/linux/irq-entry-common.h:230 [inline]
+ syscall_exit_to_user_mode build/include/linux/entry-common.h:343 [inline]
+ do_syscall_64+0x5bb/0x7a0 build/arch/x86/entry/syscall_64.c:89
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fbfdf3b2b7d
+RSP: 002b:00007ffef02c2ca8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
+RAX: 0000000000000000 RBX: 00007fbfdf647da0 RCX: 00007fbfdf3b2b7d
+RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
+RBP: 00007fbfdf647da0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000019f50b
+R13: 00007fbfdf64627c R14: 00007fbfdf647da0 R15: 00007ffef02c2d70
+ </TASK>
+
+Showing all locks held in the system:
+locks held by khungtaskd/46: 1, last CPU#1:
+ #0: ffffffff90026f00 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire build/include/linux/rcupdate.h:309 [inline]
+ #0: ffffffff90026f00 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock build/include/linux/rcupdate.h:849 [inline]
+ #0: ffffffff90026f00 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x36/0x1c0 build/kernel/locking/lockdep.c:6871
+locks held by kworker/3:6/11678: 2, on CPU#3:
+ #0: ff11000104f03140 ((wq_completion)tpm-vtpm){+.+.}-{0:0}, at: process_one_work+0x150a/0x1dc0 build/kernel/workqueue.c:3371
+ #1: ffa0000013607d08 ((work_completion)(&proxy_dev->work)){+.+.}-{0:0}, at: process_one_work+0x9f6/0x1dc0 build/kernel/workqueue.c:3372
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 46 Comm: khungtaskd Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack build/lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1b0 build/lib/dump_stack.c:120
+ nmi_cpu_backtrace+0x2a0/0x350 build/lib/nmi_backtrace.c:123
+ nmi_trigger_cpumask_backtrace+0x286/0x370 build/lib/nmi_backtrace.c:66
+ trigger_all_cpu_backtrace build/include/linux/nmi.h:164 [inline]
+ __sys_info build/lib/sys_info.c:157 [inline]
+ sys_info+0x133/0x180 build/lib/sys_info.c:165
+ check_hung_uninterruptible_tasks build/kernel/hung_task.c:353 [inline]
+ watchdog+0xe96/0x1230 build/kernel/hung_task.c:561
+ kthread+0x395/0x4a0 build/kernel/kthread.c:436
+ ret_from_fork+0xb11/0xdb0 build/arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 build/arch/x86/entry/entry_64.S:245
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0,2-3:
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+RIP: 0010:pv_native_safe_halt+0x1e/0x30 build/arch/x86/kernel/paravirt.c:64
+Code: 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 66 90 0f 1f 44 00 00 0f 00 2d 59 dd 19 00 0f 1f 44 00 00 fb f4 <e9> cd 68 03 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 90 90 90 90
+RSP: 0018:ffffffff8fc07ce0 EFLAGS: 00000242
+RAX: 00000000006308b9 RBX: ffffffff8fc93640 RCX: ffffffff8bd273a9
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: fffffbfff1f926c8 R08: 0000000000000001 R09: ffe21c0014286875
+R10: ff110000a14343ab R11: 0000000000000001 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000013bd0
+FS:  0000000000000000(0000) GS:ff1100010b4be000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff9bcb0814c CR3: 00000000264b1000 CR4: 0000000000753ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ arch_safe_halt build/arch/x86/include/asm/paravirt.h:62 [inline]
+ default_idle+0xe/0x20 build/arch/x86/kernel/process.c:768
+ default_idle_call+0x75/0xc0 build/kernel/sched/idle.c:122
+ cpuidle_idle_call build/kernel/sched/idle.c:199 [inline]
+ do_idle+0x3fa/0x620 build/kernel/sched/idle.c:355
+ cpu_startup_entry+0x54/0x60 build/kernel/sched/idle.c:454
+ rest_init+0x1f3/0x330 build/init/main.c:732
+ start_kernel+0x3fa/0x4d0 build/init/main.c:1190
+ x86_64_start_reservations+0x18/0x30 build/arch/x86/kernel/head64.c:310
+ x86_64_start_kernel+0x141/0x1a0 build/arch/x86/kernel/head64.c:291
+ common_startup_64+0x13e/0x158
+ </TASK>
+NMI backtrace for cpu 3
+CPU: 3 UID: 0 PID: 0 Comm: swapper/3 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+RIP: 0010:pv_native_safe_halt+0x1e/0x30 build/arch/x86/kernel/paravirt.c:64
+Code: 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 66 90 0f 1f 44 00 00 0f 00 2d 59 dd 19 00 0f 1f 44 00 00 fb f4 <e9> cd 68 03 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 90 90 90 90
+RSP: 0018:ffa00000001bfdf8 EFLAGS: 00000242
+RAX: 00000000009d9615 RBX: ff110001000ba640 RCX: ffffffff8bd273a9
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffe21c00200174c8 R08: 0000000000000001 R09: ffe21c00347e6875
+R10: ff110001a3f343ab R11: 0000000000000001 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ff1100020dfbe000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa35209b3c0 CR3: 0000000027938000 CR4: 0000000000753ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ arch_safe_halt build/arch/x86/include/asm/paravirt.h:62 [inline]
+ default_idle+0xe/0x20 build/arch/x86/kernel/process.c:768
+ default_idle_call+0x75/0xc0 build/kernel/sched/idle.c:122
+ cpuidle_idle_call build/kernel/sched/idle.c:199 [inline]
+ do_idle+0x3fa/0x620 build/kernel/sched/idle.c:355
+ cpu_startup_entry+0x54/0x60 build/kernel/sched/idle.c:454
+ start_secondary+0x21d/0x2d0 build/arch/x86/kernel/smpboot.c:312
+ common_startup_64+0x13e/0x158
+ </TASK>
+NMI backtrace for cpu 2
+CPU: 2 UID: 0 PID: 0 Comm: swapper/2 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+RIP: 0010:pv_native_safe_halt+0x1e/0x30 build/arch/x86/kernel/paravirt.c:64
+Code: 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 66 90 0f 1f 44 00 00 0f 00 2d 59 dd 19 00 0f 1f 44 00 00 fb f4 <e9> cd 68 03 00 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 90 90 90 90
+RSP: 0018:ffa00000001afdf8 EFLAGS: 00000246
+RAX: 000000000080dbc5 RBX: ff110001000b8000 RCX: ffffffff8bd273a9
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffe21c0020017000 R08: 0000000000000001 R09: ffe21c00347c6875
+R10: ff110001a3e343ab R11: 0000000000000001 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ff1100020debe000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f229882fc3c CR3: 000000007d7ad000 CR4: 0000000000753ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ arch_safe_halt build/arch/x86/include/asm/paravirt.h:62 [inline]
+ default_idle+0xe/0x20 build/arch/x86/kernel/process.c:768
+ default_idle_call+0x75/0xc0 build/kernel/sched/idle.c:122
+ cpuidle_idle_call build/kernel/sched/idle.c:199 [inline]
+ do_idle+0x3fa/0x620 build/kernel/sched/idle.c:355
+ cpu_startup_entry+0x54/0x60 build/kernel/sched/idle.c:454
+ start_secondary+0x21d/0x2d0 build/arch/x86/kernel/smpboot.c:312
+ common_startup_64+0x13e/0x158
+ </TASK>
+
+<<<<<<<<<<<<<<< tail report >>>>>>>>>>>>>>>
+

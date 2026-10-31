@@ -1,0 +1,2427 @@
+[    0.000000][    T0] Linux version 7.3.0-kernsight-kasan (@16486d83ae9f) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP PREEMPT_DYNAMIC Tue Oct 20 12:39:27 UTC 2026
+[    0.000000][    T0] Command line: root=/dev/sda console=ttyS0 fstab=no rw net.ifnames=0 oops=panic panic=86400 hung_task_panic=0 softlockup_panic=0 nmi_watchdog=panic rcupdate.rcu_expedited=1
+[    0.000000][    T0] KERNEL supported cpus:
+[    0.000000][    T0]   Intel GenuineIntel
+[    0.000000][    T0]   AMD AuthenticAMD
+[    0.000000][    T0] BIOS-provided physical RAM map:
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff]  System RAM
+[    0.000000][    T0] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000000a0000-0x00000000000effff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000000100000-0x00000000bffdffff]  System RAM
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000bffe0000-0x00000000bfffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000c0000000-0x00000000feffbfff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000ff000000-0x00000000fffbffff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000100000000-0x00000001bfffffff]  System RAM
+[    0.000000][    T0] NX (Execute Disable) protection: active
+[    0.000000][    T0] APIC: Static calls initialized
+[    0.000000][    T0] DMI: SMBIOS 2.8 present.
+[    0.000000][    T0] DMI: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[    0.000000][    T0] DMI: Memory slots populated: 1/1
+[    0.000000][    T0] Hypervisor detected: KVM
+[    0.000000][    T0] last_pfn = 0xbffe0 max_arch_pfn = 0x10000000000
+[    0.000000][    T0] kvm-clock: Using msrs 4b564d01 and 4b564d00
+[    0.000003][    T0] kvm-clock: using sched offset of 1836260446 cycles
+[    0.000010][    T0] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000023][    T0] tsc: Detected 2893.200 MHz processor
+[    0.003441][    T0] last_pfn = 0x1c0000 max_arch_pfn = 0x10000000000
+[    0.003508][    T0] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+[    0.003519][    T0] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.003599][    T0] last_pfn = 0xbffe0 max_arch_pfn = 0x10000000000
+[    0.011856][    T0] found SMP MP-table at [mem 0x000f5ba0-0x000f5baf]
+[    0.011885][    T0] Using GB pages for direct mapping
+[    0.014778][    T0] ACPI: Early table checksum verification disabled
+[    0.014790][    T0] ACPI: RSDP 0x00000000000F59C0 000014 (v00 BOCHS )
+[    0.014813][    T0] ACPI: RSDT 0x00000000BFFE1A21 000034 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014834][    T0] ACPI: FACP 0x00000000BFFE18BD 000074 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014858][    T0] ACPI: DSDT 0x00000000BFFE0040 00187D (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014876][    T0] ACPI: FACS 0x00000000BFFE0000 000040
+[    0.014890][    T0] ACPI: APIC 0x00000000BFFE1931 000090 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014909][    T0] ACPI: HPET 0x00000000BFFE19C1 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014927][    T0] ACPI: WAET 0x00000000BFFE19F9 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.014943][    T0] ACPI: Reserving FACP table memory at [mem 0xbffe18bd-0xbffe1930]
+[    0.014950][    T0] ACPI: Reserving DSDT table memory at [mem 0xbffe0040-0xbffe18bc]
+[    0.014957][    T0] ACPI: Reserving FACS table memory at [mem 0xbffe0000-0xbffe003f]
+[    0.014963][    T0] ACPI: Reserving APIC table memory at [mem 0xbffe1931-0xbffe19c0]
+[    0.014970][    T0] ACPI: Reserving HPET table memory at [mem 0xbffe19c1-0xbffe19f8]
+[    0.014976][    T0] ACPI: Reserving WAET table memory at [mem 0xbffe19f9-0xbffe1a20]
+[    0.015765][    T0] No NUMA configuration found
+[    0.015770][    T0] Faking a node at [mem 0x0000000000000000-0x00000001bfffffff]
+[    0.015783][    T0] NODE_DATA(0) allocated [mem 0x1bfff7c40-0x1bfffdcbf]
+[    0.216361][    T0] KernelAddressSanitizer initialized (generic)
+[    0.216718][    T0] ACPI: PM-Timer IO Port: 0x608
+[    0.216754][    T0] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.216822][    T0] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+[    0.216836][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.216844][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.216852][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.216860][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.216887][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.216908][    T0] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.216914][    T0] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[    0.216926][    T0] TSC deadline timer available
+[    0.216933][    T0] CPU topo: Max. logical packages:   1
+[    0.216938][    T0] CPU topo: Max. logical nodes:      1
+[    0.216941][    T0] CPU topo: Num. nodes per package:  1
+[    0.216948][    T0] CPU topo: Max. logical dies:       1
+[    0.216952][    T0] CPU topo: Max. dies per package:   1
+[    0.216962][    T0] CPU topo: Max. threads per core:   1
+[    0.216966][    T0] CPU topo: Num. cores per package:     4
+[    0.216970][    T0] CPU topo: Num. threads per package:   4
+[    0.216974][    T0] CPU topo: Allowing 4 present CPUs plus 0 hotplug CPUs
+[    0.217030][    T0] kvm-guest: APIC: eoi() replaced with kvm_guest_apic_eoi_write()
+[    0.217081][    T0] kvm-guest: KVM setup pv remote TLB flush
+[    0.217090][    T0] kvm-guest: setup PV sched yield
+[    0.217133][    T0] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[    0.217143][    T0] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x000fffff]
+[    0.217153][    T0] PM: hibernation: Registered nosave memory: [mem 0xbffe0000-0xffffffff]
+[    0.217162][    T0] [gap 0xc0000000-0xfeffbfff] available for PCI devices
+[    0.217168][    T0] Booting paravirtualized kernel on KVM
+[    0.217177][    T0] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.273657][    T0] Zone ranges:
+[    0.273675][    T0]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.273689][    T0]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.273697][    T0]   Normal   [mem 0x0000000100000000-0x00000001bfffffff]
+[    0.273705][    T0]   Device   empty
+[    0.273710][    T0] Movable zone start for each node
+[    0.273713][    T0] Early memory node ranges
+[    0.273716][    T0]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.273723][    T0]   node   0: [mem 0x0000000000100000-0x00000000bffdffff]
+[    0.273729][    T0]   node   0: [mem 0x0000000100000000-0x00000001bfffffff]
+[    0.273736][    T0] Initmem setup node 0 [mem 0x0000000000001000-0x00000001bfffffff]
+[    0.298044][    T0] On node 0, zone DMA: 1 pages in unavailable ranges
+[    0.298217][    T0] On node 0, zone DMA: 97 pages in unavailable ranges
+[    0.355061][    T0] On node 0, zone Normal: 32 pages in unavailable ranges
+[    0.355135][    T0] setup_percpu: NR_CPUS:8 nr_cpumask_bits:4 nr_cpu_ids:4 nr_node_ids:1
+[    0.355741][    T0] percpu: Embedded 72 pages/cpu s255872 r8192 d30848 u524288
+[    0.355925][    T0] kvm-guest: PV spinlocks enabled
+[    0.355938][    T0] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+[    0.356059][    T0] Kernel command line: root=/dev/sda console=ttyS0 fstab=no rw net.ifnames=0 oops=panic panic=86400 hung_task_panic=0 softlockup_panic=0 nmi_watchdog=panic rcupdate.rcu_expedited=1
+[    0.357129][    T0] Unknown kernel command line parameters "fstab=no", will be passed to user space.
+[    0.357165][    T0] random: crng init done
+[    0.357169][    T0] printk: log buffer data + meta data: 262144 + 917504 = 1179648 bytes
+[    0.359195][    T0] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+[    0.360350][    T0] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+[    0.360886][    T0] software IO TLB: area num 4.
+[    0.383462][    T0] Fallback order for Node 0: 0 
+[    0.383480][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 1572734
+[    0.383487][    T0] Policy zone: Normal
+[    0.383494][    T0] mem auto-init: stack:off, heap alloc:on, heap free:off
+[    0.383500][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.383535][    T0] stackdepot hash table entries: 1048576 (order: 12, 16777216 bytes, linear)
+[    0.387132][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.387212][    T0] KHO: Failed to reserve nid 0 scratch buffer
+[    0.387220][    T0] KHO: Failed to reserve scratch area, disabling kexec handover
+[    0.759179][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.766765][    T0] allocated 12582912 bytes of page_ext
+[    0.857467][    T0] ftrace: allocating 149959 entries in 588 pages
+[    0.857479][    T0] ftrace: allocated 588 pages with 4 groups
+[    0.857887][    T0] Dynamic Preempt: full
+[    0.859107][    T0] Running RCU self tests
+[    0.859111][    T0] Running RCU synchronous self tests
+[    0.859115][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.859119][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.859122][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=4.
+[    0.859128][    T0] rcu: 	RCU callback double-/use-after-free debug is enabled.
+[    0.859132][    T0] rcu: 	RCU debug extended QS entry/exit.
+[    0.859135][    T0] 	All grace periods are expedited (rcu_expedited).
+[    0.859138][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.859141][    T0] 	Rude variant of Tasks RCU enabled.
+[    0.859144][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.859148][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+[    0.859153][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.859296][    T0] Running RCU synchronous self tests
+[    0.859309][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.859323][    T0] RCU Tasks Rude: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    1.065182][    T0] NR_IRQS: 4352, nr_irqs: 456, preallocated irqs: 16
+[    1.066040][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    1.066071][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    1.067121][    T0] Console: colour *CGA 80x25
+[    1.067342][    T0] printk: console [ttyS0] enabled
+[    1.179053][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    1.180002][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    1.180548][    T0] ... MAX_LOCK_DEPTH:          48
+[    1.181111][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    1.181686][    T0] ... CLASSHASH_SIZE:          4096
+[    1.182260][    T0] ... MAX_LOCKDEP_ENTRIES:     1048576
+[    1.182863][    T0] ... MAX_LOCKDEP_CHAINS:      1048576
+[    1.183466][    T0] ... CHAINHASH_SIZE:          524288
+[    1.184059][    T0]  memory used by lock dependency info: 106625 kB
+[    1.184767][    T0]  memory used for stack traces: 8320 kB
+[    1.185394][    T0]  per task-struct memory footprint: 1920 bytes
+[    1.186265][    T0] ACPI: Core revision 20260408
+[    1.187500][    T0] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[    1.188856][    T0] APIC: Switch to symmetric I/O mode setup
+[    1.189789][    T0] x2apic enabled
+[    1.190712][    T0] APIC: Switched APIC routing to: physical x2apic
+[    1.191442][    T0] kvm-guest: APIC: send_IPI_mask() replaced with kvm_send_ipi_mask()
+[    1.192338][    T0] kvm-guest: APIC: send_IPI_mask_allbutself() replaced with kvm_send_ipi_mask_allbutself()
+[    1.193445][    T0] kvm-guest: setup PV IPIs
+[    1.196118][    T0] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[    1.197339][    T0] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x29b42b9e5a5, max_idle_ns: 440795331394 ns
+[    1.198616][    T0] Calibrating delay loop (skipped) preset value.. 5786.40 BogoMIPS (lpj=28932000)
+[    1.208916][    T0] x86/cpu: User Mode Instruction Prevention (UMIP) activated
+[    1.210306][    T0] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+[    1.210989][    T0] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+[    1.211760][    T0] mitigations: Enabled attack vectors: user_kernel, user_user, guest_host, guest_guest, SMT mitigations: auto
+[    1.213039][    T0] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+[    1.214063][    T0] Spectre V2 : Mitigation: Enhanced / Automatic IBRS
+[    1.214791][    T0] ITS: Mitigation: Aligned branch/return thunks
+[    1.215471][    T0] TAA: Mitigation: Clear CPU buffers
+[    1.216046][    T0] MMIO Stale Data: Vulnerable: Clear CPU buffers attempted, no microcode
+[    1.216959][    T0] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+[    1.218617][    T0] Spectre V2 : WARNING: Unprivileged eBPF is enabled with eIBRS on, data leaks possible via Spectre v2 BHB attacks!
+[    1.220102][    T0] Spectre V2 : Spectre v2 / PBRSB-eIBRS: Retire a single CALL on VMEXIT
+[    1.221383][    T0] Spectre V2 : Enabling IBPB for BPF
+[    1.222085][    T0] Spectre V2 : mitigation: Enabling conditional Indirect Branch Prediction Barrier
+[    1.223462][    T0] GDS: Unknown: Dependent on hypervisor status
+[    1.224170][    T0] active return thunk: its_return_thunk
+[    1.224823][    T0] Spectre V2 : Spectre BHI mitigation: SW BHB clearing on syscall and VM exit
+[    1.225903][    T0] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    1.226889][    T0] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+[    1.227708][    T0] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+[    1.228617][    T0] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+[    1.229448][    T0] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+[    1.230269][    T0] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+[    1.231134][    T0] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+[    1.232121][    T0] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    1.232920][    T0] x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+[    1.233719][    T0] x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+[    1.234528][    T0] x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+[    1.235327][    T0] x86/fpu: xstate_offset[9]: 2432, xstate_sizes[9]:    8
+[    1.236246][    T0] x86/fpu: Enabled xstate features 0x2e7, context size is 2440 bytes, using 'compacted' format.
+[    1.469914][    T0] pid_max: default: 32768 minimum: 301
+[    1.471473][    T0] landlock: Up and running.
+[    1.471990][    T0] Yama: becoming mindful.
+[    1.472675][    T0] TOMOYO Linux initialized
+[    1.473806][    T0] AppArmor: AppArmor initialized
+[    1.475619][    T0] LSM support for eBPF active
+[    1.476756][    T0] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.477731][    T0] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.479845][    T0] VFS: Finished mounting rootfs on nullfs
+[    1.483948][    T0] Running RCU synchronous self tests
+[    1.484570][    T0] Running RCU synchronous self tests
+[    1.485814][    T1] smpboot: CPU0: Intel(R) Xeon(R) Gold 6326 CPU @ 2.90GHz (family: 0x6, model: 0x6a, stepping: 0x6)
+[    1.488608][    T1] Performance Events: Icelake events, 
+[    1.488608][    T1] core: The event 0x400 is not supported as a normal event.
+[    1.488608][    T1] core: The event 0x8000 is not supported as a normal event.
+[    1.488608][    T1] core: The event 0x8100 is not supported as a normal event.
+[    1.488608][    T1] core: The event 0x8200 is not supported as a normal event.
+[    1.488608][    T1] core: The event 0x8300 is not supported as a normal event.
+[    1.488608][    T1] full-width counters, Intel PMU driver.
+[    1.488608][    T1] ... version:                   2
+[    1.488634][    T1] ... bit width:                 48
+[    1.489429][    T1] ... generic counters:          8
+[    1.490254][    T1] ... generic bitmap:            00000000000000ff
+[    1.490995][    T1] ... fixed-purpose counters:    3
+[    1.491576][    T1] ... fixed-purpose bitmap:      0000000000000007
+[    1.492298][    T1] ... value mask:                0000ffffffffffff
+[    1.493019][    T1] ... max period:                00007fffffffffff
+[    1.493741][    T1] ... global_ctrl mask:          00000007000000ff
+[    1.495036][    T1] signal: max sigframe size: 3632
+[    1.495948][    T1] rcu: Hierarchical SRCU implementation.
+[    1.496589][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    1.497800][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    1.549239][    T1] smp: Bringing up secondary CPUs ...
+[    1.560311][    T1] smpboot: x86: Booting SMP configuration:
+[    1.561368][    T1] .... node  #0, CPUs:      #1 #2 #3
+[    1.569619][    T1] smp: Brought up 1 node, 4 CPUs
+[    1.569619][    T1] smpboot: Total of 4 processors activated (23145.60 BogoMIPS)
+[    1.572786][    T1] Memory: 4744692K/6290936K available (177581K kernel code, 46064K rwdata, 61996K rodata, 30452K init, 120340K bss, 1518632K reserved, 0K cma-reserved)
+[    1.581719][    T1] devtmpfs: initialized
+[    1.581719][    T1] x86/mm: Memory block size: 128MB
+[    1.624631][    T1] Running RCU synchronous self tests
+[    1.624631][    T1] Running RCU synchronous self tests
+[    1.628929][    T1] Running RCU Tasks wait API self tests
+[    1.629324][    T1] Running RCU Tasks Rude wait API self tests
+[    1.629335][    T1] Running RCU Tasks Trace wait API self tests
+[    1.630179][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    1.630179][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    1.632626][    T1] xor: automatically using best checksumming function   avx       
+[    1.641266][    T1] PM: RTC time: 14:21:59, date: 2026-10-31
+[    1.646029][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    1.650630][    T1] audit: initializing netlink subsys (disabled)
+[    1.651462][   T41] audit: type=2000 audit(1793456520.272:1): state=initialized audit_enabled=0 res=1
+[    1.668829][   T10] Callback from call_rcu_tasks_trace() invoked.
+[    1.911826][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    1.911967][    T1] cpuidle: using governor menu
+[    1.911967][    T1] NET: Registered PF_QIPCRTR protocol family
+[    1.913911][    T1] dca service started, version 1.12.1
+[    1.914679][    T1] PCI: Using configuration type 1 for base access
+[    1.919802][    T1] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+[    1.920952][    T1] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+[    1.920952][    T1] HugeTLB: 16380 KiB vmemmap can be freed for a 1.00 GiB page
+[    1.920952][    T1] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+[    1.920952][    T1] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+[    1.950333][    T1] raid6: using avx512x2 recovery algorithm
+[    1.952226][    T1] ACPI: Added _OSI(Module Device)
+[    1.952255][    T1] ACPI: Added _OSI(Processor Device)
+[    1.952277][    T1] ACPI: Added _OSI(Processor Aggregator Device)
+[    1.968713][   T38] Callback from call_rcu_tasks() invoked.
+[    2.009210][    T1] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[    2.038931][    T1] ACPI: \_SB_: platform _OSC: OS support mask [002e7eee]
+[    2.046777][    T1] ACPI: Interpreter enabled
+[    2.047093][    T1] ACPI: PM: (supports S0 S3 S4 S5)
+[    2.047123][    T1] ACPI: Using IOAPIC for interrupt routing
+[    2.047409][    T1] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    2.047418][    T1] PCI: Using E820 reservations for host bridge windows
+[    2.051319][    T1] ACPI: Enabled 2 GPEs in block 00 to 0F
+[    2.155322][    T1] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    2.155699][    T1] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+[    2.157754][    T1] PCI host bridge to bus 0000:00
+[    2.157950][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    2.157971][    T1] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    2.157989][    T1] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    2.158007][    T1] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[    2.158026][    T1] pci_bus 0000:00: root bus resource [mem 0x1c0000000-0x23fffffff window]
+[    2.158046][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    2.158249][    T1] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000 conventional PCI endpoint
+[    2.194707][    T1] pci 0000:00:01.0: [8086:7000] type 00 class 0x060100 conventional PCI endpoint
+[    2.197876][    T1] pci 0000:00:01.1: [8086:7010] type 00 class 0x010180 conventional PCI endpoint
+[    2.198519][    T1] pci 0000:00:01.1: BAR 4 [io  0xc040-0xc04f]
+[    2.198570][    T1] pci 0000:00:01.1: BAR 0 [io  0x01f0-0x01f7]: legacy IDE quirk
+[    2.198580][    T1] pci 0000:00:01.1: BAR 1 [io  0x03f6]: legacy IDE quirk
+[    2.198589][    T1] pci 0000:00:01.1: BAR 2 [io  0x0170-0x0177]: legacy IDE quirk
+[    2.198598][    T1] pci 0000:00:01.1: BAR 3 [io  0x0376]: legacy IDE quirk
+[    2.198608][    T1] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000 conventional PCI endpoint
+[    2.198608][    T1] pci 0000:00:01.3: quirk: [io  0x0600-0x063f] claimed by PIIX4 ACPI
+[    2.198608][    T1] pci 0000:00:01.3: quirk: [io  0x0700-0x070f] claimed by PIIX4 SMB
+[    2.198608][    T1] pci 0000:00:02.0: [8086:100e] type 00 class 0x020000 conventional PCI endpoint
+[    2.198608][    T1] pci 0000:00:02.0: BAR 0 [mem 0xfeb80000-0xfeb9ffff]
+[    2.198608][    T1] pci 0000:00:02.0: BAR 1 [io  0xc000-0xc03f]
+[    2.198608][    T1] pci 0000:00:02.0: ROM [mem 0xfeb00000-0xfeb7ffff pref]
+[    2.235264][    T1] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+[    2.238351][    T1] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+[    2.241942][    T1] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+[    2.244991][    T1] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+[    2.246187][    T1] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+[    2.261743][    T1] iommu: Default domain type: Translated
+[    2.261743][    T1] iommu: DMA domain TLB invalidation policy: lazy mode
+[    2.261774][    T1] SCSI subsystem initialized
+[    2.269679][    T1] ACPI: bus type USB registered
+[    2.270529][    T1] usbcore: registered new interface driver usbfs
+[    2.270921][    T1] usbcore: registered new interface driver hub
+[    2.271191][    T1] usbcore: registered new device driver usb
+[    2.273346][    T1] mc: Linux media interface: v0.10
+[    2.273491][    T1] videodev: Linux video capture interface: v2.00
+[    2.274477][    T1] pps_core: LinuxPPS API ver. 1 registered
+[    2.274484][    T1] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    2.274554][    T1] PTP clock support registered
+[    2.278898][    T1] EDAC MC: Ver: 3.0.0
+[    2.281178][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    2.284791][    T1] Bluetooth: Core ver 2.22
+[    2.284946][    T1] NET: Registered PF_BLUETOOTH protocol family
+[    2.284953][    T1] Bluetooth: HCI device and connection manager initialized
+[    2.284990][    T1] Bluetooth: HCI socket layer initialized
+[    2.285006][    T1] Bluetooth: L2CAP socket layer initialized
+[    2.285065][    T1] Bluetooth: SCO socket layer initialized
+[    2.285116][    T1] NET: Registered PF_ATMPVC protocol family
+[    2.285309][    T1] NetLabel: Initializing
+[    2.285313][    T1] NetLabel:  domain hash size = 128
+[    2.285319][    T1] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+[    2.285633][    T1] NetLabel:  unlabeled traffic allowed by default
+[    2.289317][    T1] nfc: nfc_init: NFC Core ver 0.1
+[    2.289809][    T1] NET: Registered PF_NFC protocol family
+[    2.289916][    T1] mctp: management component transport protocol core
+[    2.289923][    T1] NET: Registered PF_MCTP protocol family
+[    2.290115][    T1] PCI: Using ACPI for IRQ routing
+[    2.290277][    T1] e820: register RAM buffer resource [mem 0x0009fc00-0x0009ffff]
+[    2.290318][    T1] e820: register RAM buffer resource [mem 0xbffe0000-0xbfffffff]
+[    2.299476][    T1] vgaarb: loaded
+[    2.305389][    T1] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[    2.305504][    T1] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[    2.310997][    T1] clocksource: Switched to clocksource kvm-clock
+[    2.322873][    T1] VFS: Disk quotas dquot_6.6.0
+[    2.323091][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    2.328013][    T1] netfs: FS-Cache loaded
+[    2.328987][    T1] CacheFiles: Loaded
+[    2.329408][    T1] TOMOYO: 2.6.0
+[    2.329413][    T1] Mandatory Access Control activated.
+[    2.331856][    T1] AppArmor: AppArmor Filesystem Enabled
+[    2.332304][    T1] pnp: PnP ACPI init
+[    2.345156][    T1] pnp: PnP ACPI: found 5 devices
+[    2.394820][    T1] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    2.396426][    T1] NET: Registered PF_INET protocol family
+[    2.397208][    T1] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    2.401859][    T1] tcp_listen_portaddr_hash hash table entries: 4096 (order: 7, 294912 bytes, linear)
+[    2.401999][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    2.402577][    T1] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    2.406206][    T1] TCP bind hash table entries: 65536 (order: 12, 9437184 bytes, vmalloc hugepage)
+[    2.409262][    T1] TCP: Hash tables configured (established 65536 bind 65536)
+[    2.410629][    T1] MPTCP token hash table entries: 8192 (order: 8, 720896 bytes, linear)
+[    2.411071][    T1] UDP hash table entries: 4096 (order: 8, 1048576 bytes, linear)
+[    2.411998][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    2.421887][    T1] RPC: Registered named UNIX socket transport module.
+[    2.421912][    T1] RPC: Registered udp transport module.
+[    2.421925][    T1] RPC: Registered tcp transport module.
+[    2.421937][    T1] RPC: Registered tcp-with-tls transport module.
+[    2.421949][    T1] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    2.425093][    T1] NET: Registered PF_XDP protocol family
+[    2.425190][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+[    2.425205][    T1] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+[    2.425215][    T1] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+[    2.425227][    T1] pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfffff window]
+[    2.425237][    T1] pci_bus 0000:00: resource 8 [mem 0x1c0000000-0x23fffffff window]
+[    2.426023][    T1] pci 0000:00:01.0: PIIX3: Enabling Passive Release
+[    2.426047][    T1] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+[    2.426184][    T1] PCI: CLS 0 bytes, default 64
+[    2.426345][    T1] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+[    2.426351][    T1] software IO TLB: mapped [mem 0x00000000bbfe0000-0x00000000bffe0000] (64MB)
+[    2.426907][    T1] ACPI: bus type thunderbolt registered
+[    2.430624][    T1] RAPL PMU: API unit is 2^-32 Joules, 0 fixed counters, 10737418240 ms ovfl timer
+[    2.434585][   T68] kworker/u16:2 (68) used greatest stack depth: 28984 bytes left
+[    2.435495][   T69] kworker/u16:2 (69) used greatest stack depth: 28600 bytes left
+[    2.471229][    T1] kvm_amd: CPU 1 isn't AMD or Hygon
+[    2.471247][    T1] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x29b42b9e5a5, max_idle_ns: 440795331394 ns
+[    2.482159][   T77] kworker/u16:2 (77) used greatest stack depth: 27240 bytes left
+[    2.506986][    T1] Initialise system trusted keyrings
+[    2.508310][    T1] workingset: timestamp_bits=40 (anon: 35) max_order=21 bucket_order=0 (anon: 0)
+[    2.512523][    T1] DLM installed
+[    2.514846][    T1] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+[    2.522180][    T1] NFS: Registering the id_resolver key type
+[    2.522322][    T1] Key type id_resolver registered
+[    2.522333][    T1] Key type id_legacy registered
+[    2.523420][    T1] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    2.523532][    T1] nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+[    2.527991][    T1] ntfs3: Enabled Linux POSIX ACLs support
+[    2.528005][    T1] ntfs3: Read-only LZX/Xpress compression included
+[    2.528318][    T1] jffs2: version 2.2. (NAND) (SUMMARY)  © 2001-2006 Red Hat, Inc.
+[    2.529819][    T1] romfs: ROMFS MTD (C) 2007 Red Hat, Inc.
+[    2.530007][    T1] QNX4 filesystem 0.2.3 registered.
+[    2.530113][    T1] qnx6: QNX6 filesystem 1.0.0 registered.
+[    2.531054][    T1] fuse: init (API version 7.46)
+[    2.533973][    T1] orangefs_debugfs_init: called with debug mask: :none: :0:
+[    2.535471][    T1] orangefs_init: module version upstream loaded
+[    2.536547][    T1] JFS: nTxBlock = 8192, nTxLock = 65536
+[    2.555416][    T1] SGI XFS with ACLs, security attributes, realtime, scrub, repair, quota, fatal assert, debug enabled
+[    2.563896][    T1] 9p: Installing v9fs 9p2000 file system support
+[    2.564441][    T1] NILFS version 2 loaded
+[    2.564450][    T1] befs: version: 0.9.3
+[    2.565291][    T1] ocfs2: Registered cluster interface o2cb
+[    2.565962][    T1] ocfs2: Registered cluster interface user
+[    2.566493][    T1] OCFS2 User DLM kernel interface loaded
+[    2.580451][    T1] gfs2: GFS2 installed
+[    2.585711][    T1] ceph: loaded (mds proto 32)
+[    2.592228][    T1] NET: Registered PF_ALG protocol family
+[    2.592691][    T1] async_tx: api initialized (async)
+[    2.592724][    T1] Key type asymmetric registered
+[    2.592771][    T1] Asymmetric key parser 'x509' registered
+[    2.592788][    T1] Asymmetric key parser 'pkcs8' registered
+[    2.592804][    T1] Key type pkcs7_test registered
+[    2.592836][    T1] krb5: 
+[    2.592844][    T1] krb5: Running selftests
+[    2.592855][    T1] krb5: Running aes128-cts-hmac-sha256-128 prf
+[    2.593201][    T1] krb5: Running aes256-cts-hmac-sha384-192 prf
+[    2.593458][    T1] krb5: Running aes128-cts-hmac-sha256-128 key
+[    2.593869][    T1] krb5: Running aes256-cts-hmac-sha384-192 key
+[    2.594253][    T1] krb5: Running camellia128-cts-cmac key
+[    2.597219][    T1] krb5: Running camellia256-cts-cmac key
+[    2.597383][    T1] krb5: Running aes128-cts-hmac-sha256-128 enc no plain
+[    2.600391][    T1] krb5: Running aes128-cts-hmac-sha256-128 enc plain<block
+[    2.600524][    T1] krb5: Running aes128-cts-hmac-sha256-128 enc plain==block
+[    2.600656][    T1] krb5: Running aes128-cts-hmac-sha256-128 enc plain>block
+[    2.600780][    T1] krb5: Running aes256-cts-hmac-sha384-192 enc no plain
+[    2.602506][    T1] krb5: Running aes256-cts-hmac-sha384-192 enc plain<block
+[    2.603050][    T1] krb5: Running aes256-cts-hmac-sha384-192 enc plain==block
+[    2.603176][    T1] krb5: Running aes256-cts-hmac-sha384-192 enc plain>block
+[    2.603300][    T1] krb5: Running camellia128-cts-cmac enc no plain
+[    2.607165][    T1] krb5: Running camellia128-cts-cmac enc 1 plain
+[    2.607418][    T1] krb5: Running camellia128-cts-cmac enc 9 plain
+[    2.607621][    T1] krb5: Running camellia128-cts-cmac enc 13 plain
+[    2.607829][    T1] krb5: Running camellia128-cts-cmac enc 30 plain
+[    2.608058][    T1] krb5: Running camellia256-cts-cmac enc no plain
+[    2.608256][    T1] krb5: Running camellia256-cts-cmac enc 1 plain
+[    2.608461][    T1] krb5: Running camellia256-cts-cmac enc 9 plain
+[    2.608679][    T1] krb5: Running camellia256-cts-cmac enc 13 plain
+[    2.608919][    T1] krb5: Running camellia256-cts-cmac enc 30 plain
+[    2.609145][    T1] krb5: Running aes128-cts-hmac-sha256-128 mic
+[    2.609237][    T1] krb5: Running aes256-cts-hmac-sha384-192 mic
+[    2.609317][    T1] krb5: Running camellia128-cts-cmac mic abc
+[    2.609441][    T1] krb5: Running camellia128-cts-cmac mic ABC
+[    2.609555][    T1] krb5: Running camellia256-cts-cmac mic 123
+[    2.609668][    T1] krb5: Running camellia256-cts-cmac mic !@#
+[    2.609789][    T1] krb5: Selftests succeeded
+[    2.610174][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 238)
+[    2.611092][    T1] io scheduler mq-deadline registered
+[    2.611101][    T1] io scheduler kyber registered
+[    2.611358][    T1] io scheduler bfq registered
+[    2.612189][    T1] raid6: skipped pq benchmark and selected avx512x4
+[    2.621389][    T1] input: Power Button as /devices/platform/LNXPWRBN:00/input/input0
+[    2.624930][    T1] ACPI: button: Power Button [PWRF]
+[    2.639746][    T1] ioatdma: Intel(R) QuickData Technology Driver 5.00
+[    2.921196][    T1] N_HDLC line discipline registered with maxframe=4096
+[    2.921684][    T1] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+[    2.925724][    T1] 00:04: ttyS0 I/O:0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    2.948586][    T1] Non-volatile memory driver v1.3
+[    2.956918][    T1] usbcore: registered new interface driver xillyusb
+[    2.960853][    T1] ACPI: bus type drm_connector registered
+[    2.965549][    T1] [drm] Initialized vgem 1.0.0 for vgem on minor 0
+[    2.965812][    T1] usbcore: registered new interface driver udl
+[    2.968112][    T1] usbcore: registered new interface driver gm12u320
+[    2.968470][    T1] usbcore: registered new interface driver gud
+[    3.114839][    T1] loop: module loaded
+[    3.121089][    T1] zram: Added device: zram0
+[    3.122365][    T1] Guest personality initialized and is inactive
+[    3.123869][    T1] VMCI host device registered (name=vmci, major=10, minor=268)
+[    3.123879][    T1] Initialized host personality
+[    3.124114][    T1] usbcore: registered new interface driver rtsx_usb
+[    3.125104][    T1] usbcore: registered new interface driver viperboard
+[    3.125412][    T1] usbcore: registered new interface driver dln2
+[    3.125936][    T1] usbcore: registered new interface driver pn533_usb
+[    3.128252][    T1] nfcsim 0.2 initialized
+[    3.128480][    T1] usbcore: registered new interface driver port100
+[    3.128725][    T1] usbcore: registered new interface driver nfcmrvl
+[    3.131797][    T1] Loading iSCSI transport class v2.0-870.
+[    3.136035][    T1] st: Version 20160209, fixed bufsize 32768, s/g segs 256
+[    3.137934][    T1] Key type psk registered
+[    3.157650][    T1] scsi host0: ata_piix
+[    3.160462][    T1] scsi host1: ata_piix
+[    3.161566][    T1] ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc040 irq 14 lpm-pol 0
+[    3.161578][    T1] ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xc048 irq 15 lpm-pol 0
+[    3.165845][    T1] slram: not enough parameters.
+[    3.174898][    T1] ftl_cs: FTL header not found.
+[    3.204985][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    3.204997][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    3.205003][    T1] eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+[    3.211164][    T1] MACsec IEEE 802.1AE
+[    3.225261][    T1] usbcore: registered new interface driver mvusb_mdio
+[    3.225672][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    3.227472][    T1] vcan: Virtual CAN interface driver
+[    3.227518][    T1] vxcan: Virtual CAN Tunnel driver
+[    3.227557][    T1] slcan: serial line CAN interface driver
+[    3.227600][    T1] CAN device driver interface
+[    3.228088][    T1] usbcore: registered new interface driver usb_8dev
+[    3.228518][    T1] usbcore: registered new interface driver ems_usb
+[    3.228969][    T1] usbcore: registered new interface driver esd_usb
+[    3.229422][    T1] usbcore: registered new interface driver etas_es58x
+[    3.229869][    T1] usbcore: registered new interface driver f81604
+[    3.230338][    T1] usbcore: registered new interface driver gs_usb
+[    3.230810][    T1] usbcore: registered new interface driver kvaser_usb
+[    3.231086][ T1065] kworker/u16:7 (1065) used greatest stack depth: 26888 bytes left
+[    3.231211][    T1] usbcore: registered new interface driver mcba_usb
+[    3.231625][    T1] usbcore: registered new interface driver peak_usb
+[    3.231878][    T1] usbcore: registered new interface driver ucan
+[    3.232643][    T1] e100: Intel(R) PRO/100 Network Driver
+[    3.232652][    T1] e100: Copyright(c) 1999-2006 Intel Corporation
+[    3.233009][    T1] e1000: Intel(R) PRO/1000 Network Driver
+[    3.233015][    T1] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    3.323028][  T957] ata1: found unknown device (class 0)
+[    3.325191][  T962] ata2: found unknown device (class 0)
+[    3.326450][  T957] ata1.00: Model 'QEMU HARDDISK', rev '2.5+', applying quirks: bridgeok
+[    3.326531][  T957] ata1.00: ATA-7: QEMU HARDDISK, 2.5+, max UDMA/100
+[    3.326568][  T957] ata1.00: 12582912 sectors, multi 16: LBA48 
+[    3.327650][  T962] ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[    3.343671][   T12] scsi 0:0:0:0: Direct-Access     ATA      QEMU HARDDISK    2.5+ PQ: 0 ANSI: 5
+[    3.349457][   T12] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[    3.352277][   T46] scsi 1:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[    3.352374][  T968] sd 0:0:0:0: [sda] 12582912 512-byte logical blocks: (6.44 GB/6.00 GiB)
+[    3.352726][  T968] sd 0:0:0:0: [sda] Write Protect is off
+[    3.352988][  T968] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    3.353582][  T968] sd 0:0:0:0: [sda] Preferred minimum I/O size 512 bytes
+[    3.387382][  T968] sd 0:0:0:0: [sda] Attached SCSI disk
+[    3.455385][   T46] sr 1:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[    3.603929][   T46] cdrom: Uniform CD-ROM driver Revision: 3.20
+[    3.717431][   T46] sr 1:0:0:0: Attached scsi generic sg1 type 5
+[    6.304181][    T1] ACPI: \_SB_.LNKB: Enabled at IRQ 10
+[    6.664056][    T1] e1000 0000:00:02.0 eth0: (PCI:33MHz:32-bit) 52:54:00:12:34:56
+[    6.664100][    T1] e1000 0000:00:02.0 eth0: Intel(R) PRO/1000 Network Connection
+[    6.664463][    T1] e1000e: Intel(R) PRO/1000 Network Driver
+[    6.664468][    T1] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    6.664751][    T1] PPP generic driver version 2.4.2
+[    6.665613][    T1] PPP BSD Compression module registered
+[    6.665628][    T1] PPP Deflate Compression module registered
+[    6.665637][    T1] PPP MPPE Compression module registered
+[    6.665643][    T1] NET: Registered PF_PPPOX protocol family
+[    6.665689][    T1] PPTP driver version 0.8.5
+[    6.665853][    T1] SLIP: version 0.8.4-NET3.019-NEWTTY (dynamic channels, max=256) (6 bit encapsulation enabled).
+[    6.665861][    T1] CSLIP: code copyright 1989 Regents of the University of California.
+[    6.665865][    T1] SLIP linefill/keepalive option.
+[    6.665875][    T1] hdlc: HDLC support module revision 1.22
+[    6.665897][    T1] LAPB Ethernet driver version 0.02
+[    6.666577][    T1] usbcore: registered new interface driver ath9k_htc
+[    6.666805][    T1] usbcore: registered new interface driver carl9170
+[    6.667048][    T1] usbcore: registered new interface driver ath6kl_usb
+[    6.667265][    T1] usbcore: registered new interface driver ar5523
+[    6.667719][    T1] usbcore: registered new interface driver ath10k_usb
+[    6.667949][    T1] usbcore: registered new interface driver plfxlc
+[    6.668244][    T1] mac80211_hwsim: initializing netlink
+[    6.684850][    T1] usbcore: registered new interface driver atusb
+[    6.695011][    T1] mac802154_hwsim mac802154_hwsim: Added 2 mac802154 hwsim hardware radios
+[    6.695643][    T1] VMware vmxnet3 virtual NIC driver - version 1.9.0.0-k-NAPI
+[    6.696216][    T1] usbcore: registered new interface driver catc
+[    6.696484][    T1] usbcore: registered new interface driver kaweth
+[    6.696493][    T1] pegasus: Pegasus/Pegasus II USB Ethernet driver
+[    6.696804][    T1] usbcore: registered new interface driver pegasus
+[    6.697086][    T1] usbcore: registered new interface driver rtl8150
+[    6.697219][    T1] usbcore: registered new device driver r8152-cfgselector
+[    6.697703][    T1] usbcore: registered new interface driver r8152
+[    6.698542][    T1] usbcore: registered new interface driver hso
+[    6.698814][    T1] usbcore: registered new interface driver lan78xx
+[    6.699094][    T1] usbcore: registered new interface driver asix
+[    6.699359][    T1] usbcore: registered new interface driver ax88179_178a
+[    6.699633][    T1] usbcore: registered new interface driver cdc_ether
+[    6.700295][    T1] usbcore: registered new interface driver cdc_eem
+[    6.700565][    T1] usbcore: registered new interface driver dm9601
+[    6.700857][    T1] usbcore: registered new interface driver sr9700
+[    6.701120][    T1] usbcore: registered new interface driver CoreChips
+[    6.701378][    T1] usbcore: registered new interface driver smsc75xx
+[    6.701641][    T1] usbcore: registered new interface driver smsc95xx
+[    6.701927][    T1] usbcore: registered new interface driver gl620a
+[    6.702204][    T1] usbcore: registered new interface driver net1080
+[    6.702472][    T1] usbcore: registered new interface driver plusb
+[    6.702784][    T1] usbcore: registered new interface driver rndis_host
+[    6.703060][    T1] usbcore: registered new interface driver cdc_subset
+[    6.703321][    T1] usbcore: registered new interface driver zaurus
+[    6.703584][    T1] usbcore: registered new interface driver MOSCHIP usb-ethernet driver
+[    6.703863][    T1] usbcore: registered new interface driver int51x1
+[    6.704127][    T1] usbcore: registered new interface driver cdc_phonet
+[    6.704391][    T1] usbcore: registered new interface driver kalmia
+[    6.704649][    T1] usbcore: registered new interface driver ipheth
+[    6.704877][    T1] usbcore: registered new interface driver sierra_net
+[    6.705142][    T1] usbcore: registered new interface driver cx82310_eth
+[    6.705418][    T1] usbcore: registered new interface driver cdc_ncm
+[    6.705872][    T1] usbcore: registered new interface driver huawei_cdc_ncm
+[    6.706408][    T1] usbcore: registered new interface driver lg-vl600
+[    6.706849][    T1] usbcore: registered new interface driver qmi_wwan
+[    6.707136][    T1] usbcore: registered new interface driver cdc_mbim
+[    6.707406][    T1] usbcore: registered new interface driver ch9200
+[    6.707648][    T1] usbcore: registered new interface driver aqc111
+[    6.707869][    T1] usbcore: registered new interface driver r8153_ecm
+[    6.713801][    T1] VFIO - User Level meta-driver version: 0.3
+[    6.743504][    T1] aoe: AoE v85 initialised.
+[    6.758253][    T1] usbcore: registered new interface driver cdc_acm
+[    6.758266][    T1] cdc_acm: USB Abstract Control Model driver for USB modems and ISDN adapters
+[    6.758506][    T1] usbcore: registered new interface driver usblp
+[    6.758739][    T1] usbcore: registered new interface driver cdc_wdm
+[    6.758967][    T1] usbcore: registered new interface driver usbtmc
+[    6.759507][    T1] usbcore: registered new interface driver uas
+[    6.759731][    T1] usbcore: registered new interface driver usb-storage
+[    6.759929][    T1] usbcore: registered new interface driver ums-alauda
+[    6.760134][    T1] usbcore: registered new interface driver ums-cypress
+[    6.760338][    T1] usbcore: registered new interface driver ums-datafab
+[    6.760552][    T1] usbcore: registered new interface driver ums_eneub6250
+[    6.760756][    T1] usbcore: registered new interface driver ums-freecom
+[    6.760959][    T1] usbcore: registered new interface driver ums-isd200
+[    6.761159][    T1] usbcore: registered new interface driver ums-jumpshot
+[    6.761354][    T1] usbcore: registered new interface driver ums-karma
+[    6.761563][    T1] usbcore: registered new interface driver ums-onetouch
+[    6.761766][    T1] usbcore: registered new interface driver ums-realtek
+[    6.761957][    T1] usbcore: registered new interface driver ums-sddr09
+[    6.762155][    T1] usbcore: registered new interface driver ums-sddr55
+[    6.762344][    T1] usbcore: registered new interface driver ums-usbat
+[    6.762672][    T1] usbcore: registered new interface driver mdc800
+[    6.762679][    T1] mdc800: v0.7.5 (30/10/2000):USB Driver for Mustek MDC800 Digital Camera
+[    6.762896][    T1] usbcore: registered new interface driver microtekX6
+[    6.763915][    T1] usbcore: registered new interface driver usbserial_generic
+[    6.764226][    T1] usbserial: USB Serial support registered for generic
+[    6.764391][    T1] usbcore: registered new interface driver aircable
+[    6.764485][    T1] usbserial: USB Serial support registered for aircable
+[    6.764642][    T1] usbcore: registered new interface driver ark3116
+[    6.764726][    T1] usbserial: USB Serial support registered for ark3116
+[    6.764930][    T1] usbcore: registered new interface driver belkin_sa
+[    6.765015][    T1] usbserial: USB Serial support registered for Belkin / Peracom / GoHubs USB Serial Adapter
+[    6.765258][    T1] usbcore: registered new interface driver ch341
+[    6.765354][    T1] usbserial: USB Serial support registered for ch341-uart
+[    6.765511][    T1] usbcore: registered new interface driver cp210x
+[    6.765595][    T1] usbserial: USB Serial support registered for cp210x
+[    6.765757][    T1] usbcore: registered new interface driver cyberjack
+[    6.765966][    T1] usbserial: USB Serial support registered for Reiner SCT Cyberjack USB card reader
+[    6.766115][    T1] usbcore: registered new interface driver cypress_m8
+[    6.766200][    T1] usbserial: USB Serial support registered for DeLorme Earthmate USB
+[    6.766291][    T1] usbserial: USB Serial support registered for HID->COM RS232 Adapter
+[    6.766375][    T1] usbserial: USB Serial support registered for Nokia CA-42 V2 Adapter
+[    6.766525][    T1] usbcore: registered new interface driver usb_debug
+[    6.766609][    T1] usbserial: USB Serial support registered for debug
+[    6.766707][    T1] usbserial: USB Serial support registered for xhci_dbc
+[    6.766855][    T1] usbcore: registered new interface driver digi_acceleport
+[    6.766939][    T1] usbserial: USB Serial support registered for Digi 2 port USB adapter
+[    6.767164][    T1] usbserial: USB Serial support registered for Digi 4 port USB adapter
+[    6.767324][    T1] usbcore: registered new interface driver io_edgeport
+[    6.767410][    T1] usbserial: USB Serial support registered for Edgeport 2 port adapter
+[    6.767506][    T1] usbserial: USB Serial support registered for Edgeport 4 port adapter
+[    6.767599][    T1] usbserial: USB Serial support registered for Edgeport 8 port adapter
+[    6.767727][    T1] usbserial: USB Serial support registered for EPiC device
+[    6.767877][    T1] usbcore: registered new interface driver io_ti
+[    6.767963][    T1] usbserial: USB Serial support registered for Edgeport TI 1 port adapter
+[    6.768048][    T1] usbserial: USB Serial support registered for Edgeport TI 2 port adapter
+[    6.768203][    T1] usbcore: registered new interface driver empeg
+[    6.768288][    T1] usbserial: USB Serial support registered for empeg
+[    6.768532][    T1] usbcore: registered new interface driver f81534a_ctrl
+[    6.768696][    T1] usbcore: registered new interface driver f81232
+[    6.768798][    T1] usbserial: USB Serial support registered for f81232
+[    6.768891][    T1] usbserial: USB Serial support registered for f81534a
+[    6.769040][    T1] usbcore: registered new interface driver f81534
+[    6.769125][    T1] usbserial: USB Serial support registered for Fintek F81532/F81534
+[    6.769294][    T1] usbcore: registered new interface driver ftdi_sio
+[    6.769379][    T1] usbserial: USB Serial support registered for FTDI USB Serial Device
+[    6.769530][    T1] usbcore: registered new interface driver garmin_gps
+[    6.769615][    T1] usbserial: USB Serial support registered for Garmin GPS usb/tty
+[    6.769769][    T1] usbcore: registered new interface driver ipaq
+[    6.769855][    T1] usbserial: USB Serial support registered for PocketPC PDA
+[    6.770006][    T1] usbcore: registered new interface driver ipw
+[    6.770089][    T1] usbserial: USB Serial support registered for IPWireless converter
+[    6.770250][    T1] usbcore: registered new interface driver ir_usb
+[    6.770334][    T1] usbserial: USB Serial support registered for IR Dongle
+[    6.770488][    T1] usbcore: registered new interface driver iuu_phoenix
+[    6.770574][    T1] usbserial: USB Serial support registered for iuu_phoenix
+[    6.770729][    T1] usbcore: registered new interface driver keyspan
+[    6.770824][    T1] usbserial: USB Serial support registered for Keyspan - (without firmware)
+[    6.770909][    T1] usbserial: USB Serial support registered for Keyspan 1 port adapter
+[    6.771008][    T1] usbserial: USB Serial support registered for Keyspan 2 port adapter
+[    6.771106][    T1] usbserial: USB Serial support registered for Keyspan 4 port adapter
+[    6.771256][    T1] usbcore: registered new interface driver keyspan_pda
+[    6.771341][    T1] usbserial: USB Serial support registered for Keyspan PDA
+[    6.771426][    T1] usbserial: USB Serial support registered for Keyspan PDA - (prerenumeration)
+[    6.771583][    T1] usbcore: registered new interface driver kl5kusb105
+[    6.771758][    T1] usbserial: USB Serial support registered for KL5KUSB105D / PalmConnect
+[    6.771908][    T1] usbcore: registered new interface driver kobil_sct
+[    6.771993][    T1] usbserial: USB Serial support registered for KOBIL USB smart card terminal
+[    6.772150][    T1] usbcore: registered new interface driver mct_u232
+[    6.772245][    T1] usbserial: USB Serial support registered for MCT U232
+[    6.772398][    T1] usbcore: registered new interface driver metro_usb
+[    6.774046][    T1] usbserial: USB Serial support registered for Metrologic USB to Serial
+[    6.774228][    T1] usbcore: registered new interface driver mos7720
+[    6.774317][    T1] usbserial: USB Serial support registered for Moschip 2 port adapter
+[    6.774475][    T1] usbcore: registered new interface driver mos7840
+[    6.774561][    T1] usbserial: USB Serial support registered for Moschip 7840/7820 USB Serial Driver
+[    6.774722][    T1] usbcore: registered new interface driver mxuport
+[    6.774822][    T1] usbserial: USB Serial support registered for MOXA UPort
+[    6.774980][    T1] usbcore: registered new interface driver navman
+[    6.775066][    T1] usbserial: USB Serial support registered for navman
+[    6.775232][    T1] usbcore: registered new interface driver omninet
+[    6.775318][    T1] usbserial: USB Serial support registered for ZyXEL - omni.net usb
+[    6.775474][    T1] usbcore: registered new interface driver opticon
+[    6.775559][    T1] usbserial: USB Serial support registered for opticon
+[    6.775732][    T1] usbcore: registered new interface driver option
+[    6.775829][    T1] usbserial: USB Serial support registered for GSM modem (1-port)
+[    6.775980][    T1] usbcore: registered new interface driver oti6858
+[    6.776065][    T1] usbserial: USB Serial support registered for oti6858
+[    6.776303][    T1] usbcore: registered new interface driver pl2303
+[    6.776390][    T1] usbserial: USB Serial support registered for pl2303
+[    6.776539][    T1] usbcore: registered new interface driver qcaux
+[    6.776624][    T1] usbserial: USB Serial support registered for qcaux
+[    6.776781][    T1] usbcore: registered new interface driver qcserial
+[    6.776866][    T1] usbserial: USB Serial support registered for Qualcomm USB modem
+[    6.777016][    T1] usbcore: registered new interface driver quatech2
+[    6.777101][    T1] usbserial: USB Serial support registered for Quatech 2nd gen USB to Serial Driver
+[    6.777258][    T1] usbcore: registered new interface driver safe_serial
+[    6.777350][    T1] usbserial: USB Serial support registered for safe_serial
+[    6.777520][    T1] usbcore: registered new interface driver sierra
+[    6.777605][    T1] usbserial: USB Serial support registered for Sierra USB modem
+[    6.777763][    T1] usbcore: registered new interface driver usb_serial_simple
+[    6.778271][    T1] usbserial: USB Serial support registered for carelink
+[    6.778365][    T1] usbserial: USB Serial support registered for flashloader
+[    6.778543][    T1] usbserial: USB Serial support registered for funsoft
+[    6.778635][    T1] usbserial: USB Serial support registered for google
+[    6.778719][    T1] usbserial: USB Serial support registered for hp4x
+[    6.778804][    T1] usbserial: USB Serial support registered for kaufmann
+[    6.778889][    T1] usbserial: USB Serial support registered for libtransistor
+[    6.779009][    T1] usbserial: USB Serial support registered for moto_modem
+[    6.779400][    T1] usbserial: USB Serial support registered for motorola_tetra
+[    6.779487][    T1] usbserial: USB Serial support registered for nokia
+[    6.779573][    T1] usbserial: USB Serial support registered for novatel_gps
+[    6.779667][    T1] usbserial: USB Serial support registered for owon
+[    6.779752][    T1] usbserial: USB Serial support registered for siemens_mpi
+[    6.779838][    T1] usbserial: USB Serial support registered for suunto
+[    6.779922][    T1] usbserial: USB Serial support registered for vivopay
+[    6.780019][    T1] usbserial: USB Serial support registered for zio
+[    6.780450][    T1] usbcore: registered new interface driver spcp8x5
+[    6.780542][    T1] usbserial: USB Serial support registered for SPCP8x5
+[    6.780700][    T1] usbcore: registered new interface driver ssu100
+[    6.780793][    T1] usbserial: USB Serial support registered for Quatech SSU-100 USB to Serial Driver
+[    6.780961][    T1] usbcore: registered new interface driver symbolserial
+[    6.781049][    T1] usbserial: USB Serial support registered for symbol
+[    6.781202][    T1] usbcore: registered new interface driver ti_usb_3410_5052
+[    6.781298][    T1] usbserial: USB Serial support registered for TI USB 3410 1 port adapter
+[    6.781608][    T1] usbserial: USB Serial support registered for TI USB 5052 2 port adapter
+[    6.781764][    T1] usbcore: registered new interface driver upd78f0730
+[    6.781850][    T1] usbserial: USB Serial support registered for upd78f0730
+[    6.782008][    T1] usbcore: registered new interface driver visor
+[    6.782095][    T1] usbserial: USB Serial support registered for Handspring Visor / Palm OS
+[    6.782182][    T1] usbserial: USB Serial support registered for Sony Clie 5.0
+[    6.782754][    T1] usbserial: USB Serial support registered for Sony Clie 3.5
+[    6.782931][    T1] usbcore: registered new interface driver wishbone_serial
+[    6.783034][    T1] usbserial: USB Serial support registered for wishbone_serial
+[    6.783189][    T1] usbcore: registered new interface driver whiteheat
+[    6.783276][    T1] usbserial: USB Serial support registered for Connect Tech - WhiteHEAT - (prerenumeration)
+[    6.783379][    T1] usbserial: USB Serial support registered for Connect Tech - WhiteHEAT
+[    6.783537][    T1] usbcore: registered new interface driver xr_serial
+[    6.783971][    T1] usbserial: USB Serial support registered for xr_serial
+[    6.784135][    T1] usbcore: registered new interface driver xsens_mt
+[    6.784230][    T1] usbserial: USB Serial support registered for xsens_mt
+[    6.784457][    T1] usbcore: registered new interface driver adutux
+[    6.784684][    T1] usbcore: registered new interface driver appledisplay
+[    6.785098][    T1] usbcore: registered new interface driver cypress_cy7c63
+[    6.785328][    T1] usbcore: registered new interface driver cytherm
+[    6.785555][    T1] usbcore: registered new interface driver emi26 - firmware loader
+[    6.785773][    T1] usbcore: registered new interface driver emi62 - firmware loader
+[    6.785885][    T1] usbcore: registered new device driver apple-mfi-fastcharge
+[    6.786390][    T1] usbcore: registered new interface driver ljca
+[    6.786608][    T1] usbcore: registered new interface driver idmouse
+[    6.786912][    T1] usbcore: registered new interface driver iowarrior
+[    6.787341][    T1] usbcore: registered new interface driver isight_firmware
+[    6.787571][    T1] usbcore: registered new interface driver usblcd
+[    6.787794][    T1] usbcore: registered new interface driver ldusb
+[    6.788021][    T1] usbcore: registered new interface driver legousbtower
+[    6.788573][    T1] usbcore: registered new interface driver usbtest
+[    6.788806][    T1] usbcore: registered new interface driver usb_ehset_test
+[    6.789052][    T1] usbcore: registered new interface driver trancevibrator
+[    6.789596][    T1] usbcore: registered new interface driver uss720
+[    6.789603][    T1] uss720: USB Parport Cable driver for Cables using the Lucent Technologies USS720 Chip
+[    6.789608][    T1] uss720: NOTE: this is a special purpose driver to allow nonstandard
+[    6.789612][    T1] uss720: protocols (eg. bitbang) over USS720 usb to parallel cables
+[    6.789616][    T1] uss720: If you just want to connect to a printer, use usblp instead
+[    6.789839][    T1] usbcore: registered new interface driver usbsevseg
+[    6.790091][    T1] usbcore: registered new interface driver yurex
+[    6.791376][    T1] usbcore: registered new interface driver chaoskey
+[    6.791955][    T1] usbcore: registered new interface driver sisusb
+[    6.792275][    T1] usbcore: registered new interface driver lvs
+[    6.792493][    T1] usbcore: registered new interface driver cxacru
+[    6.793842][    T1] usbcore: registered new interface driver speedtch
+[    6.794079][    T1] usbcore: registered new interface driver ueagle-atm
+[    6.794086][    T1] xusbatm: malformed module parameters
+[    6.798253][    T1] dummy_hcd dummy_hcd.0: USB Host+Gadget Emulator, driver 02 May 2005
+[    6.798294][    T1] dummy_hcd dummy_hcd.0: Dummy host controller
+[    6.800125][    T1] dummy_hcd dummy_hcd.0: new USB bus registered, assigned bus number 1
+[    6.801575][    T1] usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.802413][    T1] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.802426][    T1] usb usb1: Product: Dummy host controller
+[    6.802434][    T1] usb usb1: Manufacturer: Linux 7.3.0-kernsight-kasan dummy_hcd
+[    6.802453][    T1] usb usb1: SerialNumber: dummy_hcd.0
+[    6.806528][    T1] hub 1-0:1.0: USB hub found
+[    6.806852][    T1] hub 1-0:1.0: 1 port detected
+[    6.816003][    T1] SPI driver max3420-udc has no spi_device_id for maxim,max3421-udc
+[    6.817369][    T1] gadgetfs: USB Gadget filesystem, version 24 Aug 2004
+[    6.820067][    T1] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+[    6.821046][    T1] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 2
+[    6.821597][    T1] vhci_hcd vhci_hcd.0: created sysfs vhci_hcd.0
+[    6.821791][    T1] usb usb2: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.822518][    T1] usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.822530][    T1] usb usb2: Product: USB/IP Virtual Host Controller
+[    6.822567][    T1] usb usb2: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.822576][    T1] usb usb2: SerialNumber: vhci_hcd.0
+[    6.826008][    T1] hub 2-0:1.0: USB hub found
+[    6.826462][    T1] hub 2-0:1.0: 8 ports detected
+[    6.835240][    T1] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+[    6.836070][    T1] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 3
+[    6.836435][    T1] usb usb3: We don't know the algorithms for LPM for this host, disabling LPM.
+[    6.836444][    T1] usb usb3: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    6.837178][    T1] usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.837190][    T1] usb usb3: Product: USB/IP Virtual Host Controller
+[    6.837198][    T1] usb usb3: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.837206][    T1] usb usb3: SerialNumber: vhci_hcd.0
+[    6.839719][    T1] hub 3-0:1.0: USB hub found
+[    6.839980][    T1] hub 3-0:1.0: 8 ports detected
+[    6.849907][    T1] vhci_hcd vhci_hcd.1: USB/IP Virtual Host Controller
+[    6.850664][    T1] vhci_hcd vhci_hcd.1: new USB bus registered, assigned bus number 4
+[    6.850823][    T1] usb usb4: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.851583][    T1] usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.851595][    T1] usb usb4: Product: USB/IP Virtual Host Controller
+[    6.851603][    T1] usb usb4: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.851611][    T1] usb usb4: SerialNumber: vhci_hcd.1
+[    6.856554][    T1] hub 4-0:1.0: USB hub found
+[    6.856822][    T1] hub 4-0:1.0: 8 ports detected
+[    6.866459][    T1] vhci_hcd vhci_hcd.1: USB/IP Virtual Host Controller
+[    6.867755][    T1] vhci_hcd vhci_hcd.1: new USB bus registered, assigned bus number 5
+[    6.868383][    T1] usb usb5: We don't know the algorithms for LPM for this host, disabling LPM.
+[    6.868396][    T1] usb usb5: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    6.869503][    T1] usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.869515][    T1] usb usb5: Product: USB/IP Virtual Host Controller
+[    6.869524][    T1] usb usb5: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.869532][    T1] usb usb5: SerialNumber: vhci_hcd.1
+[    6.872390][    T1] hub 5-0:1.0: USB hub found
+[    6.872617][    T1] hub 5-0:1.0: 8 ports detected
+[    6.881596][    T1] vhci_hcd vhci_hcd.2: USB/IP Virtual Host Controller
+[    6.882375][    T1] vhci_hcd vhci_hcd.2: new USB bus registered, assigned bus number 6
+[    6.882530][    T1] usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.883245][    T1] usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.883256][    T1] usb usb6: Product: USB/IP Virtual Host Controller
+[    6.883264][    T1] usb usb6: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.883273][    T1] usb usb6: SerialNumber: vhci_hcd.2
+[    6.885679][    T1] hub 6-0:1.0: USB hub found
+[    6.885875][    T1] hub 6-0:1.0: 8 ports detected
+[    6.893034][    T1] vhci_hcd vhci_hcd.2: USB/IP Virtual Host Controller
+[    6.894914][    T1] vhci_hcd vhci_hcd.2: new USB bus registered, assigned bus number 7
+[    6.895273][    T1] usb usb7: We don't know the algorithms for LPM for this host, disabling LPM.
+[    6.895282][    T1] usb usb7: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    6.895994][    T1] usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.896005][    T1] usb usb7: Product: USB/IP Virtual Host Controller
+[    6.896013][    T1] usb usb7: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.896022][    T1] usb usb7: SerialNumber: vhci_hcd.2
+[    6.898461][    T1] hub 7-0:1.0: USB hub found
+[    6.898680][    T1] hub 7-0:1.0: 8 ports detected
+[    6.908956][    T1] vhci_hcd vhci_hcd.3: USB/IP Virtual Host Controller
+[    6.909769][    T1] vhci_hcd vhci_hcd.3: new USB bus registered, assigned bus number 8
+[    6.909959][    T1] usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.910685][    T1] usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.910696][    T1] usb usb8: Product: USB/IP Virtual Host Controller
+[    6.910704][    T1] usb usb8: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.910713][    T1] usb usb8: SerialNumber: vhci_hcd.3
+[    6.913415][    T1] hub 8-0:1.0: USB hub found
+[    6.913622][    T1] hub 8-0:1.0: 8 ports detected
+[    6.926026][    T1] vhci_hcd vhci_hcd.3: USB/IP Virtual Host Controller
+[    6.926827][    T1] vhci_hcd vhci_hcd.3: new USB bus registered, assigned bus number 9
+[    6.927221][    T1] usb usb9: We don't know the algorithms for LPM for this host, disabling LPM.
+[    6.927231][    T1] usb usb9: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    6.927923][    T1] usb usb9: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.927935][    T1] usb usb9: Product: USB/IP Virtual Host Controller
+[    6.927943][    T1] usb usb9: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.927951][    T1] usb usb9: SerialNumber: vhci_hcd.3
+[    6.932367][    T1] hub 9-0:1.0: USB hub found
+[    6.932883][    T1] hub 9-0:1.0: 8 ports detected
+[    6.950241][    T1] vhci_hcd vhci_hcd.4: USB/IP Virtual Host Controller
+[    6.953039][    T1] vhci_hcd vhci_hcd.4: new USB bus registered, assigned bus number 10
+[    6.953337][    T1] usb usb10: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.954806][    T1] usb usb10: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.954823][    T1] usb usb10: Product: USB/IP Virtual Host Controller
+[    6.954837][    T1] usb usb10: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.954851][    T1] usb usb10: SerialNumber: vhci_hcd.4
+[    6.959499][    T1] hub 10-0:1.0: USB hub found
+[    6.959915][    T1] hub 10-0:1.0: 8 ports detected
+[    6.973504][    T1] vhci_hcd vhci_hcd.4: USB/IP Virtual Host Controller
+[    6.974275][    T1] vhci_hcd vhci_hcd.4: new USB bus registered, assigned bus number 11
+[    6.974617][    T1] usb usb11: We don't know the algorithms for LPM for this host, disabling LPM.
+[    6.974626][    T1] usb usb11: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    6.975374][    T1] usb usb11: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.975386][    T1] usb usb11: Product: USB/IP Virtual Host Controller
+[    6.975394][    T1] usb usb11: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.975403][    T1] usb usb11: SerialNumber: vhci_hcd.4
+[    6.977988][    T1] hub 11-0:1.0: USB hub found
+[    6.978196][    T1] hub 11-0:1.0: 8 ports detected
+[    6.987723][    T1] vhci_hcd vhci_hcd.5: USB/IP Virtual Host Controller
+[    6.989300][    T1] vhci_hcd vhci_hcd.5: new USB bus registered, assigned bus number 12
+[    6.989473][    T1] usb usb12: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    6.990179][    T1] usb usb12: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    6.990191][    T1] usb usb12: Product: USB/IP Virtual Host Controller
+[    6.990199][    T1] usb usb12: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    6.990208][    T1] usb usb12: SerialNumber: vhci_hcd.5
+[    6.992640][    T1] hub 12-0:1.0: USB hub found
+[    6.992848][    T1] hub 12-0:1.0: 8 ports detected
+[    7.000851][    T1] vhci_hcd vhci_hcd.5: USB/IP Virtual Host Controller
+[    7.001559][    T1] vhci_hcd vhci_hcd.5: new USB bus registered, assigned bus number 13
+[    7.001955][    T1] usb usb13: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.001964][    T1] usb usb13: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.002772][    T1] usb usb13: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.002784][    T1] usb usb13: Product: USB/IP Virtual Host Controller
+[    7.002793][    T1] usb usb13: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.002802][    T1] usb usb13: SerialNumber: vhci_hcd.5
+[    7.005228][    T1] hub 13-0:1.0: USB hub found
+[    7.005430][    T1] hub 13-0:1.0: 8 ports detected
+[    7.014925][    T1] vhci_hcd vhci_hcd.6: USB/IP Virtual Host Controller
+[    7.015654][    T1] vhci_hcd vhci_hcd.6: new USB bus registered, assigned bus number 14
+[    7.015811][    T1] usb usb14: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.016543][    T1] usb usb14: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.016554][    T1] usb usb14: Product: USB/IP Virtual Host Controller
+[    7.016562][    T1] usb usb14: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.016570][    T1] usb usb14: SerialNumber: vhci_hcd.6
+[    7.018957][    T1] hub 14-0:1.0: USB hub found
+[    7.019171][    T1] hub 14-0:1.0: 8 ports detected
+[    7.026250][    T1] vhci_hcd vhci_hcd.6: USB/IP Virtual Host Controller
+[    7.027482][    T1] vhci_hcd vhci_hcd.6: new USB bus registered, assigned bus number 15
+[    7.027828][    T1] usb usb15: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.027837][    T1] usb usb15: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.028530][    T1] usb usb15: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.028542][    T1] usb usb15: Product: USB/IP Virtual Host Controller
+[    7.028551][    T1] usb usb15: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.028560][    T1] usb usb15: SerialNumber: vhci_hcd.6
+[    7.031022][    T1] hub 15-0:1.0: USB hub found
+[    7.031215][    T1] hub 15-0:1.0: 8 ports detected
+[    7.040039][    T1] vhci_hcd vhci_hcd.7: USB/IP Virtual Host Controller
+[    7.040765][    T1] vhci_hcd vhci_hcd.7: new USB bus registered, assigned bus number 16
+[    7.040924][    T1] usb usb16: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.041641][    T1] usb usb16: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.041653][    T1] usb usb16: Product: USB/IP Virtual Host Controller
+[    7.041661][    T1] usb usb16: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.041670][    T1] usb usb16: SerialNumber: vhci_hcd.7
+[    7.044046][    T1] hub 16-0:1.0: USB hub found
+[    7.044245][    T1] hub 16-0:1.0: 8 ports detected
+[    7.053074][    T1] vhci_hcd vhci_hcd.7: USB/IP Virtual Host Controller
+[    7.053791][    T1] vhci_hcd vhci_hcd.7: new USB bus registered, assigned bus number 17
+[    7.054134][    T1] usb usb17: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.054143][    T1] usb usb17: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.054829][    T1] usb usb17: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.054840][    T1] usb usb17: Product: USB/IP Virtual Host Controller
+[    7.054849][    T1] usb usb17: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.054857][    T1] usb usb17: SerialNumber: vhci_hcd.7
+[    7.057918][    T1] hub 17-0:1.0: USB hub found
+[    7.058110][    T1] hub 17-0:1.0: 8 ports detected
+[    7.067259][    T1] vhci_hcd vhci_hcd.8: USB/IP Virtual Host Controller
+[    7.068498][    T1] vhci_hcd vhci_hcd.8: new USB bus registered, assigned bus number 18
+[    7.068651][    T1] usb usb18: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.070659][    T1] usb usb18: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.070671][    T1] usb usb18: Product: USB/IP Virtual Host Controller
+[    7.070679][    T1] usb usb18: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.070687][    T1] usb usb18: SerialNumber: vhci_hcd.8
+[    7.073284][    T1] hub 18-0:1.0: USB hub found
+[    7.073974][    T1] hub 18-0:1.0: 8 ports detected
+[    7.087772][    T1] vhci_hcd vhci_hcd.8: USB/IP Virtual Host Controller
+[    7.089306][    T1] vhci_hcd vhci_hcd.8: new USB bus registered, assigned bus number 19
+[    7.089753][    T1] usb usb19: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.089765][    T1] usb usb19: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.090757][    T1] usb usb19: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.090772][    T1] usb usb19: Product: USB/IP Virtual Host Controller
+[    7.090783][    T1] usb usb19: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.090794][    T1] usb usb19: SerialNumber: vhci_hcd.8
+[    7.094445][    T1] hub 19-0:1.0: USB hub found
+[    7.095036][    T1] hub 19-0:1.0: 8 ports detected
+[    7.106319][    T1] vhci_hcd vhci_hcd.9: USB/IP Virtual Host Controller
+[    7.107113][    T1] vhci_hcd vhci_hcd.9: new USB bus registered, assigned bus number 20
+[    7.107266][    T1] usb usb20: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.107978][    T1] usb usb20: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.107989][    T1] usb usb20: Product: USB/IP Virtual Host Controller
+[    7.107997][    T1] usb usb20: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.108006][    T1] usb usb20: SerialNumber: vhci_hcd.9
+[    7.110487][    T1] hub 20-0:1.0: USB hub found
+[    7.110697][    T1] hub 20-0:1.0: 8 ports detected
+[    7.119384][    T1] vhci_hcd vhci_hcd.9: USB/IP Virtual Host Controller
+[    7.120511][    T1] vhci_hcd vhci_hcd.9: new USB bus registered, assigned bus number 21
+[    7.120842][    T1] usb usb21: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.120851][    T1] usb usb21: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.121522][    T1] usb usb21: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.121533][    T1] usb usb21: Product: USB/IP Virtual Host Controller
+[    7.121541][    T1] usb usb21: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.121550][    T1] usb usb21: SerialNumber: vhci_hcd.9
+[    7.124011][    T1] hub 21-0:1.0: USB hub found
+[    7.124208][    T1] hub 21-0:1.0: 8 ports detected
+[    7.135291][    T1] vhci_hcd vhci_hcd.10: USB/IP Virtual Host Controller
+[    7.138874][    T1] vhci_hcd vhci_hcd.10: new USB bus registered, assigned bus number 22
+[    7.139053][    T1] usb usb22: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.139893][    T1] usb usb22: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.139908][    T1] usb usb22: Product: USB/IP Virtual Host Controller
+[    7.139918][    T1] usb usb22: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.139928][    T1] usb usb22: SerialNumber: vhci_hcd.10
+[    7.142833][    T1] hub 22-0:1.0: USB hub found
+[    7.143084][    T1] hub 22-0:1.0: 8 ports detected
+[    7.152997][    T1] vhci_hcd vhci_hcd.10: USB/IP Virtual Host Controller
+[    7.153948][    T1] vhci_hcd vhci_hcd.10: new USB bus registered, assigned bus number 23
+[    7.154276][    T1] usb usb23: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.154285][    T1] usb usb23: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.154942][    T1] usb usb23: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.154953][    T1] usb usb23: Product: USB/IP Virtual Host Controller
+[    7.154961][    T1] usb usb23: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.154979][    T1] usb usb23: SerialNumber: vhci_hcd.10
+[    7.157469][    T1] hub 23-0:1.0: USB hub found
+[    7.157681][    T1] hub 23-0:1.0: 8 ports detected
+[    7.167794][    T1] vhci_hcd vhci_hcd.11: USB/IP Virtual Host Controller
+[    7.168702][    T1] vhci_hcd vhci_hcd.11: new USB bus registered, assigned bus number 24
+[    7.168857][    T1] usb usb24: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.169564][    T1] usb usb24: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.169575][    T1] usb usb24: Product: USB/IP Virtual Host Controller
+[    7.169583][    T1] usb usb24: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.169592][    T1] usb usb24: SerialNumber: vhci_hcd.11
+[    7.172612][    T1] hub 24-0:1.0: USB hub found
+[    7.172810][    T1] hub 24-0:1.0: 8 ports detected
+[    7.180000][    T1] vhci_hcd vhci_hcd.11: USB/IP Virtual Host Controller
+[    7.181086][    T1] vhci_hcd vhci_hcd.11: new USB bus registered, assigned bus number 25
+[    7.181446][    T1] usb usb25: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.181455][    T1] usb usb25: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.182158][    T1] usb usb25: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.182170][    T1] usb usb25: Product: USB/IP Virtual Host Controller
+[    7.182179][    T1] usb usb25: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.182187][    T1] usb usb25: SerialNumber: vhci_hcd.11
+[    7.185202][    T1] hub 25-0:1.0: USB hub found
+[    7.185408][    T1] hub 25-0:1.0: 8 ports detected
+[    7.194791][    T1] vhci_hcd vhci_hcd.12: USB/IP Virtual Host Controller
+[    7.195541][    T1] vhci_hcd vhci_hcd.12: new USB bus registered, assigned bus number 26
+[    7.195696][    T1] usb usb26: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.196381][    T1] usb usb26: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.196392][    T1] usb usb26: Product: USB/IP Virtual Host Controller
+[    7.196400][    T1] usb usb26: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.196409][    T1] usb usb26: SerialNumber: vhci_hcd.12
+[    7.199097][    T1] hub 26-0:1.0: USB hub found
+[    7.199292][    T1] hub 26-0:1.0: 8 ports detected
+[    7.206823][    T1] vhci_hcd vhci_hcd.12: USB/IP Virtual Host Controller
+[    7.207573][    T1] vhci_hcd vhci_hcd.12: new USB bus registered, assigned bus number 27
+[    7.207911][    T1] usb usb27: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.207920][    T1] usb usb27: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.208575][    T1] usb usb27: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.208586][    T1] usb usb27: Product: USB/IP Virtual Host Controller
+[    7.208594][    T1] usb usb27: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.208602][    T1] usb usb27: SerialNumber: vhci_hcd.12
+[    7.211917][    T1] hub 27-0:1.0: USB hub found
+[    7.212139][    T1] hub 27-0:1.0: 8 ports detected
+[    7.229248][    T1] vhci_hcd vhci_hcd.13: USB/IP Virtual Host Controller
+[    7.230345][    T1] vhci_hcd vhci_hcd.13: new USB bus registered, assigned bus number 28
+[    7.230498][    T1] usb usb28: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.231198][    T1] usb usb28: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.231210][    T1] usb usb28: Product: USB/IP Virtual Host Controller
+[    7.231218][    T1] usb usb28: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.231226][    T1] usb usb28: SerialNumber: vhci_hcd.13
+[    7.233730][    T1] hub 28-0:1.0: USB hub found
+[    7.233921][    T1] hub 28-0:1.0: 8 ports detected
+[    7.241436][    T1] vhci_hcd vhci_hcd.13: USB/IP Virtual Host Controller
+[    7.242336][    T1] vhci_hcd vhci_hcd.13: new USB bus registered, assigned bus number 29
+[    7.243065][    T1] usb usb29: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.243074][    T1] usb usb29: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.243730][    T1] usb usb29: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.243741][    T1] usb usb29: Product: USB/IP Virtual Host Controller
+[    7.243749][    T1] usb usb29: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.243757][    T1] usb usb29: SerialNumber: vhci_hcd.13
+[    7.246247][    T1] hub 29-0:1.0: USB hub found
+[    7.246438][    T1] hub 29-0:1.0: 8 ports detected
+[    7.255663][    T1] vhci_hcd vhci_hcd.14: USB/IP Virtual Host Controller
+[    7.256493][    T1] vhci_hcd vhci_hcd.14: new USB bus registered, assigned bus number 30
+[    7.256642][    T1] usb usb30: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.257320][    T1] usb usb30: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.257331][    T1] usb usb30: Product: USB/IP Virtual Host Controller
+[    7.257339][    T1] usb usb30: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.257347][    T1] usb usb30: SerialNumber: vhci_hcd.14
+[    7.260015][    T1] hub 30-0:1.0: USB hub found
+[    7.260418][    T1] hub 30-0:1.0: 8 ports detected
+[    7.268892][    T1] vhci_hcd vhci_hcd.14: USB/IP Virtual Host Controller
+[    7.269704][    T1] vhci_hcd vhci_hcd.14: new USB bus registered, assigned bus number 31
+[    7.270371][    T1] usb usb31: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.270386][    T1] usb usb31: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.271152][    T1] usb usb31: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.271164][    T1] usb usb31: Product: USB/IP Virtual Host Controller
+[    7.271172][    T1] usb usb31: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.271180][    T1] usb usb31: SerialNumber: vhci_hcd.14
+[    7.274880][    T1] hub 31-0:1.0: USB hub found
+[    7.275175][    T1] hub 31-0:1.0: 8 ports detected
+[    7.283902][    T1] vhci_hcd vhci_hcd.15: USB/IP Virtual Host Controller
+[    7.285600][    T1] vhci_hcd vhci_hcd.15: new USB bus registered, assigned bus number 32
+[    7.285749][    T1] usb usb32: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 7.03
+[    7.286448][    T1] usb usb32: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.286459][    T1] usb usb32: Product: USB/IP Virtual Host Controller
+[    7.286467][    T1] usb usb32: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.286476][    T1] usb usb32: SerialNumber: vhci_hcd.15
+[    7.289135][    T1] hub 32-0:1.0: USB hub found
+[    7.289344][    T1] hub 32-0:1.0: 8 ports detected
+[    7.297075][    T1] vhci_hcd vhci_hcd.15: USB/IP Virtual Host Controller
+[    7.297774][    T1] vhci_hcd vhci_hcd.15: new USB bus registered, assigned bus number 33
+[    7.298132][    T1] usb usb33: We don't know the algorithms for LPM for this host, disabling LPM.
+[    7.298141][    T1] usb usb33: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 7.03
+[    7.298859][    T1] usb usb33: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+[    7.298870][    T1] usb usb33: Product: USB/IP Virtual Host Controller
+[    7.298878][    T1] usb usb33: Manufacturer: Linux 7.3.0-kernsight-kasan vhci_hcd
+[    7.298886][    T1] usb usb33: SerialNumber: vhci_hcd.15
+[    7.301851][    T1] hub 33-0:1.0: USB hub found
+[    7.302050][    T1] hub 33-0:1.0: 8 ports detected
+[    7.311894][    T1] usbcore: registered new device driver usbip-host
+[    7.318257][    T1] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    7.320593][    T1] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    7.321679][    T1] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    7.324390][    T1] mousedev: PS/2 mouse device common for all mice
+[    7.326045][    T1] usbcore: registered new interface driver appletouch
+[    7.326445][    T1] usbcore: registered new interface driver bcm5974
+[    7.328988][ T1139] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[    7.329673][    T1] usbcore: registered new interface driver synaptics_usb
+[    7.330088][    T1] usbcore: registered new interface driver iforce
+[    7.330460][    T1] usbcore: registered new interface driver pxrc
+[    7.331028][    T1] usbcore: registered new interface driver xpad
+[    7.331460][    T1] usbcore: registered new interface driver usb_acecad
+[    7.332815][    T1] usbcore: registered new interface driver aiptek
+[    7.333424][    T1] usbcore: registered new interface driver hanwang
+[    7.333970][    T1] usbcore: registered new interface driver kbtab
+[    7.334473][    T1] usbcore: registered new interface driver pegasus_notetaker
+[    7.335146][    T1] usbcore: registered new interface driver usbtouchscreen
+[    7.335770][    T1] usbcore: registered new interface driver sur40
+[    7.336382][    T1] usbcore: registered new interface driver ati_remote2
+[    7.336395][    T1] cm109: Keymap for Komunikate KIP1000 phone loaded
+[    7.336970][    T1] usbcore: registered new interface driver cm109
+[    7.336981][    T1] cm109: CM109 phone driver: 20080805 (C) Alfred E. Heggestad
+[    7.337465][    T1] usbcore: registered new interface driver ims_pcu
+[    7.338460][    T1] usbcore: registered new interface driver keyspan_remote
+[    7.339143][    T1] usbcore: registered new interface driver powermate
+[    7.340839][    T1] usbcore: registered new interface driver yealink
+[    7.349881][    T1] rtc_cmos PNP0B00:00: RTC can wake from S4
+[    7.355355][    T1] rtc_cmos PNP0B00:00: registered as rtc0
+[    7.355477][    T1] rtc_cmos PNP0B00:00: alarms up to one day, y3k, 242 bytes nvram, hpet irqs
+[    7.356532][    T1] i2c_dev: i2c /dev entries driver
+[    7.357604][    T1] usbcore: registered new interface driver i2c-diolan-u2c
+[    7.358742][    T1] usbcore: registered new interface driver i2c-cp2615
+[    7.359220][    T1] usbcore: registered new interface driver RobotFuzz Open Source InterFace, OSIF
+[    7.359660][    T1] usbcore: registered new interface driver i2c-tiny-usb
+[    7.362059][    T1] usbcore: registered new interface driver igorplugusb
+[    7.362325][    T1] usbcore: registered new interface driver iguanair
+[    7.362649][    T1] usbcore: registered new interface driver imon
+[    7.362915][    T1] usbcore: registered new interface driver imon_raw
+[    7.363282][    T1] usbcore: registered new interface driver mceusb
+[    7.363540][    T1] usbcore: registered new interface driver redrat3
+[    7.363802][    T1] usbcore: registered new interface driver streamzap
+[    7.364076][    T1] usbcore: registered new interface driver ir_toy
+[    7.364340][    T1] usbcore: registered new interface driver ttusbir
+[    7.364616][    T1] usbcore: registered new interface driver ati_remote
+[    7.364879][    T1] usbcore: registered new interface driver xbox_remote
+[    7.365735][    T1] usbcore: registered new interface driver b2c2_flexcop_usb
+[    7.366000][    T1] usbcore: registered new interface driver dvb_usb_vp7045
+[    7.366278][    T1] usbcore: registered new interface driver dvb_usb_vp702x
+[    7.366544][    T1] usbcore: registered new interface driver dvb_usb_gp8psk
+[    7.366830][    T1] usbcore: registered new interface driver dvb_usb_dtt200u
+[    7.367114][    T1] usbcore: registered new interface driver dvb_usb_a800
+[    7.368029][    T1] usbcore: registered new interface driver dvb_usb_dibusb_mb
+[    7.368357][    T1] usbcore: registered new interface driver dvb_usb_dibusb_mc
+[    7.368623][    T1] usbcore: registered new interface driver dvb_usb_nova_t_usb2
+[    7.368888][    T1] usbcore: registered new interface driver dvb_usb_umt_010
+[    7.369167][    T1] usbcore: registered new interface driver dvb_usb_m920x
+[    7.369437][    T1] usbcore: registered new interface driver dvb_usb_digitv
+[    7.369720][    T1] usbcore: registered new interface driver dvb_usb_cxusb
+[    7.369997][    T1] usbcore: registered new interface driver dvb_usb_ttusb2
+[    7.370361][    T1] usbcore: registered new interface driver dvb_usb_dib0700
+[    7.370625][    T1] usbcore: registered new interface driver opera1
+[    7.370910][    T1] usbcore: registered new interface driver dvb_usb_af9005
+[    7.370927][    T1] failing symbol_get of non-GPLONLY symbol af9005_rc_decode.
+[    7.371297][    T1] failing symbol_get of non-GPLONLY symbol af9005_rc_decode.
+[    7.371306][    T1] failing symbol_get of non-GPLONLY symbol rc_map_af9005_table.
+[    7.371656][    T1] failing symbol_get of non-GPLONLY symbol rc_map_af9005_table.
+[    7.371663][    T1] failing symbol_get of non-GPLONLY symbol rc_map_af9005_table_size.
+[    7.371994][    T1] failing symbol_get of non-GPLONLY symbol rc_map_af9005_table_size.
+[    7.372000][    T1] af9005: af9005_rc_decode function not found, disabling remote
+[    7.372287][    T1] usbcore: registered new interface driver pctv452e
+[    7.373777][    T1] usbcore: registered new interface driver dw2102
+[    7.374056][    T1] usbcore: registered new interface driver dvb_usb_dtv5100
+[    7.374335][    T1] usbcore: registered new interface driver cinergyT2
+[    7.374608][    T1] usbcore: registered new interface driver dvb_usb_az6027
+[    7.374879][    T1] usbcore: registered new interface driver dvb_usb_technisat_usb2
+[    7.375185][    T1] usbcore: registered new interface driver dvb_usb_af9015
+[    7.375471][    T1] usbcore: registered new interface driver dvb_usb_af9035
+[    7.375888][    T1] usbcore: registered new interface driver dvb_usb_anysee
+[    7.376349][    T1] usbcore: registered new interface driver dvb_usb_au6610
+[    7.376825][    T1] usbcore: registered new interface driver dvb_usb_az6007
+[    7.377231][    T1] usbcore: registered new interface driver dvb_usb_ce6230
+[    7.377517][    T1] usbcore: registered new interface driver dvb_usb_ec168
+[    7.377956][    T1] usbcore: registered new interface driver dvb_usb_lmedm04
+[    7.378382][    T1] usbcore: registered new interface driver dvb_usb_gl861
+[    7.378826][    T1] usbcore: registered new interface driver dvb_usb_mxl111sf
+[    7.379279][    T1] usbcore: registered new interface driver dvb_usb_rtl28xxu
+[    7.379636][    T1] usbcore: registered new interface driver dvb_usb_dvbsky
+[    7.379935][    T1] usbcore: registered new interface driver zd1301
+[    7.380263][    T1] usbcore: registered new interface driver s2255
+[    7.380665][    T1] usbcore: registered new interface driver smsusb
+[    7.380999][    T1] usbcore: registered new interface driver ttusb
+[    7.381328][    T1] usbcore: registered new interface driver ttusb-dec
+[    7.381673][    T1] usbcore: registered new interface driver Abilis Systems as10x usb driver
+[    7.381998][    T1] usbcore: registered new interface driver airspy
+[    7.382341][    T1] usbcore: registered new interface driver benq
+[    7.382708][    T1] usbcore: registered new interface driver conex
+[    7.383067][    T1] usbcore: registered new interface driver cpia1
+[    7.383396][    T1] usbcore: registered new interface driver dtcs033
+[    7.383731][    T1] usbcore: registered new interface driver etoms
+[    7.384086][    T1] usbcore: registered new interface driver finepix
+[    7.384421][    T1] usbcore: registered new interface driver jeilinj
+[    7.385003][    T1] usbcore: registered new interface driver jl2005bcd
+[    7.385593][    T1] usbcore: registered new interface driver kinect
+[    7.386368][    T1] usbcore: registered new interface driver konica
+[    7.387055][    T1] usbcore: registered new interface driver mars
+[    7.387753][    T1] usbcore: registered new interface driver mr97310a
+[    7.388473][    T1] usbcore: registered new interface driver nw80x
+[    7.389197][    T1] usbcore: registered new interface driver ov519
+[    7.389869][    T1] usbcore: registered new interface driver ov534
+[    7.390544][    T1] usbcore: registered new interface driver ov534_9
+[    7.391255][    T1] usbcore: registered new interface driver pac207
+[    7.391983][    T1] usbcore: registered new interface driver gspca_pac7302
+[    7.392734][    T1] usbcore: registered new interface driver pac7311
+[    7.393409][    T1] usbcore: registered new interface driver se401
+[    7.394048][    T1] usbcore: registered new interface driver sn9c2028
+[    7.394558][    T1] usbcore: registered new interface driver gspca_sn9c20x
+[    7.394927][    T1] usbcore: registered new interface driver sonixb
+[    7.395277][    T1] usbcore: registered new interface driver sonixj
+[    7.395583][    T1] usbcore: registered new interface driver spca500
+[    7.395856][    T1] usbcore: registered new interface driver spca501
+[    7.396220][    T1] usbcore: registered new interface driver spca505
+[    7.396489][    T1] usbcore: registered new interface driver spca506
+[    7.396774][    T1] usbcore: registered new interface driver spca508
+[    7.397053][    T1] usbcore: registered new interface driver spca561
+[    7.397343][    T1] usbcore: registered new interface driver spca1528
+[    7.397615][    T1] usbcore: registered new interface driver sq905
+[    7.397898][    T1] usbcore: registered new interface driver sq905c
+[    7.398174][    T1] usbcore: registered new interface driver sq930x
+[    7.398502][    T1] usbcore: registered new interface driver sunplus
+[    7.398764][    T1] usbcore: registered new interface driver stk014
+[    7.399056][    T1] usbcore: registered new interface driver stk1135
+[    7.399334][    T1] usbcore: registered new interface driver stv0680
+[    7.399604][    T1] usbcore: registered new interface driver t613
+[    7.399895][    T1] usbcore: registered new interface driver gspca_topro
+[    7.400302][    T1] usbcore: registered new interface driver touptek
+[    7.400598][    T1] usbcore: registered new interface driver tv8532
+[    7.400880][    T1] usbcore: registered new interface driver vc032x
+[    7.401155][    T1] usbcore: registered new interface driver vicam
+[    7.401456][    T1] usbcore: registered new interface driver xirlink-cit
+[    7.401785][    T1] usbcore: registered new interface driver gspca_zc3xx
+[    7.402051][    T1] usbcore: registered new interface driver ALi m5602
+[    7.402331][    T1] usbcore: registered new interface driver STV06xx
+[    7.402645][    T1] usbcore: registered new interface driver gspca_gl860
+[    7.402938][    T1] usbcore: registered new interface driver hackrf
+[    7.403230][    T1] usbcore: registered new interface driver msi2500
+[    7.403532][    T1] usbcore: registered new interface driver Philips webcam
+[    7.403989][    T1] usbcore: registered new interface driver uvcvideo
+[    7.403997][    T1] au0828: au0828 driver loaded
+[    7.404309][    T1] usbcore: registered new interface driver au0828
+[    7.404619][    T1] usbcore: registered new interface driver cx231xx
+[    7.405091][    T1] usbcore: registered new interface driver em28xx
+[    7.405123][    T1] em28xx: Registered (Em28xx v4l2 Extension) extension
+[    7.405130][    T1] em28xx: Registered (Em28xx Audio Extension) extension
+[    7.405136][    T1] em28xx: Registered (Em28xx dvb Extension) extension
+[    7.405141][    T1] em28xx: Registered (Em28xx Input Extension) extension
+[    7.405428][    T1] usbcore: registered new interface driver go7007
+[    7.405701][    T1] usbcore: registered new interface driver go7007-loader
+[    7.406075][    T1] usbcore: registered new interface driver hdpvr
+[    7.406834][    T1] usbcore: registered new interface driver pvrusb2
+[    7.406841][    T1] pvrusb2: V4L in-tree version:Hauppauge WinTV-PVR-USB2 MPEG2 Encoder/Tuner
+[    7.406845][    T1] pvrusb2: Debug mask is 31 (0x1f)
+[    7.407133][    T1] usbcore: registered new interface driver stk1160
+[    7.407403][    T1] usbcore: registered new interface driver usbtv
+[    7.409518][    T1] dvbdev: DVB: registering new adapter (dvb_vidtv_bridge)
+[    7.411930][    T1] i2c i2c-0: DVB: registering adapter 0 frontend 0 (Dummy demod for DVB-T/T2/C/S/S2)...
+[    7.412112][    T1] dvbdev: dvb_create_media_entity: media entity 'Dummy demod for DVB-T/T2/C/S/S2' registered.
+[    7.417833][    T1] dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+[    7.425383][    T1] vidtv vidtv.0: Successfully initialized vidtv!
+[    7.427382][    T1] vicodec vicodec.0: Device 'stateful-encoder' registered as /dev/video0
+[    7.428132][    T1] vicodec vicodec.0: Device 'stateful-decoder' registered as /dev/video1
+[    7.428852][    T1] vicodec vicodec.0: Device 'stateless-decoder' registered as /dev/video2
+[    7.432252][    T1] vim2m vim2m.0: Device registered as /dev/video3
+[    7.458424][    T1] vivid-000: using single planar format API
+[    7.469389][    T1] vivid-000: CEC adapter cec0 registered for HDMI input
+[    7.470462][    T1] vivid-000: V4L2 capture device registered as video7
+[    7.471835][    T1] vivid-000: CEC adapter cec1 registered for HDMI output 0
+[    7.472669][    T1] vivid-000: V4L2 output device registered as video8
+[    7.474066][    T1] vivid-000: V4L2 capture device registered as vbi0, supports raw and sliced VBI
+[    7.476516][    T1] vivid-000: V4L2 output device registered as vbi1, supports raw and sliced VBI
+[    7.477516][    T1] vivid-000: V4L2 capture device registered as swradio0
+[    7.478510][    T1] vivid-000: V4L2 receiver device registered as radio0
+[    7.479535][    T1] vivid-000: V4L2 transmitter device registered as radio1
+[    7.480799][    T1] vivid-000: V4L2 metadata capture device registered as video9
+[    7.481868][    T1] vivid-000: V4L2 metadata output device registered as video10
+[    7.482745][    T1] vivid-000: V4L2 touch capture device registered as v4l-touch0
+[    7.485276][    T1] usbcore: registered new interface driver radioshark2
+[    7.485839][    T1] usbcore: registered new interface driver radioshark
+[    7.486257][    T1] usbcore: registered new interface driver radio-si470x
+[    7.486815][    T1] usbcore: registered new interface driver radio-usb-si4713
+[    7.487252][    T1] usbcore: registered new interface driver dsbr100
+[    7.487613][    T1] usbcore: registered new interface driver radio-keene
+[    7.487963][    T1] usbcore: registered new interface driver radio-ma901
+[    7.488326][    T1] usbcore: registered new interface driver radio-mr800
+[    7.488685][    T1] usbcore: registered new interface driver radio-raremono
+[    7.490699][    T1] usbcore: registered new interface driver powerz
+[    7.491083][    T1] usbcore: registered new interface driver pcwd_usb
+[    7.493769][    T1] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+[    7.493846][    T1] device-mapper: uevent: version 1.0.3
+[    7.494954][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    7.497033][    T1] Bluetooth: HCI UART driver ver 2.3
+[    7.497045][    T1] Bluetooth: HCI UART protocol H4 registered
+[    7.497052][    T1] Bluetooth: HCI UART protocol BCSP registered
+[    7.497216][    T1] Bluetooth: HCI UART protocol LL registered
+[    7.497527][    T1] Bluetooth: HCI UART protocol Three-wire (H5) registered
+[    7.497803][    T1] Bluetooth: HCI UART protocol QCA registered
+[    7.497817][    T1] Bluetooth: HCI UART protocol AG6XX registered
+[    7.498038][    T1] Bluetooth: HCI UART protocol Marvell registered
+[    7.499138][    T1] usbcore: registered new interface driver bcm203x
+[    7.499689][    T1] usbcore: registered new interface driver bpa10x
+[    7.500078][    T1] usbcore: registered new interface driver bfusb
+[    7.500536][    T1] usbcore: registered new interface driver btusb
+[    7.501030][    T1] usbcore: registered new interface driver ath3k
+[    7.501453][    T1] intel_pstate: CPU model not supported
+[    7.501463][    T1] VUB300 Driver rom wait states = 1C irqpoll timeout = 0400
+[    7.502846][    T1] usbcore: registered new interface driver vub300
+[    7.503324][    T1] usbcore: registered new interface driver ushc
+[    7.513097][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    7.553448][    T1] usbcore: registered new interface driver usbhid
+[    7.553463][    T1] usbhid: USB HID core driver
+[    7.557561][    T1] usbcore: registered new interface driver es2_ap_driver
+[    7.557572][    T1] comedi: version 0.7.76 - http://www.comedi.org
+[    7.558717][    T1] comedi comedi0: comedi_test: 1000000 microvolt, 100000 microsecond waveform attached
+[    7.563508][    T1] comedi comedi0: driver 'comedi_test' has successfully auto-configured 'comedi_test'.
+[    7.565182][    T1] usbcore: registered new interface driver dt9812
+[    7.565407][    T1] usbcore: registered new interface driver ni6501
+[    7.565651][    T1] usbcore: registered new interface driver usbdux
+[    7.565899][    T1] usbcore: registered new interface driver usbduxfast
+[    7.566140][    T1] usbcore: registered new interface driver usbduxsigma
+[    7.566382][    T1] usbcore: registered new interface driver vmk80xx
+[    7.566607][    T1] greybus: registered new driver hid
+[    7.566954][    T1] greybus: registered new driver gbphy
+[    7.567173][    T1] gb_gbphy: registered new driver usb
+[    7.572835][    T1] gnss: GNSS driver registered with major 495
+[    7.573161][    T1] usbcore: registered new interface driver gnss-usb
+[    7.573444][    T1] usbcore: registered new interface driver hdm_usb
+[    7.666098][    T1] usbcore: registered new interface driver snd-usb-audio
+[    7.666429][    T1] usbcore: registered new interface driver snd-ua101
+[    7.666731][    T1] usbcore: registered new interface driver snd-usb-usx2y
+[    7.667081][    T1] usbcore: registered new interface driver snd-usb-us122l
+[    7.667403][    T1] usbcore: registered new interface driver snd-usb-caiaq
+[    7.667676][    T1] usbcore: registered new interface driver snd-usb-6fire
+[    7.667967][    T1] usbcore: registered new interface driver snd-usb-hiface
+[    7.668257][    T1] usbcore: registered new interface driver snd-bcd2000
+[    7.668540][    T1] usbcore: registered new interface driver snd_usb_pod
+[    7.668826][    T1] usbcore: registered new interface driver snd_usb_podhd
+[    7.669102][    T1] usbcore: registered new interface driver snd_usb_toneport
+[    7.669371][    T1] usbcore: registered new interface driver snd_usb_variax
+[    7.671532][    T1] drop_monitor: Initializing network drop monitor service
+[    7.671857][    T1] NET: Registered PF_LLC protocol family
+[    7.671956][    T1] GACT probability on
+[    7.671999][    T1] Mirror/redirect action on
+[    7.672128][    T1] Simple TC action Loaded
+[    7.676888][    T1] u32 classifier
+[    7.676893][    T1]     Performance counters on
+[    7.676896][    T1]     input device check on
+[    7.676899][    T1]     Actions configured
+[    7.681799][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    7.681799][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    7.681834][    T1] The pptp conntrack helper is scheduled for removal.
+[    7.681834][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    7.685011][    T1] The DCCP match is deprecated and scheduled to be removed in 2027.
+[    7.685011][    T1] Please contact the netfilter-devel mailing list or update your iptables rules
+[    7.685316][    T1] xt_time: kernel timezone is -0000
+[    7.685471][    T1] IPVS: Registered protocols (TCP, UDP, SCTP, AH, ESP)
+[    7.685525][    T1] IPVS: Connection hash table configured (size=4096, memory=32Kbytes)
+[    7.685893][    T1] IPVS: ipvs loaded.
+[    7.685914][    T1] IPVS: [rr] scheduler registered.
+[    7.685919][    T1] IPVS: [wrr] scheduler registered.
+[    7.685925][    T1] IPVS: [lc] scheduler registered.
+[    7.685930][    T1] IPVS: [wlc] scheduler registered.
+[    7.685935][    T1] IPVS: [fo] scheduler registered.
+[    7.685940][    T1] IPVS: [ovf] scheduler registered.
+[    7.685958][    T1] IPVS: [lblc] scheduler registered.
+[    7.685973][    T1] IPVS: [lblcr] scheduler registered.
+[    7.685978][    T1] IPVS: [dh] scheduler registered.
+[    7.685983][    T1] IPVS: [sh] scheduler registered.
+[    7.685988][    T1] IPVS: [mh] scheduler registered.
+[    7.685994][    T1] IPVS: [sed] scheduler registered.
+[    7.685999][    T1] IPVS: [nq] scheduler registered.
+[    7.686004][    T1] IPVS: [twos] scheduler registered.
+[    7.686070][    T1] IPVS: [sip] pe registered.
+[    7.686203][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    7.688949][    T1] gre: GRE over IPv4 demultiplexer driver
+[    7.688956][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    7.695361][    T1] IPv4 over IPsec tunneling driver
+[    7.698688][    T1] Initializing XFRM netlink socket
+[    7.698798][    T1] IPsec XFRM device driver
+[    7.698912][    T1] xfrm_iptfs: IPsec IP-TFS tunnel mode module
+[    7.699278][    T1] NET: Registered PF_INET6 protocol family
+[    7.706889][    T1] Segment Routing with IPv6
+[    7.706895][    T1] RPL Segment Routing with IPv6
+[    7.707044][    T1] In-situ OAM (IOAM) with IPv6
+[    7.707216][    T1] mip6: Mobile IPv6
+[    7.709839][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    7.715549][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    7.717943][    T1] NET: Registered PF_PACKET protocol family
+[    7.717953][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    7.717980][    T1] NET: Registered PF_KEY protocol family
+[    7.718234][    T1] Bridge firewalling registered
+[    7.718724][    T1] NET: Registered PF_X25 protocol family
+[    7.718788][    T1] X25: Linux Version 0.2
+[    7.718798][    T1] can: controller area network core
+[    7.718951][    T1] NET: Registered PF_CAN protocol family
+[    7.718958][    T1] can: raw protocol
+[    7.719113][    T1] can: broadcast manager protocol
+[    7.719133][    T1] can: netlink gateway - max_hops=1
+[    7.719209][    T1] can: SAE J1939
+[    7.719220][    T1] can: isotp protocol (max_pdu_size 8300)
+[    7.719887][    T1] Bluetooth: RFCOMM TTY layer initialized
+[    7.719903][    T1] Bluetooth: RFCOMM socket layer initialized
+[    7.719944][    T1] Bluetooth: RFCOMM ver 1.11
+[    7.719974][    T1] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+[    7.719979][    T1] Bluetooth: BNEP filters: protocol multicast
+[    7.719993][    T1] Bluetooth: BNEP socket layer initialized
+[    7.719999][    T1] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+[    7.720012][    T1] Bluetooth: HIDP socket layer initialized
+[    7.720686][    T1] NET: Registered PF_RXRPC protocol family
+[    7.720696][    T1] Key type rxrpc registered
+[    7.720701][    T1] Key type rxrpc_s registered
+[    7.721237][    T1] NET: Registered PF_KCM protocol family
+[    7.721670][    T1] l2tp_core: L2TP core driver, V2.0
+[    7.721688][    T1] l2tp_ppp: PPPoL2TP kernel driver, V2.0
+[    7.721693][    T1] l2tp_ip: L2TP IP encapsulation support (L2TPv3)
+[    7.721792][    T1] l2tp_netlink: L2TP netlink interface
+[    7.721914][    T1] l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
+[    7.721919][    T1] l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
+[    7.722120][    T1] NET: Registered PF_PHONET protocol family
+[    7.722281][    T1] 8021q: 802.1Q VLAN Support v1.8
+[    7.722485][    T1] sctp: Hash tables configured (bind 32/56)
+[    7.726122][    T1] NET: Registered PF_RDS protocol family
+[    7.726734][    T1] Registered RDS/tcp transport
+[    7.726743][    T1] tipc: Activated (version 2.0.0)
+[    7.727090][    T1] NET: Registered PF_TIPC protocol family
+[    7.727614][    T1] tipc: Started in single node mode
+[    7.727687][    T1] 9pnet: Installing 9P2000 support
+[    7.734091][    T1] NET: Registered PF_IEEE802154 protocol family
+[    7.734281][    T1] Key type dns_resolver registered
+[    7.734336][    T1] Key type ceph registered
+[    7.734800][    T1] libceph: loaded (mon/osd proto 15/24)
+[    7.735826][    T1] batman_adv: B.A.T.M.A.N. advanced 7.3.0-kernsight-kasan (compatibility version 15) loaded
+[    7.735955][    T1] openvswitch: Open vSwitch switching datapath
+[    7.737288][    T1] NET: Registered PF_VSOCK protocol family
+[    7.737548][    T1] mpls_gso: MPLS GSO support
+[    7.757472][    T1] IPI shorthand broadcast: enabled
+[    7.767576][ T1139] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input3
+[    8.204586][    T1] sched_clock: Marking stable (8080008031, 122538276)->(8212438894, -9892587)
+[    8.207707][    T1] registered taskstats version 1
+[    8.328900][    T1] Loading compiled-in X.509 certificates
+[    8.332738][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 38508082b4e4f25c1d1c02afeaefa7cb8f25c939'
+[    8.571224][    T1] zswap: loaded using pool 842
+[    8.573589][    T1] Demotion targets for Node 0: null
+[    8.573696][    T1] debug_vm_pgtable: [debug_vm_pgtable         ]: Validating architecture page table helpers
+[    9.203615][    C0] clocksource: Watchdog remote CPU 2 read timed out
+[   18.763614][    T1] page_owner is disabled
+[   18.764306][    T1] Key type .fscrypt registered
+[   18.764314][    T1] Key type fscrypt-provisioning registered
+[   18.770138][    T1] kAFS: Red Hat AFS client v0.1 registering.
+[   18.792232][    T1] Btrfs loaded, experimental=on, debug=on, assert=on, zoned=yes, fsverity=yes
+[   18.792730][    T1] Key type big_key registered
+[   18.792766][    T1] Key type encrypted registered
+[   18.792773][    T1] AppArmor: AppArmor sha256 policy hashing enabled
+[   18.792814][    T1] ima: No TPM chip found, activating TPM-bypass!
+[   18.792840][    T1] Loading compiled-in module X.509 certificates
+[   18.795893][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 38508082b4e4f25c1d1c02afeaefa7cb8f25c939'
+[   18.795911][    T1] ima: Allocated hash algorithm: sha256
+[   18.797703][    T1] ima: No architecture policies found
+[   18.798077][    T1] evm: Initialising EVM extended attributes:
+[   18.798082][    T1] evm: security.selinux
+[   18.798087][    T1] evm: security.SMACK64
+[   18.798091][    T1] evm: security.SMACK64EXEC (disabled)
+[   18.798096][    T1] evm: security.SMACK64TRANSMUTE (disabled)
+[   18.798100][    T1] evm: security.SMACK64MMAP (disabled)
+[   18.798105][    T1] evm: security.apparmor
+[   18.798109][    T1] evm: security.ima
+[   18.798113][    T1] evm: security.capability
+[   18.798117][    T1] evm: HMAC attrs: 0x1
+[   18.804213][    T1] PM:   Magic number: 14:662:385
+[   18.804412][    T1] usb usb6-port5: hash matches
+[   18.804437][    T1] usb usb3: hash matches
+[   18.804602][    T1]  vdpasim_blk: hash matches
+[   18.804612][    T1] thermal cooling_device0: hash matches
+[   18.804965][    T1] netconsole: network logging started
+[   18.805314][    T1] gtp: GTP module loaded (pdp ctx size 128 bytes)
+[   18.810176][    T1] cfg80211: Loading compiled-in X.509 certificates for regulatory database
+[   18.811466][    T1] Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+[   18.812684][    T1] Loaded X.509 cert 'wens: 61c038651aabdcf94bd0ac7ff06c7248db18c600'
+[   18.814308][    T1] clk: Disabling unused clocks
+[   18.814352][    T1] ALSA device list:
+[   18.814357][    T1]   #0: Dummy 1
+[   18.814363][    T1]   #1: Loopback 1
+[   18.814367][    T1]   #2: Virtual MIDI Card 1
+[   18.819812][ T1616] faux_driver regulatory: Direct firmware load for regulatory.db failed with error -2
+[   18.819826][ T1616] faux_driver regulatory: Falling back to sysfs fallback for: regulatory.db
+[   19.454628][    T1] md: Waiting for all devices to be available before autodetect
+[   19.454645][    T1] md: If you don't use raid, use raid=noautodetect
+[   19.454669][    T1] md: Autodetecting RAID arrays.
+[   19.454759][    T1] md: autorun ...
+[   19.454768][    T1] md: ... autorun DONE.
+[   19.643368][    T1] EXT4-fs (sda): mounted filesystem 99ab7806-87ca-4560-a984-fa27ad664ced r/w with ordered data mode. Quota mode: none.
+[   20.018937][    T1] VFS: Mounted root (ext4 filesystem) on device 8:0.
+[   20.025654][    T1] devtmpfs: mounted
+[   20.026582][    T1] VFS: Pivoted into new rootfs
+[   20.100951][    T1] Freeing unused kernel image (initmem) memory: 30452K
+[   20.101413][    T1] Write protecting the kernel read-only data: 241664k
+[   20.116328][    T1] Freeing unused kernel image (text/rodata gap) memory: 592K
+[   20.120218][    T1] Freeing unused kernel image (rodata/data gap) memory: 1492K
+[   21.279853][    T1] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+[   21.281152][    T1] Run /sbin/init as init process
+[!p]104[?7h
+[0;1;39mWelcome to [0m[1mDebian GNU/Linux 13 (trixie)[0m[0;1;39m![0m
+
+[   21.623832][    T1] systemd[1]: systemd 257.13-1~deb13u1 running in system mode (+PAM +AUDIT +SELINUX +APPARMOR +IMA +IPE +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 -IDN +IPTC +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK +BTF -XKBCOMMON -UTMP +SYSVINIT +LIBARCHIVE)
+[   21.623867][    T1] systemd[1]: Detected virtualization kvm.
+[   21.623901][    T1] systemd[1]: Detected architecture x86-64.
+[   21.631725][    T1] systemd[1]: Hostname set to <syzkaller>.
+[   23.522645][    T1] systemd[1]: bpf-restrict-fs: LSM BPF program attached
+[   23.644116][ T4080] selinuxenabled (4080) used greatest stack depth: 26072 bytes left
+[   23.647259][ T4073] selinux-autorel (4073) used greatest stack depth: 24904 bytes left
+[   23.708731][ T4074] systemd-debug-g (4074) used greatest stack depth: 24584 bytes left
+[   23.758874][ T4076] systemd-getty-g (4076) used greatest stack depth: 24200 bytes left
+[   23.788528][ T4082] systemd-ssh-generator[4082]: Failed to query local AF_VSOCK CID: Cannot assign requested address
+[   23.971672][ T4084] systemd-sysv-generator[4084]: SysV service '/etc/init.d/isc-dhcp-server' lacks a native systemd unit file, automatically generating a unit file for compatibility.
+[   23.971701][ T4084] systemd-sysv-generator[4084]: Please update package to include a native systemd unit file.
+[   23.971724][ T4084] systemd-sysv-generator[4084]: ⚠️ This compatibility logic is deprecated, expect removal soon. ⚠️
+[   24.052221][ T4072] (sd-exec-[4072]: /usr/lib/systemd/system-generators/systemd-ssh-generator failed with exit status 1.
+[   24.785679][    T1] systemd[1]: Queued start job for default target graphical.target.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-getty.slice[0m - Slice /system/getty.
+[   24.812880][    T1] systemd[1]: Created slice system-getty.slice - Slice /system/getty.
+[   24.822955][    T1] systemd[1]: Created slice system-modprobe.slice - Slice /system/modprobe.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-modprobe.slice[0m - Slice /system/modprobe.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-serial\x2dget…slice[0m - Slice /system/serial-getty.
+[   24.836720][    T1] systemd[1]: Created slice system-serial\x2dgetty.slice - Slice /system/serial-getty.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-xfs_scrub.sli…[0mxfs_scrub background service slice.
+[   24.848072][    T1] systemd[1]: Created slice system-xfs_scrub.slice - xfs_scrub background service slice.
+[[0;32m  OK  [0m] Created slice [0;1;39muser.slice[0m - User and Session Slice.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-ask-password-conso…[0mequests to Console Directory Watch.
+[   24.856688][    T1] systemd[1]: Created slice user.slice - User and Session Slice.
+[   24.859625][    T1] systemd[1]: Started systemd-ask-password-console.path - Dispatch Password Requests to Console Directory Watch.
+[   24.862882][    T1] systemd[1]: Started systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-ask-password-wall.…[0md Requests to Wall Directory Watch.
+[[0;32m  OK  [0m] Set up automount [0;1;39mproc-sys-fs-binfm…[0mormats File System Automount Point.
+         Expecting device [0;1;39mdev-ttyS0.device[0m - /dev/ttyS0...
+[[0;32m  OK  [0m] Reached target [0;1;39mpaths.target[0m - Path Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mslices.target[0m - Slice Units.
+[[0;32m  OK  [0m] Reached targ[   24.873175][    T1] systemd[1]: Set up automount proc-sys-fs-binfmt_misc.automount - Arbitrary Executable File Formats File System Automount Point.
+et [0;1;39mswap[   24.875759][    T1] systemd[1]: Expecting device dev-ttyS0.device - /dev/ttyS0...
+[   24.877661][    T1] systemd[1]: Reached target paths.target - Path Units.
+.target[0m - Sw[   24.879398][    T1] systemd[1]: Reached target slices.target - Slice Units.
+aps.
+[   24.881265][    T1] systemd[1]: Reached target swap.target - Swaps.
+[   24.891891][    T1] systemd[1]: Listening on dm-event.socket - Device-mapper event daemon FIFOs.
+[[0;32m  OK  [0m] Listening on [0;1;39mdm-event.socket[0m - Device-mapper event daemon FIFOs.
+[[0;32m  OK  [0m] Listening on [0;1;39mlvm2-lvmpolld.socket[0m - LVM2 poll daemon socket.
+[   24.895976][    T1] systemd[1]: Listening on lvm2-lvmpolld.socket - LVM2 poll daemon socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mrpcbind.socket[0m - RPCbind Server Activation Socket.
+[   25.008908][    T1] systemd[1]: Listening on rpcbind.socket - RPCbind Server Activation Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-creds.socket[0m - Credential Encryption/Decryption.
+[   25.020388][    T1] systemd[1]: Listening on systemd-creds.socket - Credential Encryption/Decryption.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-initctl.socke…[0m- initctl Compatibility Named Pipe.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-journald-dev-…socket[0m - Journal Socket (/dev/log).
+[   25.024948][    T1] systemd[1]: Listening on systemd-initctl.socket - initctl Compatibility Named Pipe.
+[   25.028568][    T1] systemd[1]: Listening on systemd-journald-dev-log.socket - Journal Socket (/dev/log).
+[   25.034308][    T1] systemd[1]: Listening on systemd-journald.socket - Journal Sockets.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-journald.socket[0m - Journal Sockets.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-udevd-control.socket[0m - udev Control Socket.
+[   25.038254][    T1] systemd[1]: systemd-pcrextend.socket - TPM PCR Measurements skipped, unmet condition check ConditionSecurity=measured-uki
+[   25.038361][    T1] systemd[1]: systemd-pcrlock.socket - Make TPM PCR Policy skipped, unmet condition check ConditionSecurity=measured-uki
+[   25.040047][    T1] systemd[1]: Listening on systemd-udevd-control.socket - udev Control Socket.
+[   25.042812][    T1] systemd[1]: Listening on systemd-udevd-kernel.socket - udev Kernel Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-udevd-kernel.socket[0m - udev Kernel Socket.
+         Mountin[   25.071193][    T1] systemd[1]: Mounting dev-hugepages.mount - Huge Pages File System...
+g [0;1;39mdev-hugepages.mount[0m - Huge Pages File System...
+         Mounting [0;1;39mdev-mqueue.mount[0m - POSIX Message Queue File System...
+[   25.092703][    T1] systemd[1]: Mounting dev-mqueue.mount - POSIX Message Queue File System...
+         Mounting [0;1;39mrun-lock.mount[0m - Legacy Locks Directory /run/lock...
+[   25.107038][    T1] systemd[1]: Mounting run-lock.mount - Legacy Locks Directory /run/lock...
+[   25.122013][    T1] systemd[1]: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+         Mounting [0;1;39msys-kernel-debug.mount[0m - Kernel Debug File System...
+         Mounting [0;1;39msys-kernel-tracing.mount[0m - Kernel Trace File System...
+[   25.158158][    T1] systemd[1]: Mounting sys-kernel-tracing.mount - Kernel Trace File System...
+         Mounting [0;1;39mtmp.mount[0m - Temporary Directory /tmp...
+[   25.187191][    T1] systemd[1]: Mounting tmp.mount - Temporary Directory /tmp...
+[   25.189612][    T1] systemd[1]: kmod-static-nodes.service - Create List of Static Device Nodes skipped, unmet condition check ConditionFileNotEmpty=/lib/modules/7.3.0-kernsight-kasan/modules.devname
+         Starting [0;1;39mlvm2-monitor.service[0m - Mo…ing dmeventd or progress polling...
+[   25.216912][    T1] systemd[1]: Starting lvm2-monitor.service - Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling...
+         Starting [0;1;39mmodprobe@configfs.service[0m - Load Kernel Module configfs...[   25.241797][    T1] systemd[1]: Starting modprobe@configfs.service - Load Kernel Module configfs...
+
+         Starting [0;1;39mmodprobe@dm_multipath.ser…[0m Load Kernel Module dm_multipath...
+[   25.257194][    T1] systemd[1]: Starting modprobe@dm_multipath.service - Load Kernel Module dm_multipath...
+         Starting [0;1;39mmodprobe@drm.service[0m - Load Kernel Module drm...
+[   25.277742][    T1] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+         Starting [0;1;39mmodprobe@efi_pstore.servi…[0m - Load Kernel Module efi_pstore...
+[   25.300653][    T1] systemd[1]: Starting modprobe@efi_pstore.service - Load Kernel Module efi_pstore...
+[   25.322271][    T1] systemd[1]: Starting modprobe@fuse.service - Load Kernel Module fuse...
+         Starting [0;1;39mmodprobe@fuse.service[0m - Load Kernel Module fuse...
+         Starting [0;1;39mmodprobe@nvme_fabrics.ser…[0m Load Kernel Module nvme_fabrics...
+[   25.343756][    T1] systemd[1]: Starting modprobe@nvme_fabrics.service - Load Kernel Module nvme_fabrics...
+[   25.347123][    T1] systemd[1]: systemd-hibernate-clear.service - Clear Stale Hibernate Storage Info skipped, unmet condition check ConditionPathExists=/sys/firmware/efi/efivars/HibernateLocation-8cf2644b-4b0b-428f-9387-6d876050dc67
+[   25.352899][    T1] systemd[1]: systemd-hwdb-update.service - Rebuild Hardware Database skipped, no trigger condition checks were met.
+         Starting [0;1;39msystemd-journald.service[0m - Journal Service...
+[   25.399242][    T1] systemd[1]: Starting systemd-journald.service - Journal Service...
+         Starting [0;1;39msystemd-modules-load.service[0m - Load Kernel Modules...
+[   25.434815][    T1] systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+[   25.438275][    T1] systemd[1]: systemd-pcrmachine.service - TPM PCR Machine ID Measurement skipped, unmet condition check ConditionSecurity=measured-uki
+         Starting [0;1;39msystemd-random-seed.service[0m - Load/Save OS Random Seed...
+[   25.455692][    T1] systemd[1]: Starting systemd-random-seed.service - Load/Save OS Random Seed...
+[   25.459729][ T4101] modprobe (4101) used greatest stack depth: 22952 bytes left
+         Starting [0;1;39msystemd-tmpfiles-setup-de…[0m Device Nodes in /dev gracefully...
+[   25.470207][    T1] systemd[1]: Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
+[   25.473882][    T1] systemd[1]: systemd-tpm2-setup-early.service - Early TPM SRK Setup skipped, unmet condition check ConditionSecurity=measured-uki
+[   25.473955][    T1] systemd[1]: systemd-tpm2-setup.service - TPM SRK Setup skipped, unmet condition check ConditionSecurity=measured-uki
+         Starting [0;1;39msystemd-udev-load-credent…[0mLoad udev Rules from Credentials...
+[   25.498462][    T1] systemd[1]: Starting systemd-udev-load-credentials.service - Load udev Rules from Credentials...
+         Starting [0;1;39msystemd-udev-trigger.service[0m - Coldplug All udev Devices...
+[   25.524161][    T1] systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+[[0;32m  OK  [0m] Started [0;[   25.551734][    T1] systemd[1]: Started tlshd.service - Handshake service for kernel TLS consumers.
+1;39mtlshd.service[0m - Handshake service for kernel TLS consumers.
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-hugepages.mount[0m - Huge Pages File S[   25.660439][    T1] systemd[1]: Mounted dev-hugepages.mount - Huge Pages File System.
+ystem.
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-mqueue.mount[0m - POSIX Message Queue File System.
+[   25.676180][    T1] systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+[   25.682270][    T1] systemd[1]: Mounted run-lock.mount - Legacy Locks Directory /run/lock.
+[[0;32m  OK  [0m] Mounted [0;1;39mrun-lock.mount[0m - Legacy Locks Directory /run/lock.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-debug.mount[0m - Kernel Debug File System.
+[   25.689091][    T1] systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+[   25.692912][    T1] systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-tracing.mount[0m - Kernel Trace File System.
+[[0;32m  OK  [0m] Mounted [0;1;39mtmp.mount[0m - Temporary Directory /tmp.
+[   25.696831][    T1] systemd[1]: Mounted tmp.mount - Temporary Directory /tmp.
+[   25.703843][    T1] systemd[1]: modprobe@configfs.service: Deactivated successfully.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@c[   25.712315][    T1] systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+onfigfs.service[0m - Load Kernel Module configfs.
+[   25.721017][    T1] systemd[1]: modprobe@dm_multipath.service: Deactivated successfully.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@dm_multipath.ser…[0m - Load Kernel Module dm_multipath.
+[   25.729086][    T1] systemd[1]: Finished modprobe@dm_multipath.service - Load Kernel Module dm_multipath.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@drm.service[0m - Load Kernel Module drm.
+[   25.737431][    T1] systemd[1]: modprobe@drm.service: Deactivated successfully.
+[   25.741010][    T1] systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+[   25.747147][    T1] systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@efi_pstore.service[0m - Load Kernel Module efi_pstore.
+[   25.750662][    T1] systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+[   25.758890][    T1] systemd[1]: modprobe@fuse.service: Deactivated successfully.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@fuse.service[0m - Load Kernel Module fuse.
+[   25.766001][    T1] systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+[[0;32m  OK  [0m] Finished [0;1;39mlvm2-monitor.service[0m - Mo…using dmeventd or progress polling.
+[   25.777732][    T1] systemd[1]: Finished lvm2-monitor.service - Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@nvme_fabrics.ser…[0m - Load Kernel Module nvme_fabrics.[   25.794158][    T1] systemd[1]: modprobe@nvme_fabrics.service: Deactivated successfully.
+[   25.801490][    T1] systemd[1]: Finished modprobe@nvme_fabrics.service - Load Kernel Module nvme_fabrics.
+
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-modules-load.service[0m - Load Kernel Modules.
+[   25.817741][    T1] systemd[1]: Finished systemd-modules-load.service - Load Kernel Modules.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-random-seed.service[0m - Load/Save OS Random Seed.
+[   25.827911][    T1] systemd[1]: Finished systemd-random-seed.service - Load/Save OS Random Seed.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-udev-load-credent…[0m- Load udev Rules from Credentials.
+[   25.837873][    T1] systemd[1]: Finished systemd-udev-load-credentials.service - Load udev Rules from Credentials.
+         Mounting [0;1;39msys-fs-fuse-connections.mount[0m - FUSE Control File System...[   25.861739][    T1] systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+
+[   25.866915][ T4104] systemd-journald[4104]: Collecting audit messages is disabled.
+         Mounting [0;1;39msys-kernel-config.mount[0m - Kernel Configuration File System...
+[   25.880922][    T1] systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+         Starting [0;1;39mmultipathd.service[0m - Devi…pper Multipath Device Controller...
+[   25.909402][    T1] systemd[1]: Starting multipathd.service - Device-Mapper Multipath Device Controller...
+[   25.916144][    T1] systemd[1]: systemd-pstore.service - Platform Persistent Storage Archival skipped, unmet condition check ConditionDirectoryNotEmpty=/sys/fs/pstore
+[   25.952337][    T1] systemd[1]: Starting systemd-sysctl.service - Apply Kernel Variables...
+         Starting [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup-de…[0mic Device Nodes in /dev gracefully.
+[   26.008335][    T1] systemd[1]: Finished systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully.
+[   26.022133][    T1] systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-fs-fuse-connections.mount[0m - FUSE Control File System.
+         Starting [0;1;39msystemd-sysusers.service[0m - Create System Users...
+[   26.048064][    T1] systemd[1]: Starting systemd-sysusers.service - Create System Users...
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-config.mount[0m - Kernel Configuration File System.
+[   26.087509][    T1] systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-sysusers.service[0m - Create System Users.
+[   26.470691][    T1] systemd[1]: Finished systemd-sysusers.service - Create System Users.
+         Starting [0;1;39msystemd-tmpfiles-setup-de…[0meate Static Device Nodes in /dev...
+[   26.527633][    T1] systemd[1]: Starting systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev...
+[   26.535411][    T1] systemd[1]: multipathd.service: Main process exited, code=exited, status=1/FAILURE
+[   26.537894][    T1] systemd[1]: multipathd.service: Failed with result 'exit-code'.
+[[0;1;31mFAILED[0m] Failed to [   26.544040][    T1] systemd[1]: Failed to start multipathd.service - Device-Mapper Multipath Device Controller.
+start [0;1;39mmultipathd.service[0m…Mapper Multipath Device Controller.
+See 'systemctl status multipathd.service' for details.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables.
+[   26.557479][    T1] systemd[1]: Finished systemd-sysctl.service - Apply Kernel Variables.
+         Starting [0;1;39mblk-availability.service[0m - Availability of block devices...
+[   26.573610][    T1] systemd[1]: Starting blk-availability.service - Availability of block devices...
+[[0;32m  OK  [0m] Finished [0;1;39mblk-availability.service[0m - Availability of block devices.
+[   26.653957][    T1] systemd[1]: Finished blk-availability.service - Availability of block devices.
+[   26.656757][    T1] systemd[1]: multipathd.service: Scheduled restart job, restart counter is at 1.
+         Starting [0;1;39mmodprobe@dm_multipath.ser…[0m Load Kernel Module dm_multipath...
+[   26.669519][    T1] systemd[1]: Starting modprobe@dm_multipath.service - Load Kernel Module dm_multipath...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup-de…[0mCreate Static Device Nodes in /dev.
+[   26.706617][    T1] systemd[1]: Finished systemd-tmpfiles-setup-dev.service - Create Static Device Nodes in /dev.
+         Starting [0;1;39msystemd-udevd.service[0m - R…ager for Device Events and Files...
+[   26.736777][    T1] systemd[1]: Starting systemd-udevd.service - Rule-based Manager for Device Events and Files...
+[[0;32m  OK  [0m] Finished [0[   26.756487][    T1] systemd[1]: modprobe@dm_multipath.service: Deactivated successfully.
+;1;39mmodprobe@d[   26.761538][    T1] systemd[1]: Finished modprobe@dm_multipath.service - Load Kernel Module dm_multipath.
+m_multipath.ser…[0m - Load Kernel Module dm_multipath.
+         Starting [0;1;39mmultipathd.service[0m - Devi…pper Multipath Device Controller...
+[   26.777933][    T1] systemd[1]: Starting multipathd.service - Device-Mapper Multipath Device Controller...
+[   27.070642][    T1] systemd[1]: multipathd.service: Main process exited, code=exited, status=1/FAILURE
+[[0;1;31mFAILED[0m] Failed to start [0;1;39mmultipathd.service[0m…Mapper Multipath Device Controller.
+See 'systemctl status multipathd.service' for details.
+[   27.074206][    T1] systemd[1]: multipathd.service: Failed with result 'exit-code'.
+[   27.077949][    T1] systemd[1]: Failed to start multipathd.service - Device-Mapper Multipath Device Controller.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-udevd.service[0m - Ru…anager for Device Events and Files.
+[   27.148078][    T1] systemd[1]: Started systemd-udevd.service - Rule-based Manager for Device Events and Files.
+         Starting [0;1;39mnvmefc-boot-connections.s…[0mC-NVME devices found during boot...
+[   27.168593][    T1] systemd[1]: Starting nvmefc-boot-connections.service - Auto-connect to subsystems on FC-NVME devices found during boot...
+[   27.170644][    T1] systemd[1]: multipathd.service: Scheduled restart job, restart counter is at 2.
+         Starting [0;1;39mmodprobe@dm_multipath.ser…[0m Load Kernel Module dm_multipath...
+[   27.184600][    T1] systemd[1]: Starting modprobe@dm_multipath.service - Load Kernel Module dm_multipath...
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@dm_multipath.ser…[0m - Load Kernel Module dm_multipath.
+[   27.267344][    T1] systemd[1]: modprobe@dm_multipath.service: Deactivated successfully.
+[   27.270916][    T1] systemd[1]: Finished modprobe@dm_multipath.service - Load Kernel Module dm_multipath.
+         Starting [0;1;39mmultipathd.service[0m - Devi…pper Multipath Device Controller...[   27.291348][    T1] systemd[1]: Starting multipathd.service - Device-Mapper Multipath Device Controller...
+
+[[0;32m  OK  [0m] Started [0;1;39msystemd-journald.service[0m - Journal Service.
+[   27.306514][    T1] systemd[1]: Started systemd-journald.service - Journal Service.
+[[0;32m  OK  [0m] Finished [0;1;39mnvmefc-boot-connections.s…[0m FC-NVME devices found during boot.
+         Starting [0;1;39msystemd-journal-flush.ser…[0msh Journal to Persistent Storage...
+[[0;1;31mFAILED[0m] Failed to start [0;1;39mmultipathd.service[0m…Mapper Multipath Device Controller.
+See 'systemctl status multipathd.service' for details.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs-pre.target[0m…Preparation for Local File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs.target[0m - Local File Systems.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-sysext.socket[0m… System Extension Image Management.
+         Starting [0;1;39mselinux-autorelabel-mark.…[0mthe need to relabel after reboot...
+         Starting [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats...
+         Starting [0;1;39mmodprobe@dm_multipath.ser…[0m Load Kernel Module dm_multipath...
+[[0;32m  OK  [0m] Finished [0;1;39mselinux-autorelabel-mark.�[   27.743274][ T4104] systemd-journald[4104]: Received client request to flush runtime journal.
+��[0mk the need[   27.752392][ T4104] systemd-journald[4104]: File /var/log/journal/adaa891ae7924ae18d38fbc0dff2ae9f/system.journal corrupted or uncleanly shut down, renaming and replacing.
+ to relabel after reboot.
+         Mounting [0;1;39mproc-sys-fs-binfmt_misc.m…[0mcutable File Formats File System...
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@dm_multipath.ser…[0m - Load Kernel Module dm_multipath.
+[[0;1;31mFAILED[0m] Failed to start [0;1;39mmultipathd.service[0m…Mapper Multipath Device Controller.
+See 'systemctl status multipathd.service' for details.
+[[0;32m  OK  [0m] Mounted [0;1;39mproc-sys-fs-binfmt_misc.mo…[0mxecutable File Formats File System.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-journal-flush.ser…[0mlush Journal to Persistent Storage.
+         Starting [0;1;39msystemd-tmpfiles-setup.se…[0mate System Files and Directories...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup.se…[0mreate System Files and Directories.
+         Starting [0;1;39mldconfig.service[0m - Rebuild Dynamic Linker Cache...
+         Starting [0;1;39mrpcbind.service[0m - RPC bind portmap service...
+         Starting [0;1;39msystemd-journal-catalog-u…ervice[0m - Rebuild Journal Catalog...
+[[0;32m  OK  [0m] Started [0;1;39mrpcbind.service[0m - RPC bind portmap service.
+[[0;32m  OK  [0m] Reached target [0;1;39mrpcbind.target[0m - RPC Port Mapper.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-journal-catalog-u….service[0m - Rebuild Journal Catalog.
+[[0;32m  OK  [0m] Finished [0;1;39mldconfig.service[0m - Rebuild Dynamic Linker Cache.
+         Starting [0;1;39msystemd-update-done.service[0m - Update is Completed...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-update-done.service[0m - Update is Completed.
+[[0m[0;31m*     [0m] (1 of 2) Job systemd-udev-trigger.s…vice/start running (7s / no limit)
+M[K[[0;1;31m*[0m[0;31m*    [0m] (1 of 2) Job systemd-udev-trigger.s…vice/start running (7s / no limit)
+M[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] (1 of 2) Job systemd-udev-trigger.s…vice/start running (8s / no limit)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] (2 of 2) Job dev-ttyS0.device/start running (8s / 1min 30s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] (2 of 2) Job dev-ttyS0.device/start running (9s / 1min 30s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] (2 of 2) Job dev-ttyS0.device/start running (9s / 1min 30s)
+M[K[    [0;31m*[0;1;31m*[0m] (1 of 2) Job systemd-udev-trigger.s…ice/start running (10s / no limit)
+M[K[     [0;31m*[0m] (1 of 2) Job systemd-udev-trigger.s…ice/start running (10s / no limit)
+M[K[[0;32m  OK  [0m] Finished [0;1;39msystemd-udev-trigger.service[0m - Coldplug All udev Devices.
+[K[[0;32m  OK  [0m] Reached target [0;1;39msysinit.target[0m - System Initialization.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily.timer[0m - Daily apt download activities.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily-upgrade.timer[0m - …y apt upgrade and clean activities.
+[[0;32m  OK  [0m] Started [0;1;39mdpkg-db-backup.timer[0m - Daily dpkg database backup timer.
+[[0;32m  OK  [0m] Started [0;1;39me2scrub_all.timer[0m - Period…Metadata Check for All Filesystems.
+[[0;32m  OK  [0m] Started [0;1;39mfstrim.timer[0m - Discard unused filesystem blocks once a week.
+[[0;32m  OK  [0m] Started [0;1;39mlogrotate.timer[0m - Daily rotation of log files.
+[[0;32m  OK  [0m] Started [0;1;39mman-db.timer[0m - Daily man-db regeneration.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-tmpfiles-clean.tim…[0my Cleanup of Temporary Directories.
+[[0;32m  OK  [0m] Started [0;1;39mxfs_scrub_all.timer[0m - Peri…Metadata Check for All Filesystems.
+[[0;32m  OK  [0m] Reached target [0;1;39mtimers.target[0m - Timer Units.
+[[0;32m  OK  [0m] Listening on [0;1;39mdbus.socket[0m - D-Bus System Message Bus Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39msshd-unix-local.socke…[0mtemd-ssh-generator, AF_UNIX Local).
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-hostnamed.socket[0m - Hostname Service Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39muuidd.socket[0m - UUID daemon activation socket.
+[[0;32m  OK  [0m] Reached target [0;1;39msockets.target[0m - Socket Units.
+         Starting [0;1;39mifupdown-pre.service[0m - He…synchronize boot up for ifupdown...
+[[0;32m  OK  [0m] Reached target [0;1;39mbasic.target[0m - Basic System.
+         Starting [0;1;39macct.service[0m - Kernel process accounting...
+         Starting [0;1;39mdbus.service[0m - D-Bus System Message Bus...
+         Starting [0;1;39me2scrub_reap.service[0m - Re…ne ext4 Metadata Check Snapshots...
+         Starting [0;1;39msystemd-logind.service[0m - User Login Management...
+[   35.906203][ T7564] Process accounting resumed
+[[0;32m  OK  [0m] Finished [0;1;39macct.service[0m - Kernel process accounting.
+[[0;32m  OK  [0m] Started [0;1;39mdbus.service[0m - D-Bus System Message Bus.
+[[0;32m  OK  [0m] Found device [0;1;39mdev-ttyS0.device[0m - /dev/ttyS0.
+[[0;32m  OK  [0m] Finished [0;1;39me2scrub_reap.service[0m - Re…line ext4 Metadata Check Snapshots.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-logind.service[0m - User Login Management.
+[   38.361538][ T1616] cfg80211: failed to load regulatory.db
+[[0;32m  OK  [0m] Reached target [0;1;39musb-gadget.target[0m - Hardware activated USB gadget.
+[[0;32m  OK  [0m] Reached target [0;1;39msound.target[0m - Sound Card.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-rfkill.socket[0m…ll Switch Status /dev/rfkill Watch.
+         Starting [0;1;39msystemd-rfkill.service[0m - Load/Save RF Kill Switch Status...
+[[0;32m  OK  [0m] Finished [0;1;39mifupdown-pre.service[0m - He…o synchronize boot up for ifupdown.
+         Starting [0;1;39mnetworking.service[0m - Raise network interfaces...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-rfkill.service[0m - Load/Save RF Kill Switch Status.
+[   40.283566][ T7711] 8021q: adding VLAN 0 to HW filter on device eth0
+[   40.293729][ T1110] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+[    [0;31m*[0;1;31m*[0m] Job networking.service/start running (16s / 5min 14s)
+M[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] Job networking.service/start running (17s / 5min 14s)
+M[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] Job networking.service/start running (17s / 5min 14s)
+M[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] Job networking.service/start running (17s / 1min 47s)
+M[K[[0;1;31mFAILED[0m] Failed to start [0;1;39mnetworking.service[0m - Raise network interfaces.
+[KSee 'systemctl status networking.service' for details.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork.target[0m - Network.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork-online.target[0m - Network is Online.
+         Starting [0;1;39mdnsmasq.service[0m - dnsmasq…ight DHCP and caching DNS server...
+         Starting [0;1;39mnbd-server.service[0m - Network Block Device server...
+         Starting [0;1;39mnvmf-autoconnect.service[0m …ystems automatically during boot...
+         Starting [0;1;39mssh.service[0m - OpenBSD Secure Shell server...
+         Starting [0;1;39mvsftpd.service[0m - vsftpd FTP server...
+[[0;1;31mFAILED[0m] Failed to start [0;1;39mnbd-server.service[0m - Network Block Device server.
+See 'systemctl status nbd-server.service' for details.
+[[0;32m  OK  [0m] Started [0;1;39mvsftpd.service[0m - vsftpd FTP server.
+[[0;32m  OK  [0m] Finished [0;1;39mnvmf-autoconnect.service[0m …bsystems automatically during boot.
+[[0;32m  OK  [0m] Reached target [0;1;39mremote-fs-pre.targe…[0mreparation for Remote File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mremote-fs.target[0m - Remote File Systems.
+[[0;32m  OK  [0m] Started [0;1;39mcron.service[0m - Regular background program processing daemon.
+         Starting [0;1;39msystemd-user-sessions.service[0m - Permit User Sessions...
+[[0;32m  OK  [0m] Started [0;1;39mssh.service[0m - OpenBSD Secure Shell server.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-user-sessions.service[0m - Permit User Sessions.
+[[0;32m  OK  [0m] Started [0;1;39mdnsmasq.service[0m - dnsmasq …weight DHCP and caching DNS server.
+[[0;32m  OK  [0m] Reached target [0;1;39mnss-lookup.target[0m - Host and Network Name Lookups.
+[[0;32m  OK  [0m] Started [0;1;39mgetty@tty1.service[0m - Getty on tty1.
+         Starting [0;1;39misc-dhcp-server.service[0m - LSB: DHCP server...
+[[0;32m  OK  [0m] Started [0;1;39mserial-getty@ttyS0.service[0m - Serial Getty on ttyS0.
+[[0;32m  OK  [0m] Reached target [0;1;39mgetty.target[0m - Login Prompts.
+[[0;1;31mFAILED[0m] Failed to start [0;1;39misc-dhcp-server.service[0m - LSB: DHCP server.
+See 'systemctl status isc-dhcp-server.service' for details.
+[[0;32m  OK  [0m] Reached target [0;1;39mmulti-user.target[0m - Multi-User System.
+[[0;32m  OK  [0m] Reached target [0;1;39mgraphical.target[0m - Graphical Interface.
+[!p]104[?7h[6n[32766;32766H[6n[!p]104[?7h[6n[32766;32766H[6n
+Debian GNU/Linux 13 syzkaller ttyS0
+
+syzkaller login: [   71.726554][ T7964] cgroup: Unknown subsys name 'net'
+[   71.898312][ T7964] cgroup: Unknown subsys name 'cpuset'
+[   71.904998][ T7964] cgroup: Unknown subsys name 'rlimit'
+[   72.349560][ T7964] Adding 124996k swap on ./swap-file.  Priority:0 extents:1 across:124996k 
+[   75.345449][ T8189] bridge0: port 1(bridge_slave_0) entered blocking state
+[   75.345957][ T8189] bridge0: port 1(bridge_slave_0) entered disabled state
+[   75.346026][ T8189] bridge_slave_0: entered allmulticast mode
+[   75.346827][ T8189] bridge_slave_0: entered promiscuous mode
+[   75.349576][ T8189] bridge0: port 2(bridge_slave_1) entered blocking state
+[   75.349624][ T8189] bridge0: port 2(bridge_slave_1) entered disabled state
+[   75.349681][ T8189] bridge_slave_1: entered allmulticast mode
+[   75.350474][ T8189] bridge_slave_1: entered promiscuous mode
+[   75.370628][ T8189] bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+[   75.372122][ T8189] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+[   75.389048][ T8189] team0: Port device team_slave_0 added
+[   75.390360][ T8189] team0: Port device team_slave_1 added
+[   75.405133][ T8189] batman_adv: batadv0: Adding interface: batadv_slave_0
+[   75.405143][ T8189] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   75.405157][ T8189] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+[   75.406501][ T8189] batman_adv: batadv0: Adding interface: batadv_slave_1
+[   75.406509][ T8189] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   75.406522][ T8189] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+[   75.432935][ T8189] hsr_slave_0: entered promiscuous mode
+[   75.433432][ T8189] hsr_slave_1: entered promiscuous mode
+[   75.543662][ T8189] netdevsim netdevsim0 netdevsim0: renamed from eth0
+[   75.547248][ T8189] 8021q: adding VLAN 0 to HW filter on device netdevsim0
+[   75.548319][ T8189] netdevsim netdevsim0 netdevsim1: renamed from eth1
+[   75.551585][ T8189] 8021q: adding VLAN 0 to HW filter on device netdevsim1
+[   75.552387][ T8189] netdevsim netdevsim0 netdevsim2: renamed from eth2
+[   75.558002][ T8189] 8021q: adding VLAN 0 to HW filter on device netdevsim2
+[   75.559576][ T8189] netdevsim netdevsim0 netdevsim3: renamed from eth3
+[   75.561756][ T8189] 8021q: adding VLAN 0 to HW filter on device netdevsim3
+[   75.579503][ T8189] bridge0: port 2(bridge_slave_1) entered blocking state
+[   75.579574][ T8189] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   75.579881][ T8189] bridge0: port 1(bridge_slave_0) entered blocking state
+[   75.579947][ T8189] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   75.610756][ T8189] 8021q: adding VLAN 0 to HW filter on device bond0
+[   75.620405][   T67] bridge0: port 1(bridge_slave_0) entered disabled state
+[   75.621609][   T67] bridge0: port 2(bridge_slave_1) entered disabled state
+[   75.639604][ T8189] 8021q: adding VLAN 0 to HW filter on device team0
+[   75.644729][   T67] bridge0: port 1(bridge_slave_0) entered blocking state
+[   75.644865][   T67] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   75.649028][   T46] bridge0: port 2(bridge_slave_1) entered blocking state
+[   75.649110][   T46] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   75.944760][ T8189] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   75.970394][ T8189] veth0_vlan: entered promiscuous mode
+[   75.974869][ T8189] veth1_vlan: entered promiscuous mode
+[   75.994387][ T8189] veth0_macvtap: entered promiscuous mode
+[   75.996910][ T8189] veth1_macvtap: entered promiscuous mode
+[   76.004865][ T8189] batman_adv: batadv0: Interface activated: batadv_slave_0
+[   76.010747][ T8189] batman_adv: batadv0: Interface activated: batadv_slave_1
+[   76.044395][   T46] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+[   76.072972][   T46] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+[   76.073004][   T46] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+[   76.073094][   T57] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+[   76.105641][   T46] netdevsim netdevsim0 netdevsim3 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[   76.165781][   T46] netdevsim netdevsim0 netdevsim2 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[   76.227589][   T46] netdevsim netdevsim0 netdevsim1 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[   76.301138][   T46] netdevsim netdevsim0 netdevsim0 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[   76.671091][ T4054] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > 1
+[   76.671518][ T4054] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > 9
+[   76.671766][ T4054] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
+[   76.672256][ T4054] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
+[   76.674700][ T4054] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
+[   76.865609][   T57] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   76.865624][   T57] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   76.891835][   T57] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   76.891853][   T57] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   77.199911][  T135] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > 1
+[   77.200705][  T135] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > 9
+[   77.201213][  T135] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
+[   77.204962][  T135] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
+[   77.205254][  T135] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
+[   77.571942][ T8744] bridge0: port 1(bridge_slave_0) entered blocking state
+[   77.572033][ T8744] bridge0: port 1(bridge_slave_0) entered disabled state
+[   77.572093][ T8744] bridge_slave_0: entered allmulticast mode
+[   77.572916][ T8744] bridge_slave_0: entered promiscuous mode
+[   77.574580][ T8744] bridge0: port 2(bridge_slave_1) entered blocking state
+[   77.574658][ T8744] bridge0: port 2(bridge_slave_1) entered disabled state
+[   77.574829][ T8744] bridge_slave_1: entered allmulticast mode
+[   77.575596][ T8744] bridge_slave_1: entered promiscuous mode
+[   77.595734][ T8744] bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+[   77.597789][ T8744] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+[   77.611419][ T8744] team0: Port device team_slave_0 added
+[   77.612770][ T8744] team0: Port device team_slave_1 added
+[   77.627444][ T8744] batman_adv: batadv0: Adding interface: batadv_slave_0
+[   77.627455][ T8744] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   77.627468][ T8744] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+[   77.628804][ T8744] batman_adv: batadv0: Adding interface: batadv_slave_1
+[   77.628812][ T8744] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   77.628825][ T8744] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+[   77.651400][ T8744] hsr_slave_0: entered promiscuous mode
+[   77.651827][ T8744] hsr_slave_1: entered promiscuous mode
+[   77.652150][ T8744] debugfs: 'hsr0' already exists in 'hsr'
+[   77.652210][ T8744] Cannot create hsr debugfs directory
+[   79.263600][ T4054] Bluetooth: hci0: command tx timeout
+[   79.408273][   T46] bridge_slave_1: left allmulticast mode
+[   79.408305][   T46] bridge_slave_1: left promiscuous mode
+[   79.408881][   T46] bridge0: port 2(bridge_slave_1) entered disabled state
+[   79.412191][   T46] bridge_slave_0: left allmulticast mode
+[   79.412205][   T46] bridge_slave_0: left promiscuous mode
+[   79.412658][   T46] bridge0: port 1(bridge_slave_0) entered disabled state
+[   79.497868][   T46] bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+[   79.499315][   T46] bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+[   79.500050][   T46] bond0 (unregistering): Released all slaves
+[   79.571650][   T46] hsr_slave_0: left promiscuous mode
+[   79.576651][   T46] hsr_slave_1: left promiscuous mode
+[   79.577426][   T46] batman_adv: batadv0: Interface deactivated: batadv_slave_0
+[   79.577450][   T46] batman_adv: batadv0: Removing interface: batadv_slave_0
+[   79.579250][   T46] batman_adv: batadv0: Interface deactivated: batadv_slave_1
+[   79.579262][   T46] batman_adv: batadv0: Removing interface: batadv_slave_1
+[   79.591330][   T46] veth1_macvtap: left promiscuous mode
+[   79.591360][   T46] veth0_macvtap: left promiscuous mode
+[   79.591448][   T46] veth1_vlan: left promiscuous mode
+[   79.591489][   T46] veth0_vlan: left promiscuous mode
+[   79.740478][   T46] team0 (unregistering): Port device team_slave_1 removed
+[   79.750561][   T46] team0 (unregistering): Port device team_slave_0 removed
+[   80.117292][ T8744] netdevsim netdevsim0 netdevsim0: renamed from eth0
+[   80.119419][ T8744] 8021q: adding VLAN 0 to HW filter on device netdevsim0
+[   80.120136][ T8744] netdevsim netdevsim0 netdevsim1: renamed from eth1
+[   80.122031][ T8744] 8021q: adding VLAN 0 to HW filter on device netdevsim1
+[   80.122789][ T8744] netdevsim netdevsim0 netdevsim2: renamed from eth2
+[   80.125874][ T8744] 8021q: adding VLAN 0 to HW filter on device netdevsim2
+[   80.126336][ T8744] netdevsim netdevsim0 netdevsim3: renamed from eth3
+[   80.129904][ T8744] 8021q: adding VLAN 0 to HW filter on device netdevsim3
+[   80.170996][ T8744] 8021q: adding VLAN 0 to HW filter on device bond0
+[   80.178658][ T8744] 8021q: adding VLAN 0 to HW filter on device team0
+[   80.181658][ T1026] bridge0: port 1(bridge_slave_0) entered blocking state
+[   80.181735][ T1026] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   80.187218][ T1026] bridge0: port 2(bridge_slave_1) entered blocking state
+[   80.187348][ T1026] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   80.630629][ T8744] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   80.656227][ T8744] veth0_vlan: entered promiscuous mode
+[   80.660331][ T8744] veth1_vlan: entered promiscuous mode
+[   80.674717][ T8744] veth0_macvtap: entered promiscuous mode
+[   80.681753][ T8744] veth1_macvtap: entered promiscuous mode
+[   80.724866][ T8744] batman_adv: batadv0: Interface activated: batadv_slave_0
+[   80.730867][ T8744] batman_adv: batadv0: Interface activated: batadv_slave_1
+[   80.764154][   T46] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+[   80.783668][   T44] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   80.783680][   T44] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   80.800900][   T57] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   80.800913][   T57] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   80.814429][   T57] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+[   80.815443][   T57] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+[   80.817322][   T57] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+[   80.937281][ T9121] loop0: detected capacity change from 0 to 32768
+[   80.941803][ T9121] BTRFS: device fsid 3d39d0ba-bdae-447e-827b-b091e1a68885 devid 1 transid 8 /dev/loop0 (7:0) scanned by syz.0.17 (9121)
+[   80.951916][ T9121] BTRFS info (device loop0): first mount of filesystem 3d39d0ba-bdae-447e-827b-b091e1a68885
+[   80.951937][ T9121] BTRFS info (device loop0): using crc32c checksum algorithm
+[   80.965287][ T1026] BTRFS warning (device loop0): checksum verify failed on logical 5332992 mirror 1 wanted 0x7b2525bb found 0xf31ea143 level 0
+[   80.965372][ T9121] BTRFS warning (device loop0): couldn't read tree root
+[   81.001418][ T9121] BTRFS error (device loop0): open_ctree failed: -EIO
+[   81.009538][ T9121] netlink: 4 bytes leftover after parsing attributes in process `syz.0.17'.
+[   81.044817][ T9142] iommufd_mock iommufd_mock0: Adding to iommu group 0
+[   81.343300][ T4054] Bluetooth: hci0: command tx timeout
+[   81.443084][ T9142] loop0: detected capacity change from 0 to 131072
+[   81.466960][ T9142] XFS (loop0): Mounting V5 Filesystem b93a8937-ccd4-41a2-86c7-66a1570a2846
+[   81.485513][ T9142] XFS (loop0): Ending clean mount
+[   81.522577][ T8744] XFS (loop0): Unmounting Filesystem b93a8937-ccd4-41a2-86c7-66a1570a2846
+[   81.632794][ T9190] FAULT_INJECTION: forcing a failure.
+[   81.632794][ T9190] name fail_usercopy, interval 1, probability 0, space 0, times 1
+[   81.632818][ T9190] CPU: 2 UID: 0 PID: 9190 Comm: syz.0.20 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+[   81.632836][ T9190] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[   81.632845][ T9190] Call Trace:
+[   81.632850][ T9190]  <TASK>
+[   81.632857][ T9190]  dump_stack_lvl+0x180/0x1b0
+[   81.632887][ T9190]  should_fail_ex+0x524/0x650
+[   81.632918][ T9190]  _copy_to_user+0x32/0xd0
+[   81.632944][ T9190]  simple_read_from_buffer+0xd0/0x190
+[   81.632972][ T9190]  proc_fail_nth_read+0x18f/0x240
+[   81.632998][ T9190]  ? __pfx_proc_fail_nth_read+0x10/0x10
+[   81.633025][ T9190]  ? rw_verify_area+0xd4/0x6f0
+[   81.633042][ T9190]  ? __pfx_proc_fail_nth_read+0x10/0x10
+[   81.633066][ T9190]  vfs_read+0x1eb/0xc80
+[   81.633094][ T9190]  ? __pfx_vfs_read+0x10/0x10
+[   81.633114][ T9190]  ? __fget_files+0x1f6/0x3b0
+[   81.633145][ T9190]  ? __fget_files+0x200/0x3b0
+[   81.633178][ T9190]  ksys_read+0x126/0x240
+[   81.633199][ T9190]  ? __pfx_ksys_read+0x10/0x10
+[   81.633217][ T9190]  ? preempt_count_sub+0xfc/0x1a0
+[   81.633251][ T9190]  do_syscall_64+0x12e/0x7a0
+[   81.633278][ T9190]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[   81.633295][ T9190] RIP: 0033:0x7fd861fb151c
+[   81.633309][ T9190] Code: ec 28 48 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 79 0d 03 00 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 31 c0 0f 05 <48> 3d 00 f0 ff ff 77 34 44 89 c7 48 89 44 24 08 e8 bf 0d 03 00 48
+[   81.633323][ T9190] RSP: 002b:00007fd862f46f90 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   81.633338][ T9190] RAX: ffffffffffffffda RBX: 00007fd862245fa0 RCX: 00007fd861fb151c
+[   81.633348][ T9190] RDX: 000000000000000f RSI: 00007fd862f47020 RDI: 0000000000000004
+[   81.633356][ T9190] RBP: 00007fd862f47010 R08: 0000000000000000 R09: 0000000000000000
+[   81.633365][ T9190] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+[   81.633374][ T9190] R13: 00007fd862246038 R14: 00007fd862245fa0 R15: 00007fd862f27000
+[   81.633418][ T9190]  </TASK>
+[   81.656462][ T9193] loop0: detected capacity change from 0 to 512
+[   81.673355][ T9193] EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: none.
+[   81.695282][ T8744] EXT4-fs (loop0): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[   81.876076][ T9211] loop0: detected capacity change from 0 to 32768
+[   81.898769][ T9211] XFS (loop0): Mounting V5 Filesystem 6b3d8c96-b8b2-4f73-8344-2893082bca0b
+[   81.938843][ T9211] XFS (loop0): Ending clean mount
+[   82.009048][ T8744] XFS (loop0): Unmounting Filesystem 6b3d8c96-b8b2-4f73-8344-2893082bca0b
+[   82.117558][ T1139] tpm tpm0: Operation Canceled
+[   83.422685][ T4054] Bluetooth: hci0: command tx timeout
+[   85.503984][ T4054] Bluetooth: hci0: command tx timeout
+[   97.158960][  T135] Bluetooth: hci1: unexpected cc 0x0c03 length: 249 > 1
+[   97.162954][  T135] Bluetooth: hci1: unexpected cc 0x1003 length: 249 > 9
+[   97.163356][  T135] Bluetooth: hci1: unexpected cc 0x1001 length: 249 > 9
+[   97.163869][  T135] Bluetooth: hci1: unexpected cc 0x0c23 length: 249 > 4
+[   97.164207][  T135] Bluetooth: hci1: unexpected cc 0x0c38 length: 249 > 2
+[   97.549250][ T9316] bridge0: port 1(bridge_slave_0) entered blocking state
+[   97.549364][ T9316] bridge0: port 1(bridge_slave_0) entered disabled state
+[   97.549545][ T9316] bridge_slave_0: entered allmulticast mode
+[   97.550322][ T9316] bridge_slave_0: entered promiscuous mode
+[   97.551694][ T9316] bridge0: port 2(bridge_slave_1) entered blocking state
+[   97.551779][ T9316] bridge0: port 2(bridge_slave_1) entered disabled state
+[   97.551835][ T9316] bridge_slave_1: entered allmulticast mode
+[   97.552652][ T9316] bridge_slave_1: entered promiscuous mode
+[   97.569664][ T9316] bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+[   97.571230][ T9316] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+[   97.584705][ T9316] team0: Port device team_slave_0 added
+[   97.586110][ T9316] team0: Port device team_slave_1 added
+[   97.598966][ T9316] batman_adv: batadv0: Adding interface: batadv_slave_0
+[   97.598991][ T9316] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   97.599005][ T9316] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+[   97.599884][ T9316] batman_adv: batadv0: Adding interface: batadv_slave_1
+[   97.599891][ T9316] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[   97.599905][ T9316] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+[   97.624797][ T9316] hsr_slave_0: entered promiscuous mode
+[   97.625226][ T9316] hsr_slave_1: entered promiscuous mode
+[   97.715182][ T9316] netdevsim netdevsim1 netdevsim0: renamed from eth0
+[   97.717309][ T9316] 8021q: adding VLAN 0 to HW filter on device netdevsim0
+[   97.717887][ T9316] netdevsim netdevsim1 netdevsim1: renamed from eth1
+[   97.719411][ T9316] 8021q: adding VLAN 0 to HW filter on device netdevsim1
+[   97.719913][ T9316] netdevsim netdevsim1 netdevsim2: renamed from eth2
+[   97.721643][ T9316] 8021q: adding VLAN 0 to HW filter on device netdevsim2
+[   97.722201][ T9316] netdevsim netdevsim1 netdevsim3: renamed from eth3
+[   97.724229][ T9316] 8021q: adding VLAN 0 to HW filter on device netdevsim3
+[   97.737255][ T9316] bridge0: port 2(bridge_slave_1) entered blocking state
+[   97.737316][ T9316] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   97.737484][ T9316] bridge0: port 1(bridge_slave_0) entered blocking state
+[   97.737546][ T9316] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   97.767384][ T9316] 8021q: adding VLAN 0 to HW filter on device bond0
+[   97.776363][   T44] bridge0: port 1(bridge_slave_0) entered disabled state
+[   97.777462][   T44] bridge0: port 2(bridge_slave_1) entered disabled state
+[   97.785539][ T9316] 8021q: adding VLAN 0 to HW filter on device team0
+[   97.789923][   T99] bridge0: port 1(bridge_slave_0) entered blocking state
+[   97.790043][   T99] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   97.796617][   T44] bridge0: port 2(bridge_slave_1) entered blocking state
+[   97.796703][   T44] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   98.074922][ T9316] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   98.098787][ T9316] veth0_vlan: entered promiscuous mode
+[   98.102163][ T9316] veth1_vlan: entered promiscuous mode
+[   98.115243][ T9316] veth0_macvtap: entered promiscuous mode
+[   98.118025][ T9316] veth1_macvtap: entered promiscuous mode
+[   98.126597][ T9316] batman_adv: batadv0: Interface activated: batadv_slave_0
+[   98.132100][ T9316] batman_adv: batadv0: Interface activated: batadv_slave_1
+[   98.167228][ T1026] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   98.167245][ T1026] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   98.181641][   T99] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   98.181655][   T99] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   98.195092][   T99] netdevsim netdevsim1 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+[   98.195934][   T57] netdevsim netdevsim1 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+[   98.195966][   T57] netdevsim netdevsim1 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+[   98.195989][   T57] netdevsim netdevsim1 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+[   98.235131][ T9628] Zero length message leads to an empty skb
+[   98.285504][ T9630] loop1: detected capacity change from 0 to 8192
+[   98.290121][ T9630] ntfs3(loop1): Different NTFS sector size (4096) and media sector size (512).
+[   98.311654][ T9630] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[   98.311907][ T9630] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[   99.193418][ T4054] Bluetooth: hci1: command tx timeout
+[   99.390212][ T9642] loop1: detected capacity change from 0 to 32768
+[   99.391288][ T9642] BTRFS: device fsid afd29e67-b8c6-49b0-b0d7-0efab618e2f3 devid 1 transid 8 /dev/loop1 (7:1) scanned by syz.1.30 (9642)
+[   99.397219][ T9642] BTRFS info (device loop1): first mount of filesystem afd29e67-b8c6-49b0-b0d7-0efab618e2f3
+[   99.397270][ T9642] BTRFS info (device loop1): using crc32c checksum algorithm
+[   99.418539][ T9642] BTRFS info (device loop1): enabling ssd optimizations
+[   99.418559][ T9642] BTRFS info (device loop1): turning on async discard
+[   99.418569][ T9642] BTRFS info (device loop1): enabling free space tree
+[   99.698218][ T9316] BTRFS info (device loop1): last unmount of filesystem afd29e67-b8c6-49b0-b0d7-0efab618e2f3
+[  100.298081][ T9685] loop1: detected capacity change from 0 to 256
+[  100.918009][ T9705] loop1: detected capacity change from 0 to 2048
+[  100.921210][ T9705] EXT4-fs (loop1): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: none.
+[  100.921271][ T9705] ext4 filesystem being mounted at /6/file2 supports timestamps until 2038-01-19 (0x7fffffff)
+[  100.923270][ T9705] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  100.923502][ T9705] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  101.262681][ T4054] Bluetooth: hci1: command tx timeout
+[  101.451843][ T9316] EXT4-fs (loop1): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[  101.602104][ T9741] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  101.603548][ T9741] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  101.947169][ T9741] loop1: detected capacity change from 0 to 131072
+[  101.996411][ T9741] F2FS-fs (loop1): f2fs_recover_fsync_data: recovery fsync data, check_only: 0
+[  101.997636][ T9741] F2FS-fs (loop1): Mounted with checkpoint version = 48b305e5
+[  103.219189][ T9770] loop1: detected capacity change from 0 to 131072
+[  103.260695][ T9770] F2FS-fs (loop1): f2fs_recover_fsync_data: recovery fsync data, check_only: 0
+[  103.262006][ T9770] F2FS-fs (loop1): Mounted with checkpoint version = 48b305e5
+[  103.268427][ T9770] veth1: entered promiscuous mode
+[  103.343040][ T4054] Bluetooth: hci1: command tx timeout
+[  103.521414][ T9786] loop1: detected capacity change from 0 to 65536
+[  104.149369][ T9812] loop1: detected capacity change from 0 to 4096
+[  104.149883][ T9812] udf: Unknown parameter 'К������$�S'
+[  104.157875][ T9812] iommufd_mock iommufd_mock0: Adding to iommu group 0
+[  104.178805][ T9823] dvmrp0: entered allmulticast mode
+[  104.852402][ T9823] loop1: detected capacity change from 0 to 262144
+[  104.859635][ T9823] (syz.1.44,9823,2):ocfs2_check_set_options:1243 ERROR: Invalid heartbeat mount options
+[  104.860442][ T9823] (syz.1.44,9823,2):ocfs2_fill_super:1177 ERROR: status = -22
+[  105.100794][ T9851] loop1: detected capacity change from 0 to 1024
+[  105.125718][ T9851] EXT4-fs (loop1): mounted filesystem 00000000-0000-0000-0000-000000000000 ro without journal. Quota mode: writeback.
+[  105.250572][ T9316] EXT4-fs (loop1): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[  105.283574][ T9864] loop1: detected capacity change from 0 to 2048
+[  105.287070][ T9864] EXT4-fs (loop1): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: none.
+[  105.287129][ T9864] ext4 filesystem being mounted at /19/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+[  105.289342][ T9864] EXT4-fs error (device loop1): ext4_lookup:1787: inode #14: comm syz.1.46: iget: checksum invalid
+[  105.299096][ T9316] EXT4-fs (loop1): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[  105.334795][ T9875] FAULT_INJECTION: forcing a failure.
+[  105.334795][ T9875] name fail_usercopy, interval 1, probability 0, space 0, times 0
+[  105.334816][ T9875] CPU: 2 UID: 0 PID: 9875 Comm: syz.1.48 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+[  105.334829][ T9875] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[  105.334836][ T9875] Call Trace:
+[  105.334840][ T9875]  <TASK>
+[  105.334845][ T9875]  dump_stack_lvl+0x180/0x1b0
+[  105.334884][ T9875]  should_fail_ex+0x524/0x650
+[  105.334910][ T9875]  _copy_from_user+0x30/0xd0
+[  105.334929][ T9875]  kvm_vcpu_ioctl+0xe5f/0x1640
+[  105.334949][ T9875]  ? __pfx_kvm_vcpu_ioctl+0x10/0x10
+[  105.334965][ T9875]  ? __sanitizer_cov_trace_switch+0x54/0x90
+[  105.334995][ T9875]  ? do_vfs_ioctl+0x12a/0x1470
+[  105.335010][ T9875]  ? __pfx_do_vfs_ioctl+0x10/0x10
+[  105.335035][ T9875]  ? hook_file_ioctl_common+0x146/0x430
+[  105.335055][ T9875]  ? __fget_files+0x200/0x3b0
+[  105.335075][ T9875]  ? __pfx_kvm_vcpu_ioctl+0x10/0x10
+[  105.335091][ T9875]  __x64_sys_ioctl+0x194/0x210
+[  105.335107][ T9875]  do_syscall_64+0x12e/0x7a0
+[  105.335127][ T9875]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  105.335139][ T9875] RIP: 0033:0x7ff11fdb2b7d
+[  105.335149][ T9875] Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+[  105.335159][ T9875] RSP: 002b:00007ff120c18f98 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+[  105.335170][ T9875] RAX: ffffffffffffffda RBX: 00007ff120045fa0 RCX: 00007ff11fdb2b7d
+[  105.335177][ T9875] RDX: 0000000000000000 RSI: 000000004004ae99 RDI: 0000000000000005
+[  105.335184][ T9875] RBP: 00007ff120c19010 R08: 0000000000000000 R09: 0000000000000000
+[  105.335190][ T9875] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+[  105.335196][ T9875] R13: 00007ff120046038 R14: 00007ff120045fa0 R15: 00007ff120bf9000
+[  105.335220][ T9875]  </TASK>
+[  105.433579][ T4054] Bluetooth: hci1: command tx timeout
+[  105.553620][ T9884] loop1: detected capacity change from 0 to 32768
+[  106.228834][ T9917] capability: warning: `syz.1.53' uses 32-bit capabilities (legacy support in use)
+[  106.829518][ T9936] loop1: detected capacity change from 0 to 16
+[  106.829854][ T9936] erofs: Unknown parameter 'cache_stvateg'
+[  106.927169][ T9936] loop1: detected capacity change from 0 to 32768
+[  106.927538][ T9936] ocfs2: Bad value for 'dir_resv_level'
+[  107.072262][ T9958] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  107.077976][ T9958] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  107.620573][ T9981] loop1: detected capacity change from 0 to 4096
+[  107.637877][ T9981] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  107.638105][ T9981] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  107.638651][ T9981] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  107.640622][ T9981] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  108.584819][ T9995] loop1: detected capacity change from 0 to 131072
+[  108.626398][ T9995] F2FS-fs (loop1): f2fs_recover_fsync_data: recovery fsync data, check_only: 0
+[  108.628209][ T9995] F2FS-fs (loop1): Mounted with checkpoint version = 48b305e5
+[  108.922023][T10016] loop1: detected capacity change from 0 to 32768
+[  108.948738][T10022] NILFS (loop1): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+[  109.815964][T10027] loop1: detected capacity change from 0 to 262144
+[  109.818899][T10027] BTRFS: device fsid f9acc048-ac89-4f9b-90b4-9ee8f3de7bde devid 1 transid 8 /dev/loop1 (7:1) scanned by syz.1.63 (10027)
+[  109.821893][T10027] BTRFS info (device loop1): first mount of filesystem f9acc048-ac89-4f9b-90b4-9ee8f3de7bde
+[  109.821910][T10027] BTRFS info (device loop1): using blake2b checksum algorithm
+[  109.842935][T10027] BTRFS info (device loop1): deleted orphan free space tree entries
+[  109.843069][T10027] BTRFS info (device loop1): enabling ssd optimizations
+[  109.843079][T10027] BTRFS info (device loop1): turning on async discard
+[  109.843089][T10027] BTRFS info (device loop1): enabling free space tree
+[  109.868147][ T9316] BTRFS info (device loop1): last unmount of filesystem f9acc048-ac89-4f9b-90b4-9ee8f3de7bde
+[  110.231197][T10073] loop1: detected capacity change from 0 to 1024
+[  110.251304][T10073] EXT4-fs (loop1): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: writeback.
+[  110.497191][ T9316] EXT4-fs (loop1): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[  110.579323][T10088] loop1: detected capacity change from 0 to 1024
+[  110.588417][T10088] EXT4-fs (loop1): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: writeback.
+[  110.827259][ T9316] EXT4-fs (loop1): unmounting filesystem 00000000-0000-0000-0000-000000000000.
+[  110.880180][T10104] loop1: detected capacity change from 0 to 2048
+[  110.890875][T10107] NILFS (loop1): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+[  110.893252][T10104] NILFS error (device loop1): nilfs_check_folio: bad entry in directory #2: disallowed inode number - offset=80, inode=7, rec_len=24, name_len=5
+[  110.924069][T10112] loop1: detected capacity change from 0 to 1024
+[  111.577216][T10131] loop1: detected capacity change from 0 to 32768
+[  111.606935][T10131] XFS (loop1): Mounting V5 Filesystem 6b3d8c96-b8b2-4f73-8344-2893082bca0b
+[  111.658504][T10131] XFS (loop1): Ending clean mount
+[  111.678868][ T9316] XFS (loop1): Unmounting Filesystem 6b3d8c96-b8b2-4f73-8344-2893082bca0b
+[  112.075208][T10195] loop1: detected capacity change from 0 to 65536
+[  112.087911][T10195] XFS (loop1): Deprecated V4 format (crc=0) will not be supported after September 2030.
+[  112.089438][T10195] XFS (loop1): Mounting V4 Filesystem cc8a0a03-7501-4b50-be6e-9129643585b1
+[  112.110355][T10195] XFS (loop1): Ending clean mount
+[  112.113802][T10195] XFS (loop1): Quotacheck needed: Please wait.
+[  112.129439][T10195] XFS (loop1): Quotacheck: Done.
+[  112.129848][T10195] xfs filesystem being mounted at /46/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+[  112.141035][ T9316] XFS (loop1): Unmounting Filesystem cc8a0a03-7501-4b50-be6e-9129643585b1
+[  112.406186][T10246] loop1: detected capacity change from 0 to 128
+[  113.020836][T10265] FAULT_INJECTION: forcing a failure.
+[  113.020836][T10265] name failslab, interval 1, probability 0, space 0, times 1
+[  113.020857][T10265] CPU: 0 UID: 0 PID: 10265 Comm: syz.1.76 Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(full) 
+[  113.020872][T10265] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[  113.020879][T10265] Call Trace:
+[  113.020883][T10265]  <TASK>
+[  113.020889][T10265]  dump_stack_lvl+0x180/0x1b0
+[  113.020930][T10265]  should_fail_ex+0x524/0x650
+[  113.020959][T10265]  should_failslab+0xc7/0x130
+[  113.020977][T10265]  __kmalloc_cache_noprof+0x90/0x6c0
+[  113.020994][T10265]  ? ksys_write+0x1a8/0x240
+[  113.021009][T10265]  ? __do_sys_memfd_create+0x171/0x4e0
+[  113.021036][T10265]  __do_sys_memfd_create+0x171/0x4e0
+[  113.021060][T10265]  do_syscall_64+0x12e/0x7a0
+[  113.021082][T10265]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  113.021095][T10265] RIP: 0033:0x7ff11fdb2b7d
+[  113.021106][T10265] Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+[  113.021118][T10265] RSP: 002b:00007ff120c18d58 EFLAGS: 00000246 ORIG_RAX: 000000000000013f
+[  113.021130][T10265] RAX: ffffffffffffffda RBX: 00002000000051c0 RCX: 00007ff11fdb2b7d
+[  113.021138][T10265] RDX: 00007ff120c18dfc RSI: 0000000000000000 RDI: 00007ff11fe50aee
+[  113.021145][T10265] RBP: 00000000000050ec R08: 00007ff120c18c40 R09: 00007ff120c19010
+[  113.021152][T10265] R10: 0000000000000000 R11: 0000000000000246 R12: 0000200000005100
+[  113.021159][T10265] R13: 00007ff120c18dfc R14: 00007ff120c18e00 R15: 0000200000000340
+[  113.021195][T10265]  </TASK>
+[  113.141087][T10268] BTRFS: device fsid 9c2593b3-5c40-4e29-8ff3-7b58260955bc devid 1 transid 8 /dev/loop1 (7:1) scanned by syz.1.77 (10268)
+[  113.144886][T10268] BTRFS info (device loop1): first mount of filesystem 9c2593b3-5c40-4e29-8ff3-7b58260955bc
+[  113.144904][T10268] BTRFS info (device loop1): using sha256 checksum algorithm
+[  113.160204][T10268] BTRFS info (device loop1): enabling ssd optimizations
+[  113.160220][T10268] BTRFS info (device loop1): turning on async discard
+[  113.160229][T10268] BTRFS info (device loop1): enabling free space tree
+[  113.186503][ T9316] BTRFS info (device loop1): last unmount of filesystem 9c2593b3-5c40-4e29-8ff3-7b58260955bc
+[  113.268385][T10295] iommufd_mock iommufd_mock0: Adding to iommu group 0
+[  113.385134][T10295] process 'syz.1.78' launched './file1' with NULL argv: empty string added
+[  113.685181][  T135] Bluetooth: hci0: unexpected cc 0x0c03 length: 249 > 1
+[  113.685992][  T135] Bluetooth: hci0: unexpected cc 0x1003 length: 249 > 9
+[  113.686297][  T135] Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
+[  113.686740][  T135] Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
+[  113.687563][  T135] Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
+[  113.725624][   T57] netdevsim netdevsim1 netdevsim3 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  113.780996][   T57] netdevsim netdevsim1 netdevsim2 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  113.863921][   T57] netdevsim netdevsim1 netdevsim1 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  113.920056][   T57] netdevsim netdevsim1 netdevsim0 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  114.054950][   T57] bridge_slave_1: left allmulticast mode
+[  114.054966][   T57] bridge_slave_1: left promiscuous mode
+[  114.055357][   T57] bridge0: port 2(bridge_slave_1) entered disabled state
+[  114.057264][   T57] bridge_slave_0: left allmulticast mode
+[  114.057276][   T57] bridge_slave_0: left promiscuous mode
+[  114.057381][   T57] bridge0: port 1(bridge_slave_0) entered disabled state
+[  114.067146][   T57] dvmrp0: left allmulticast mode
+[  114.141793][   T57] bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+[  114.145321][   T57] bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+[  114.146146][   T57] bond0 (unregistering): Released all slaves
+[  114.216524][T10321] bridge0: port 1(bridge_slave_0) entered blocking state
+[  114.216626][T10321] bridge0: port 1(bridge_slave_0) entered disabled state
+[  114.216683][T10321] bridge_slave_0: entered allmulticast mode
+[  114.219999][T10321] bridge_slave_0: entered promiscuous mode
+[  114.223113][T10321] bridge0: port 2(bridge_slave_1) entered blocking state
+[  114.223162][T10321] bridge0: port 2(bridge_slave_1) entered disabled state
+[  114.223221][T10321] bridge_slave_1: entered allmulticast mode
+[  114.223999][T10321] bridge_slave_1: entered promiscuous mode
+[  114.285187][T10321] bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+[  114.293994][T10321] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+[  114.326657][T10321] team0: Port device team_slave_0 added
+[  114.328020][T10321] team0: Port device team_slave_1 added
+[  114.385588][T10321] batman_adv: batadv0: Adding interface: batadv_slave_0
+[  114.385599][T10321] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[  114.385613][T10321] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+[  114.387233][T10321] batman_adv: batadv0: Adding interface: batadv_slave_1
+[  114.387242][T10321] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1532 would solve the problem.
+[  114.387255][T10321] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+[  114.412897][T10321] hsr_slave_0: entered promiscuous mode
+[  114.413326][T10321] hsr_slave_1: entered promiscuous mode
+[  114.413666][T10321] debugfs: 'hsr0' already exists in 'hsr'
+[  114.413677][T10321] Cannot create hsr debugfs directory
+[  114.471087][   T57] hsr_slave_0: left promiscuous mode
+[  114.471613][   T57] hsr_slave_1: left promiscuous mode
+[  114.472243][   T57] batman_adv: batadv0: Interface deactivated: batadv_slave_0
+[  114.472256][   T57] batman_adv: batadv0: Removing interface: batadv_slave_0
+[  114.473772][   T57] batman_adv: batadv0: Interface deactivated: batadv_slave_1
+[  114.473784][   T57] batman_adv: batadv0: Removing interface: batadv_slave_1
+[  114.477804][   T57] veth1_macvtap: left promiscuous mode
+[  114.477828][   T57] veth0_macvtap: left promiscuous mode
+[  114.477897][   T57] veth1_vlan: left promiscuous mode
+[  114.477937][   T57] veth0_vlan: left promiscuous mode
+[  114.619171][   T57] team0 (unregistering): Port device team_slave_1 removed
+[  114.632926][   T57] team0 (unregistering): Port device team_slave_0 removed
+[  114.756844][T10321] netdevsim netdevsim2 netdevsim0: renamed from eth0
+[  114.759233][T10321] 8021q: adding VLAN 0 to HW filter on device netdevsim0
+[  114.759879][T10321] netdevsim netdevsim2 netdevsim1: renamed from eth1
+[  114.761529][T10321] 8021q: adding VLAN 0 to HW filter on device netdevsim1
+[  114.762639][T10321] netdevsim netdevsim2 netdevsim2: renamed from eth2
+[  114.769050][T10321] 8021q: adding VLAN 0 to HW filter on device netdevsim2
+[  114.769678][T10321] netdevsim netdevsim2 netdevsim3: renamed from eth3
+[  114.775578][T10321] 8021q: adding VLAN 0 to HW filter on device netdevsim3
+[  114.835030][T10321] 8021q: adding VLAN 0 to HW filter on device bond0
+[  114.846670][T10321] 8021q: adding VLAN 0 to HW filter on device team0
+[  114.850316][   T46] bridge0: port 1(bridge_slave_0) entered blocking state
+[  114.850388][   T46] bridge0: port 1(bridge_slave_0) entered forwarding state
+[  114.854846][   T44] bridge0: port 2(bridge_slave_1) entered blocking state
+[  114.854901][   T44] bridge0: port 2(bridge_slave_1) entered forwarding state
+[  115.125208][T10321] 8021q: adding VLAN 0 to HW filter on device batadv0
+[  115.148752][T10321] veth0_vlan: entered promiscuous mode
+[  115.156663][T10321] veth1_vlan: entered promiscuous mode
+[  115.176709][T10321] veth0_macvtap: entered promiscuous mode
+[  115.180145][T10321] veth1_macvtap: entered promiscuous mode
+[  115.188249][T10321] batman_adv: batadv0: Interface activated: batadv_slave_0
+[  115.191861][T10321] batman_adv: batadv0: Interface activated: batadv_slave_1
+[  115.239603][   T99] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[  115.239627][   T99] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[  115.257291][ T1026] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[  115.257314][ T1026] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[  115.262662][   T44] netdevsim netdevsim2 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+[  115.263055][   T44] netdevsim netdevsim2 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+[  115.263083][   T44] netdevsim netdevsim2 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+[  115.263102][   T44] netdevsim netdevsim2 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+[  115.300716][T10675] set_capacity_and_notify: 2 callbacks suppressed
+[  115.300728][T10675] loop2: detected capacity change from 0 to 2048
+[  115.310942][T10678] NILFS (loop2): segctord starting. Construction interval = 5 seconds, CP frequency < 30 seconds
+[  115.360423][T10683] iommufd_mock iommufd_mock0: Adding to iommu group 0
+[  115.752688][  T135] Bluetooth: hci0: command tx timeout
+[  116.951392][T10741] loop2: detected capacity change from 0 to 131072
+[  116.952010][T10741] f2fs: Unknown parameter 'fowner<00000000000000000000'
+[  117.046194][T10741] sctp: [Deprecated]: syz.2.84 (pid 10741) Use of int in maxseg socket option.
+[  117.046194][T10741] Use struct sctp_assoc_value instead
+[  117.087302][T10755] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  117.087561][T10755] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  117.798648][T10771] loop2: detected capacity change from 0 to 65536
+[  117.815657][T10771] XFS (loop2): Mounting V5 Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  117.824763][  T135] Bluetooth: hci0: command tx timeout
+[  117.833471][T10771] XFS (loop2): Ending clean mount
+[  117.999534][T10771] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  117.999803][T10771] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  118.511871][T10321] XFS (loop2): Unmounting Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  118.790377][T10820] loop2: detected capacity change from 0 to 65536
+[  118.806347][T10820] XFS (loop2): Mounting V5 Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  118.816314][T10820] XFS (loop2): Ending clean mount
+[  118.943394][T10820] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  118.946344][T10820] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  119.460358][T10321] XFS (loop2): Unmounting Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  119.744397][T10864] loop2: detected capacity change from 0 to 65536
+[  119.764013][T10864] XFS (loop2): Mounting V5 Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  119.776884][T10864] XFS (loop2): Ending clean mount
+[  119.953682][  T135] Bluetooth: hci0: command tx timeout
+[  119.986675][T10864] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  119.986914][T10864] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  120.501117][T10321] XFS (loop2): Unmounting Filesystem d6f69dbd-8c5d-46be-b88e-92c0ae88ceb2
+[  120.610283][T10909] loop2: detected capacity change from 0 to 4096
+[  120.610910][T10909] =======================================================
+[  120.610910][T10909] WARNING: The mand mount option has been deprecated and
+[  120.610910][T10909]          and is ignored by this kernel. Remove the mand
+[  120.610910][T10909]          option from the mount to silence this warning.
+[  120.610910][T10909] =======================================================
+[  120.610995][T10909] ntfs3: Bad value for 'gid'
+[  120.611004][T10909] ntfs3: Bad value for 'gid'
+[  120.714143][T10909] loop2: detected capacity change from 0 to 32768
+[  120.716119][T10909] BTRFS: device fsid afd29e67-b8c6-49b0-b0d7-0efab618e2f3 devid 1 transid 8 /dev/loop2 (7:2) scanned by syz.2.90 (10909)
+[  120.718643][T10909] BTRFS info (device loop2): first mount of filesystem afd29e67-b8c6-49b0-b0d7-0efab618e2f3
+[  120.718659][T10909] BTRFS info (device loop2): using crc32c checksum algorithm
+[  120.734423][T10909] BTRFS info (device loop2): enabling ssd optimizations
+[  120.734437][T10909] BTRFS info (device loop2): turning on async discard
+[  120.734446][T10909] BTRFS info (device loop2): enabling free space tree
+[  120.741635][T10321] BTRFS info (device loop2): last unmount of filesystem afd29e67-b8c6-49b0-b0d7-0efab618e2f3
+[  121.236890][T10958] loop2: detected capacity change from 0 to 65536
+[  121.254288][T10958] XFS (loop2): Mounting V4 Filesystem e63ad84b-681a-44ea-8f8e-210cbe251491
+[  121.277560][T10958] XFS (loop2): Ending clean mount
+[  121.277854][T10958] xfs filesystem being mounted at /13/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+[  122.057424][  T135] Bluetooth: hci0: command tx timeout
+[  122.232589][T10958] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  122.232853][T10958] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  122.859545][T10321] XFS (loop2): Unmounting Filesystem e63ad84b-681a-44ea-8f8e-210cbe251491
+[  123.203432][T11013] loop2: detected capacity change from 0 to 65536
+[  123.220823][T11013] XFS (loop2): Mounting V4 Filesystem e63ad84b-681a-44ea-8f8e-210cbe251491
+[  123.250186][T11013] XFS (loop2): Ending clean mount
+[  123.250588][T11013] xfs filesystem being mounted at /14/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+[  123.694571][T11013] UDC core: USB Raw Gadget: couldn't find an available UDC or it's busy
+[  123.694834][T11013] misc raw-gadget: fail, usb_gadget_register_driver returned -16
+[  124.386039][T10321] XFS (loop2): Unmounting Filesystem e63ad84b-681a-44ea-8f8e-210cbe251491
+[  124.745219][T10729] netdevsim netdevsim2 netdevsim3 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  124.801918][T10729] netdevsim netdevsim2 netdevsim2 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  124.865401][T10729] netdevsim netdevsim2 netdevsim1 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  124.952477][T10729] netdevsim netdevsim2 netdevsim0 (unregistering): unset [1, 0] type 2 family 0 port 6081 - 0
+[  125.039279][T10729] bridge_slave_1: left allmulticast mode
+[  125.039296][T10729] bridge_slave_1: left promiscuous mode
+[  125.039417][T10729] bridge0: port 2(bridge_slave_1) entered disabled state
+[  125.040749][T10729] bridge_slave_0: left allmulticast mode
+[  125.040760][T10729] bridge_slave_0: left promiscuous mode
+[  125.040849][T10729] bridge0: port 1(bridge_slave_0) entered disabled state
+[  125.138191][T10729] bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+[  125.139419][T10729] bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+[  125.140263][T10729] bond0 (unregistering): Released all slaves
+[  125.418526][T10729] hsr_slave_0: left promiscuous mode
+[  125.419511][T10729] hsr_slave_1: left promiscuous mode
+[  125.420636][T10729] batman_adv: batadv0: Interface deactivated: batadv_slave_0
+[  125.420668][T10729] batman_adv: batadv0: Removing interface: batadv_slave_0
+[  125.421979][T10729] batman_adv: batadv0: Interface deactivated: batadv_slave_1
+[  125.422011][T10729] batman_adv: batadv0: Removing interface: batadv_slave_1
+[  125.426103][T10729] veth1_macvtap: left promiscuous mode
+[  125.426122][T10729] veth0_macvtap: left promiscuous mode
+[  125.426175][T10729] veth1_vlan: left promiscuous mode
+[  125.426207][T10729] veth0_vlan: left promiscuous mode
+[  125.549196][T10729] team0 (unregistering): Port device team_slave_1 removed
+[  125.556728][T10729] team0 (unregistering): Port device team_slave_0 removed
