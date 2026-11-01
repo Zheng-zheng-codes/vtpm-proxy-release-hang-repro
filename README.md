@@ -1,4 +1,4 @@
-# vTPM proxy release-path hang (`vtpm_proxy_fops_release`) — reproducer
+# vTPM proxy release-path stall (`vtpm_proxy_fops_release`) — reproducer
 
 This repository contains the reproducer and logs for:
 
@@ -8,16 +8,42 @@ INFO: task hung in vtpm_proxy_fops_release
 
 A process closing the "server side" of a vTPM proxy device blocks in
 `vtpm_proxy_fops_release()` -> `vtpm_proxy_work_stop()` -> `flush_work()`
-while the chip-register work (`vtpm_proxy_work` -> `tpm_chip_register()`)
-is still running inside a `tpm_transmit()` retry loop
-(`tpm_chip_start() -> vtpm_proxy_request_locality()`), waiting for the
-vtpm fd counterpart, which is the exiting process itself. The guest serial
+while `vtpm_proxy_work` (the chip-register work,
+`tpm_chip_register()`) is still running inside a `tpm_transmit()` loop
+(`tpm_chip_start() -> vtpm_proxy_request_locality()`). The guest serial
 log shows repeated `tpm tpm3: Operation Timed out` /
-`tpm tpm31: Operation Timed out`; after the transmit retries are exhausted
-the work completes with an error, `flush_work()` returns and the release
-path finishes. We therefore observe a multi-minute stall of the release
-path (hung-task reports at 143 s and 163 s) followed by recovery, not a
-permanent deadlock.
+`tpm tpm31: Operation Timed out` lines while the release is blocked.
+
+Additional observations from the sysrq-t task dumps:
+
+- The full call stack of the running chip-register work was captured in
+  the first dump (`logs/vtpm-sysrq-t-all-tasks.txt`); in the two later
+  dumps the kworker stack no longer fit in the kernel log buffer, but the
+  workqueue state shows the backlog:
+
+  ```
+  workqueue tpm-vtpm: flags=0x40108
+    pwq 6: cpus=1 node=0 active=1 refcnt=33
+      in-flight: 24:vtpm_proxy_work for 75s
+      inactive: 4*vtpm_proxy_work BAR(10837), 26*vtpm_proxy_work
+  ```
+
+  (`logs/dmesg-sysrq-verify4.txt`: `in-flight: ... for 109s`,
+  `inactive: 29*vtpm_proxy_work BAR(10857)`.) Because of the backlog we
+  cannot tell which queued work the blocked release is actually waiting
+  for.
+
+- The blocked release was observed through two different entry paths:
+  process exit (`do_exit()` -> `task_work_run()` -> `__fput()`, in the
+  campaign reports, the automated reproduction and
+  `logs/dmesg-sysrq-verify4.txt`) and a `close_range()` returning to
+  user space (`task_work_run()` -> `__fput()`, in
+  `logs/dmesg-sysrq-verify3.txt`).
+
+Whether the release eventually completes was **not** captured: the logs
+end while the task is still blocked. We are not claiming a permanent
+deadlock either; the duration of the stall beyond the log window is
+unknown.
 
 ## Tested kernels
 
@@ -35,19 +61,18 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 
 ## Observed results
 
-| Environment | Runs | Hang observed |
+| Run | Sequence | Hang |
 |---|---|---|
-| syzkaller campaign VM (standard QEMU environment) | 4 crash instances over a multi-day campaign | yes (log/report 0..3) |
-| automated state-primed reproduction (syzkaller `-mode repro`) | 1 | yes, `verified=true` (`logs/serial-7.3-auto-repro.log`) |
-| manual replay of the same sequence in the same QEMU environment | 2 | yes, 2/2 (`logs/serial-7.3-manual-repro.log`, `logs/serial-verify3.log`) |
-| bare fresh VM (no scratch disks / pmem / NUMA layout), same sequence | 4 | no (`logs/serial-7.3-bare-no-trigger-*.log`) |
+| syzkaller campaign, standard QEMU environment | 4 crash instances over a multi-day campaign | yes (`logs/log-7.3-*.txt`, `logs/report-7.3-*.txt`) |
+| automated state-primed reproduction (`syzkaller -mode repro`) | 49-program sequence | yes, 1/1, `verified=true` (`logs/serial-7.3-auto-repro.log`) |
+| manual replay, same QEMU environment | same sequence | yes, 1/1 (`logs/serial-7.3-manual-repro.log`, `logs/vtpm-sysrq-t-all-tasks.txt`) |
+| manual replay, same QEMU environment, second run | same sequence | yes, 1/1 (`logs/serial-verify4.log`, `logs/dmesg-sysrq-verify4.txt`, `logs/execprog-verify4.out`) |
+| bare fresh VM, **different command line**, no scratch disks / pmem / NUMA | same sequence | no hang recorded in 4 runs (`logs/serial-7.3-bare-no-trigger-*.log`) |
 
-The reproducer appears timing sensitive: it reproduced reliably in the
-syzkaller QEMU environment but did not trigger on a bare VM. We have not
-isolated which environmental factors matter. A minimized single program
-does not reproduce on its own either; the state built by the preceding
-programs of the sequence is required, so the reproducer is the full
-sequence below.
+The bare-VM runs differ from the positive runs in the kernel command line
+as well as in the QEMU device layout, so they only show that no hang was
+recorded in those runs; the effect of the environment cannot be isolated
+from them.
 
 ## Reproduction steps
 
@@ -57,7 +82,9 @@ sequence below.
    inspect the hang live). The guest needs no extra setup.
 
 2. From the host, copy the two executor binaries and the reproducer
-   sequence into the guest:
+   sequence into the guest. The sequence file in this repository
+   (sha256 `b9740e789ed9...`, see `MANIFEST.sha256`) is byte-identical to
+   the file used in the runs whose logs are included:
 
    ```bash
    scp syz-execprog syz-executor repro.kernsight.prog root@guest:/tmp/
@@ -71,45 +98,55 @@ sequence below.
    ./syz-execprog -executor=/tmp/syz-executor -procs=1 -repeat=1 /tmp/repro.kernsight.prog
    ```
 
-   `repro.kernsight.prog` contains 49 programs, replayed one at a time in
-   file order (`procs=1`, `repeat=1`, `sandbox=none`). The sequence first
-   creates several vTPM proxy devices (and other state), then the final
-   program's process exits.
+   The sequence parses as 50 programs
+   (`logs/execprog-verify4.out`: `parsed 50 programs`), replayed one at a
+   time in file order (`procs=1`, `repeat=1`, `sandbox=none`). Note
+   `procs=1` means one executor process; programs run sequentially but
+   each program can leave asynchronous kernel-side work (workqueues,
+      timers, devices) behind, and the executor's syscall threads do not
+   all share one file descriptor table. The sequence creates several
+   vTPM proxy devices and closes/exits over them; the hang appears when
+   the closing task's release path races a still-running (or queued)
+   chip-register work.
 
-4. Expected timeline (see `logs/serial-7.3-manual-repro.log`):
+4. Expected timeline (see `logs/serial-verify4.log`):
 
-   - t≈135 s: the sequence finishes executing; the executor process exits
-     and closes its vtpm fds.
-   - t≈260 s: the hung-task monitor reports
+   - the sequence finishes executing; the closing task blocks in
+     `flush_work()` (drivers/char/tpm/tpm_vtpm_proxy.c:471, reached from
+     `vtpm_proxy_fops_release()`:239).
+   - t≈480 s: the hung-task monitor reports
 
      ```
-     INFO: task syz.0.33:10854 blocked for more than 143 seconds.
-           Blocked by coredump.
+     INFO: task syz.0.33:10857 blocked for more than 143 seconds.
      ```
 
-     with the release path stuck in `flush_work()` (trace below).
-   - t≈470 s: `tpm tpm3: Operation Timed out` / `tpm tpm31: Operation
-     Timed out`; the transmit retries are exhausted, the work finishes,
-     `flush_work()` returns and the reproducer exits normally
-     (`EXIT:0`). Recovery after minutes is reproducible.
+     (t≈504 s: the 163 s report).
+   - the task remains blocked while
+     `tpm tpm3: Operation Timed out` / `tpm tpm31: Operation Timed out`
+     lines appear in the log. When the log window ends (all included
+     logs) the task is still blocked; we have no log evidence of the
+     release completing.
 
-5. While the task is blocked (between the 143 s report and the recovery),
-   capture what the chip-register work is doing from inside the guest:
+5. While the task is blocked, capture what the chip-register work is
+   doing from inside the guest:
 
    ```bash
    echo t > /proc/sysrq-trigger
    dmesg > dump.txt
    ```
 
-   Expected (see `logs/vtpm-sysrq-t-all-tasks.txt`): a kworker named
-   `kworker/X:Y+tpm-vtpm` in state `D`:
+   Expected (see `logs/vtpm-sysrq-t-all-tasks.txt` for the full stack;
+   in later dumps the kworker stack may rotate out of the kernel log
+   buffer, while the workqueue backlog remains visible, e.g.
+   `logs/dmesg-sysrq-verify4.txt`): a
+   kworker named `kworker/X:Y+tpm-vtpm` in state `D`:
 
    ```
    Workqueue: tpm-vtpm vtpm_proxy_work
    Call Trace:
-     tpm_transmit+0x4bf/0xb90                <- retry loop (usleep_range_state)
+     tpm_transmit+0x4bf/0xb90
      tpm_transmit_cmd+0x62/0x1f0
-     vtpm_proxy_request_locality+0x140/0x280 <- locality via the proxy
+     vtpm_proxy_request_locality+0x140/0x280
      tpm_chip_start+0x18f/0x340
      tpm_chip_bootstrap+0x80/0x1c0
      tpm_chip_register+0x27/0x4d0
@@ -117,38 +154,39 @@ sequence below.
      process_one_work+0xa9c/0x1dc0
    ```
 
-   while the exiting task is blocked in
-   `vtpm_proxy_fops_release() -> vtpm_proxy_delete_device() ->
-   vtpm_proxy_work_stop() -> flush_work()`
-   (drivers/char/tpm/tpm_vtpm_proxy.c:239/590/470/471).
+   plus the workqueue backlog shown above, and the blocked release in
+   `vtpm_proxy_fops_release()`.
 
 ## Notes
 
-- The hang is timing sensitive: it reproduced reliably in the syzkaller
-  QEMU environment (with scratch disks and pmem/NUMA layout) but not on a
-  bare VM. If a run does not hang, simply re-run the sequence.
-- The sequence creates several vtpm devices; the recovery log shows two
-  chips ("tpm3" and "tpm31") timing out.
-- A generated C reproducer for this sequence compiles but does not
-  reproduce the hang (it loops in a single process and does not go
-  through the executor's exit path); it is therefore not included.
-  See `logs/serial-7.3-c-repro-no-trigger.log` for the negative runs.
+- The hang is timing sensitive: it reproduced in the syzkaller QEMU
+  environment in every attempt, but not in 4 runs on a bare VM whose
+  command line and device layout differed (see the caveat above). If a
+  run does not hang, re-run the sequence.
+- The hang was observed through two entry paths (process exit and
+  `close_range()`); we have not established which entry paths can or
+  cannot trigger it beyond these runs.
+- `vtpm_proxy_tpm_req_canceled()` (the transmit cancel callback) already
+  exists in the driver; from the captured stacks we cannot tell why the
+  wait nevertheless persists. See the question in the report mail.
 
 ## Repository layout
 
 ```
-repro/repro.kernsight.prog        49-program sequence (the reproducer)
-logs/vtpm-sysrq-t-all-tasks.txt   sysrq-t task dump with the kworker stack
-logs/serial-7.3-manual-repro.log  manual replay: hung task + tpm timeouts + recovery
-logs/serial-7.3-auto-repro.log    automated state-primed reproduction (verified=true)
-logs/serial-verify3.log, logs/dmesg-sysrq-verify3.txt  second manual replay + task dump
-logs/serial-7.3-c-repro-no-trigger.log  C reproducer runs (no trigger)
-logs/serial-7.3-bare-no-trigger-*.log   4 bare-VM runs (no trigger)
+repro/repro.kernsight.prog        the reproducer (parses as 50 programs)
+logs/vtpm-sysrq-t-all-tasks.txt   sysrq-t dump: kworker stack + backlog (run 1)
+logs/dmesg-sysrq-verify3.txt      sysrq-t dump: backlog, close_range entry path
+logs/dmesg-sysrq-verify4.txt      sysrq-t dump: backlog, do_exit entry path
+logs/serial-7.3-auto-repro.log    automated state-primed reproduction
+logs/serial-7.3-manual-repro.log  manual replay, run 1
+logs/serial-verify4.log           manual replay, run 2 (serial)
+logs/execprog-verify4.out         run 2 syz-execprog stdout ("parsed 50 programs")
+logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no hang recorded)
 logs/report-7.3-*.txt, logs/log-7.3-*.txt  the 4 campaign instances
 logs/crash-title.txt              crash title
 kernel/kernel-7.3.config          kernel configuration
 cmdline/cmdline-7.3.txt           kernel command line (syzkaller standard set)
 cmdline/cmdline-7.3-retest.txt    verification variant (hung_task_panic=0)
 verify.sh                         re-checks the numbers quoted in this report
-MANIFEST.sha256                   sha256 of every file
+MANIFEST.sha256                   sha256 of every file (except itself)
 ```
