@@ -15,6 +15,10 @@ grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-verify4.log \
     || fail "manual run 2 (verify4) hung task line"
 grep -q "blocked for more than 163 seconds" logs/serial-verify4.log || fail "163 s report"
+grep -q "state:D stack:26264 pid:10857 tgid:10857 ppid:10246" logs/serial-verify4.log \
+    || fail "verify4 task header fields"
+grep -q "locks held by kworker/3:2/1235: 2, on CPU#3" logs/serial-verify4.log \
+    || fail "verify4 worker fields"
 # tpm timeout lines while blocked
 [ "$(grep -c 'Operation Timed out' logs/serial-7.3-manual-repro.log)" -ge 2 ] \
     || fail "manual run 1 tpm timeout count"

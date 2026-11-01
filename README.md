@@ -34,11 +34,11 @@ Additional observations from the sysrq-t task dumps:
   for.
 
 - The blocked release was observed through two different entry paths:
-  process exit (`do_exit()` -> `task_work_run()` -> `__fput()`, in the
-  campaign reports, the automated reproduction and
-  `logs/dmesg-sysrq-verify4.txt`) and a `close_range()` returning to
-  user space (`task_work_run()` -> `__fput()`, in
-  `logs/dmesg-sysrq-verify3.txt`).
+  process exit (`do_exit()` -> `task_work_run()` -> `__fput()`) in the
+  campaign reports, the automated reproduction, manual replays A and C;
+  and a `close_range()` returning to user space
+  (`task_work_run()` -> `__fput()`) in manual replay B
+  (`logs/dmesg-sysrq-verify3.txt`).
 
 Whether the release eventually completes was **not** captured: the logs
 end while the task is still blocked. We are not claiming a permanent
@@ -61,13 +61,14 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 
 ## Observed results
 
-| Run | Sequence | Hang |
-|---|---|---|
-| syzkaller campaign, standard QEMU environment | 4 crash instances over a multi-day campaign | yes (`logs/log-7.3-*.txt`, `logs/report-7.3-*.txt`) |
-| automated state-primed reproduction (`syzkaller -mode repro`) | 49-program sequence | yes, 1/1, `verified=true` (`logs/serial-7.3-auto-repro.log`) |
-| manual replay, same QEMU environment | same sequence | yes, 1/1 (`logs/serial-7.3-manual-repro.log`, `logs/vtpm-sysrq-t-all-tasks.txt`) |
-| manual replay, same QEMU environment, second run | same sequence | yes, 1/1 (`logs/serial-verify4.log`, `logs/dmesg-sysrq-verify4.txt`, `logs/execprog-verify4.out`) |
-| bare fresh VM, **different command line**, no scratch disks / pmem / NUMA | same sequence | no hang recorded in 4 runs (`logs/serial-7.3-bare-no-trigger-*.log`) |
+| Run | Record of the hang |
+|---|---|
+| syzkaller campaign, standard QEMU environment (4 instances over a multi-day campaign) | `logs/log-7.3-*.txt`, `logs/report-7.3-*.txt` |
+| automated replay of the stored sequence (`syzkaller -mode repro`); observed hang | `logs/serial-7.3-auto-repro.log` |
+| manual replay A | `logs/serial-7.3-manual-repro.log`, sysrq-t dump `logs/vtpm-sysrq-t-all-tasks.txt` |
+| manual replay B | sysrq-t dump `logs/dmesg-sysrq-verify3.txt` |
+| manual replay C | `logs/serial-verify4.log`, syz-execprog output `logs/execprog-verify4.out`, sysrq-t dump `logs/dmesg-sysrq-verify4.txt` |
+| bare fresh VMs, different command line, no scratch disks / pmem / NUMA layout (4 runs) | no hang recorded (`logs/serial-7.3-bare-no-trigger-*.log`) |
 
 The bare-VM runs differ from the positive runs in the kernel command line
 as well as in the QEMU device layout, so they only show that no hang was
@@ -99,15 +100,16 @@ from them.
    ```
 
    The sequence parses as 50 programs
-   (`logs/execprog-verify4.out`: `parsed 50 programs`), replayed one at a
-   time in file order (`procs=1`, `repeat=1`, `sandbox=none`). Note
-   `procs=1` means one executor process; programs run sequentially but
-   each program can leave asynchronous kernel-side work (workqueues,
-      timers, devices) behind, and the executor's syscall threads do not
-   all share one file descriptor table. The sequence creates several
-   vTPM proxy devices and closes/exits over them; the hang appears when
-   the closing task's release path races a still-running (or queued)
-   chip-register work.
+   (`logs/execprog-verify4.out`: `parsed 50 programs`) and is replayed
+   one at a time in file order (`procs=1`, `repeat=1`, `sandbox=none`).
+   For comparison: the automated reproduction's own log reported
+   "49 log programs" replayed from the crash-log tail -- that count does
+   not include the crashing testcase, which the saved sequence file adds
+   as the 50th program. Programs run sequentially, but a program can
+   leave asynchronous kernel-side work (workqueues, timers, devices)
+   behind. The sequence creates several vTPM proxy devices and
+   closes/exits over them; the hang appears when a closing task's
+   release path races a still-running (or queued) chip-register work.
 
 4. Expected timeline (see `logs/serial-verify4.log`):
 
@@ -135,11 +137,8 @@ from them.
    dmesg > dump.txt
    ```
 
-   Expected (see `logs/vtpm-sysrq-t-all-tasks.txt` for the full stack;
-   in later dumps the kworker stack may rotate out of the kernel log
-   buffer, while the workqueue backlog remains visible, e.g.
-   `logs/dmesg-sysrq-verify4.txt`): a
-   kworker named `kworker/X:Y+tpm-vtpm` in state `D`:
+   Expected (see the dumps): a kworker named `kworker/X:Y+tpm-vtpm` in
+   state `D`:
 
    ```
    Workqueue: tpm-vtpm vtpm_proxy_work
@@ -166,6 +165,20 @@ from them.
 - The hang was observed through two entry paths (process exit and
   `close_range()`); we have not established which entry paths can or
   cannot trigger it beyond these runs.
+- What each dump shows:
+  - manual replay A (`logs/vtpm-sysrq-t-all-tasks.txt`): full stack of the
+    running register work (kworker/2:3) + blocked release + backlog
+    (`in-flight: 24:vtpm_proxy_work for 75s`,
+    `inactive: 4*vtpm_proxy_work BAR(10837), 26*vtpm_proxy_work`).
+  - manual replay B (`logs/dmesg-sysrq-verify3.txt`): backlog + blocked
+    release; the running worker's stack had rotated out of the kernel log
+    buffer (`ps` at that moment showed `kworker/1:0+tpm-vtpm` in state D).
+  - manual replay C (`logs/dmesg-sysrq-verify4.txt`): backlog
+    (`in-flight: ... for 109s`, `inactive: 29*vtpm_proxy_work
+    BAR(10857)`) + blocked release; the log lists the running worker as
+    `locks held by kworker/3:2/1235: 2, on CPU#3`. Because of the
+    backlog, the correspondence between the blocked release and any
+    specific queued work is unconfirmed.
 - `vtpm_proxy_tpm_req_canceled()` (the transmit cancel callback) already
   exists in the driver; from the captured stacks we cannot tell why the
   wait nevertheless persists. See the question in the report mail.
@@ -180,7 +193,7 @@ logs/dmesg-sysrq-verify4.txt      sysrq-t dump: backlog, do_exit entry path
 logs/serial-7.3-auto-repro.log    automated state-primed reproduction
 logs/serial-7.3-manual-repro.log  manual replay, run 1
 logs/serial-verify4.log           manual replay, run 2 (serial)
-logs/execprog-verify4.out         run 2 syz-execprog stdout ("parsed 50 programs")
+logs/execprog-verify4.out         syz-execprog stdout ("parsed 50 programs")
 logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no hang recorded)
 logs/report-7.3-*.txt, logs/log-7.3-*.txt  the 4 campaign instances
 logs/crash-title.txt              crash title
