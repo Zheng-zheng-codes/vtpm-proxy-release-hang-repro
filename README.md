@@ -68,6 +68,7 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 | manual replay A | `logs/serial-7.3-manual-repro.log`, sysrq-t dump `logs/vtpm-sysrq-t-all-tasks.txt` |
 | manual replay B | sysrq-t dump `logs/dmesg-sysrq-verify3.txt` |
 | manual replay C | `logs/serial-verify4.log`, syz-execprog output `logs/execprog-verify4.out`, sysrq-t dump `logs/dmesg-sysrq-verify4.txt` |
+| two-step reproduction (state construction, then the crashing testcase; hang at the step-1 executor exit) | `logs/serial-twostep.log`, `logs/execprog-twostep-step1.out`, sysrq-t dump `logs/dmesg-sysrq-twostep.txt` |
 | bare fresh VMs, different command line, no scratch disks / pmem / NUMA layout (4 runs) | no hang recorded (`logs/serial-7.3-bare-no-trigger-*.log`) |
 
 The bare-VM runs differ from the positive runs in the kernel command line
@@ -77,36 +78,64 @@ from them.
 
 ## Reproduction steps
 
+Two equivalent ways have been verified. Method B (two-step) is the
+simplest: the hang appears when the state-construction sequence's
+executor process exits.
+
 1. Build / obtain the kernel above and boot a guest from it. Use the
    command line from `cmdline/cmdline-7.3.txt` (or the
    `cmdline/cmdline-7.3-retest.txt` variant, `hung_task_panic=0`, to
    inspect the hang live). The guest needs no extra setup.
 
-2. From the host, copy the two executor binaries and the reproducer
-   sequence into the guest. The sequence file in this repository
-   (sha256 `b9740e789ed9...`, see `MANIFEST.sha256`) is byte-identical to
-   the file used in the runs whose logs are included:
+2. From the host, copy the executor binaries and the reproducer programs
+   into the guest (all files below are in this repository, see
+   `MANIFEST.sha256`):
 
    ```bash
-   scp syz-execprog syz-executor repro.kernsight.prog root@guest:/tmp/
+   scp syz-execprog syz-executor repro.priming.prog repro.prog root@guest:/tmp/
    ssh root@guest
    cd /tmp && chmod +x syz-execprog syz-executor
    ```
 
-3. Run the sequence with a single executor process, one pass:
+### Method B (two-step, verified 1/1 -- `logs/serial-twostep.log`)
+
+3. Run the state-construction sequence (49 programs) once:
 
    ```bash
-   ./syz-execprog -executor=/tmp/syz-executor -procs=1 -repeat=1 /tmp/repro.kernsight.prog
+   ./syz-execprog -executor=/tmp/syz-executor -procs=1 -repeat=1 /tmp/repro.priming.prog
    ```
 
-   The sequence parses as 50 programs
-   (`logs/execprog-verify4.out`: `parsed 50 programs`) and is replayed
-   one at a time in file order (`procs=1`, `repeat=1`, `sandbox=none`).
-   Programs run sequentially, but a program can leave asynchronous
-   kernel-side work (workqueues, timers, devices) behind. The sequence
-   creates several vTPM proxy devices and closes/exits over them; the
-   hang appears when a closing task's release path races a
-   still-running (or queued) chip-register work.
+   It parses as 49 programs, runs for ~20 s and exits normally
+   (`EXIT:0`, `logs/execprog-twostep-step1.out`). When its executor
+   process exits, the vtpm fds it holds are released, and the release
+   path hangs: the hung-task monitor reports
+
+   ```
+   INFO: task syz.0.33:10843 blocked for more than 143 seconds.   (t≈267 s)
+   ```
+
+   while `ps` shows `kworker/X:Y+tpm-vtpm` and the executor task both in
+   state `D` (see `logs/dmesg-sysrq-twostep.txt`). The serial log shows
+   `tpm tpm1/tpm2: Operation Timed out` while the release is blocked.
+
+4. Optionally run the crashing testcase afterwards
+   (`./syz-execprog -executor=/tmp/syz-executor -procs=1 -repeat=1
+   /tmp/repro.prog`); on the already-blocked VM it simply runs and exits.
+
+### Method A (single sequence file, verified 3/3: automated 1/1, manual 2/2)
+
+Run the full sequence (state construction + crashing testcase as the
+50th program) with a single executor process, one pass:
+
+   The file is `repro/repro.kernsight.prog` (sha256 `b9740e789ed9...`,
+   byte-identical to the file used in the runs whose logs are included).
+   It parses as 50 programs (`logs/execprog-verify4.out`: `parsed 50
+   programs`) and is replayed one at a time in file order (`procs=1`,
+   `repeat=1`, `sandbox=none`). Programs run sequentially, but a program
+   can leave asynchronous kernel-side work (workqueues, timers, devices)
+   behind. The sequence creates several vTPM proxy devices and
+   closes/exits over them; the hang appears when a closing task's
+   release path races a still-running (or queued) chip-register work.
 
 4. Expected timeline (see `logs/serial-verify4.log`):
 
@@ -183,13 +212,17 @@ from them.
 ## Repository layout
 
 ```
-repro/repro.kernsight.prog        the reproducer (parses as 50 programs)
+repro/repro.priming.prog          state-construction sequence (49 programs)
+repro/repro.prog                  crashing testcase (use after the priming run)
+repro/repro.kernsight.prog        single-file form: priming + testcase (50 programs)
 logs/vtpm-sysrq-t-all-tasks.txt   sysrq-t dump: kworker stack + backlog (run 1)
 logs/dmesg-sysrq-verify3.txt      sysrq-t dump: backlog, close_range entry path
 logs/dmesg-sysrq-verify4.txt      sysrq-t dump: backlog, do_exit entry path
 logs/serial-7.3-auto-repro.log    automated state-primed reproduction
 logs/serial-7.3-manual-repro.log  manual replay, run 1
 logs/serial-verify4.log           manual replay, run 2 (serial)
+logs/serial-twostep.log, logs/execprog-twostep-step1.out  two-step reproduction
+logs/dmesg-sysrq-twostep.txt      sysrq-t dump of the two-step run
 logs/execprog-verify4.out         syz-execprog stdout ("parsed 50 programs")
 logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no hang recorded)
 logs/report-7.3-*.txt, logs/log-7.3-*.txt  the 4 campaign instances

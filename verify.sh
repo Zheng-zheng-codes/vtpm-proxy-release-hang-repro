@@ -7,6 +7,11 @@ fail() { echo "MISMATCH: $*"; exit 1; }
 [ "$(sha256sum repro/repro.kernsight.prog | cut -d' ' -f1)" = "b9740e789ed936ed615ea52351dae844af99f268174055d2251f3960b68c2975" ] \
     || fail "repro.kernsight.prog sha256"
 grep -q "parsed 50 programs" logs/execprog-verify4.out || fail "parsed-50 line"
+grep -q "parsed 49 programs" logs/execprog-twostep-step1.out || fail "parsed-49 line (two-step)"
+grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-twostep.log \
+    || fail "two-step hung task line"
+grep -q "in-flight: .*vtpm_proxy_work" logs/dmesg-sysrq-twostep.txt \
+    || fail "two-step dump: in-flight work"
 # hung-task reports in the three reproduction logs
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3-auto-repro.log \
     || fail "auto-repro hung task line"
