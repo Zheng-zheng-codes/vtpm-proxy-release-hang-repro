@@ -102,14 +102,11 @@ from them.
    The sequence parses as 50 programs
    (`logs/execprog-verify4.out`: `parsed 50 programs`) and is replayed
    one at a time in file order (`procs=1`, `repeat=1`, `sandbox=none`).
-   For comparison: the automated reproduction's own log reported
-   "49 log programs" replayed from the crash-log tail -- that count does
-   not include the crashing testcase, which the saved sequence file adds
-   as the 50th program. Programs run sequentially, but a program can
-   leave asynchronous kernel-side work (workqueues, timers, devices)
-   behind. The sequence creates several vTPM proxy devices and
-   closes/exits over them; the hang appears when a closing task's
-   release path races a still-running (or queued) chip-register work.
+   Programs run sequentially, but a program can leave asynchronous
+   kernel-side work (workqueues, timers, devices) behind. The sequence
+   creates several vTPM proxy devices and closes/exits over them; the
+   hang appears when a closing task's release path races a
+   still-running (or queued) chip-register work.
 
 4. Expected timeline (see `logs/serial-verify4.log`):
 
@@ -168,8 +165,8 @@ from them.
 - What each dump shows:
   - manual replay A (`logs/vtpm-sysrq-t-all-tasks.txt`): full stack of the
     running register work (kworker/2:3) + blocked release + backlog
-    (`in-flight: 24:vtpm_proxy_work for 75s`,
-    `inactive: 4*vtpm_proxy_work BAR(10837), 26*vtpm_proxy_work`).
+    (`in-flight: 9703:vtpm_proxy_work for 38s`,
+    `inactive: 24*vtpm_proxy_work BAR(10900)`).
   - manual replay B (`logs/dmesg-sysrq-verify3.txt`): backlog + blocked
     release; the running worker's stack had rotated out of the kernel log
     buffer (`ps` at that moment showed `kworker/1:0+tpm-vtpm` in state D).
