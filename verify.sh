@@ -13,6 +13,9 @@ grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-two
 grep -q "in-flight: .*vtpm_proxy_work" logs/dmesg-sysrq-twostep.txt \
     || fail "two-step dump: in-flight work"
 # hung-task reports in the three reproduction logs
+# (these four logs + the auto-repro log = the 4/4 positive cell of the
+#  2x2 experiment; the two negative arms are checked in their own
+#  section below)
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3-auto-repro.log \
     || fail "auto-repro hung task line"
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3-manual-repro.log \

@@ -1,0 +1,24 @@
+# Excerpt of the QEMU wrapper that creates the guest disks for every VM
+# (state_collection_scripts/qemu_environment.sh). The wrapper runs
+# `qemu-img create ... 12G` for each scratch disk before QEMU starts, and
+# passes each image to QEMU with -drive file=...,if=virtio,format=qcow2.
+#
+# The sizes come from the collection policy:
+#   scratch-a, scratch-b: $primary GiB
+#   scratch-c..h, logwrites: $additional_device_gib GiB
+# (policy: additional_device_gib = 12)
+
+  for name in scratch-a scratch-b scratch-c scratch-d scratch-e logwrites scratch-f scratch-g scratch-h; do
+      local size="$extra"
+      case "$name" in scratch-a|scratch-b) size="$primary" ;; esac
+      qemu-img create -q -f qcow2 "$directory/$name.qcow2" "${size}G" || return 1
+      KERNSIGHT_QEMU_ENVIRONMENT_ARGS+=(-drive "file=$directory/$name.qcow2,if=virtio,format=qcow2")
+  done
+
+# qemu-img info of a freshly created 12 GiB scratch image:
+
+  image: scratch-info.qcow2
+  file format: qcow2
+  virtual size: 12 GiB (12884901888 bytes)
+  disk size: 196 KiB
+  cluster_size: 65536
