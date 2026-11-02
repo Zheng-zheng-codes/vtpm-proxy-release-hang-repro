@@ -52,6 +52,13 @@ for i in 1 2 3 4; do
     grep -q "blocked for more than" logs/serial-7.3-bare-no-trigger-$i.log \
         && fail "bare run $i unexpectedly recorded a hang"
 done
+# factorial experiment: sequence parsed, no hang in the two negative arms
+grep -q "parsed 50 programs" logs/controlled/execprog-A-2.out || fail "factorial A-2 parsed line"
+grep -q "parsed 50 programs" logs/controlled/execprog-B-2.out || fail "factorial B-2 parsed line"
+for i in 1 2; do
+    grep -q "blocked for more than" logs/controlled/serial-A-$i.log && fail "factorial A-$i unexpectedly hung"
+    grep -q "blocked for more than" logs/controlled/serial-B-$i.log && fail "factorial B-$i unexpectedly hung"
+done
 # manifest must not contain itself
 grep -q "MANIFEST.sha256" MANIFEST.sha256 && fail "MANIFEST contains itself"
 echo "all checks passed"

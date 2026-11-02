@@ -1,0 +1,1 @@
+root=/dev/sda console=ttyS0 fstab=no rw net.ifnames=0 oops=panic panic=86400 hung_task_panic=0 softlockup_panic=0 nmi_watchdog=panic rcupdate.rcu_expedited=1

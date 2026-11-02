@@ -71,10 +71,21 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 | two-step reproduction (state construction, then the crashing testcase; hang at the step-1 executor exit) | `logs/serial-twostep.log`, `logs/execprog-twostep-step1.out`, sysrq-t dump `logs/dmesg-sysrq-twostep.txt` |
 | bare fresh VMs, different command line, no scratch disks / pmem / NUMA layout (4 runs) | no hang recorded (`logs/serial-7.3-bare-no-trigger-*.log`) |
 
-The bare-VM runs differ from the positive runs in the kernel command line
-as well as in the QEMU device layout, so they only show that no hang was
-recorded in those runs; the effect of the environment cannot be isolated
-from them.
+A 2x2 factorial experiment (same 50-program sequence, same kernel,
+`hung_task_panic=0`, fresh VM per run) isolates the two factors:
+
+| kernel command line | QEMU layout | runs | hang |
+|---|---|---|---|
+| full | full (scratch+pmem+NUMA) | 3 + 1 automated | 4/4 |
+| full | bare (root disk only) | 2 | 0/2 |
+| minimal | full | 2 | 0/2 |
+| minimal | bare | 4 | 0/4 |
+
+Both the full command line and the full device layout were necessary:
+either alone was not sufficient in these runs. Per-run command lines are
+in `cmdline/` and the run logs in `logs/controlled/`. (Small sample; the
+numbers do not establish stability under the positive configuration
+beyond the runs shown.)
 
 ## Reproduction steps
 
@@ -225,6 +236,7 @@ logs/serial-twostep.log, logs/execprog-twostep-step1.out  two-step reproduction
 logs/dmesg-sysrq-twostep.txt      sysrq-t dump of the two-step run
 logs/execprog-verify4.out         syz-execprog stdout ("parsed 50 programs")
 logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no hang recorded)
+logs/controlled/                      2x2 factorial experiment logs
 logs/report-7.3-*.txt, logs/log-7.3-*.txt  the 4 campaign instances
 logs/crash-title.txt              crash title
 kernel/kernel-7.3.config          kernel configuration
