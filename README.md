@@ -54,10 +54,10 @@ unknown.
 No TPM changes were made for this testing
 (`drivers/char/tpm/` matches vanilla apart from build artifacts).
 
-Kernel config: `kernel/kernel-7.3.config` (12 GiB scratch disks are
-created with `qemu-img create -f qcow2 scratch-X.qcow2 12G` by the QEMU
-wrapper for every VM; wrapper excerpt and `qemu-img info` output:
-`cmdline/qemu-wrapper-scratch-create.txt`).
+Kernel config: `kernel/kernel-7.3.config` (scratch disks are created with `qemu-img create -f qcow2 ...` by the
+QEMU wrapper for every VM: 2 x 16 GiB (scratch-a/b) + 6 x 12 GiB
+(scratch-c..h) + 1 x 12 GiB (logwrites); wrapper excerpt, sizes and
+`qemu-img info` output: `cmdline/qemu-wrapper-scratch-create.txt`).
 Command-line files in `cmdline/`:
 - `cmdline-7.3.txt` -- the captured QEMU invocation of a positive run
   (wrapper arguments; its `-append` value is the guest kernel command

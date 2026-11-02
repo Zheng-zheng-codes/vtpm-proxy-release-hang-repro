@@ -6,7 +6,7 @@ b1f901d036f2b488b7ba72a5c0ccb0d0d91240b92053f3c2f3df7c914bd7be91  ./cmdline/cmdl
 1badfd5a0badc3f8466d7dbd04b9b4838f234daa6609b43a97207f6c4686f209  ./cmdline/cmdline-B-2.txt
 969f7a5937864135096aee7ceef24ff135fd354337feec2eaaedecadceee7ecf  ./cmdline/qemu-args-bare-layout.txt
 1f2801f7b9112f9616368ad20f50f8a3e17a5259fb16dab9f52592f109ee893a  ./cmdline/qemu-args-full-layout.txt
-665033913db6d36abffa3bf9a649c6b16ee3deb38be1804d0fd0dcb4c9cfdb63  ./cmdline/qemu-wrapper-scratch-create.txt
+fe6e3c00d635714cd6358325cbff2e64323b6e7288d1b3b83ec02719bc4ecfba  ./cmdline/qemu-wrapper-scratch-create.txt
 5a655a7e462ee04426e52123694f9d1eb67f147e222b1fcf5b3645f2a6c32242  ./kernel/kernel-7.3.config
 32c1a0b7120a951fc6e06fd877ff940d38eee3de2978d528fc564dd10a856e34  ./logs/controlled/execprog-A-1.out
 c2220cda9f2599e34a0dac912c05bc06007d1abd3d7d89c23a8b97209649775d  ./logs/controlled/execprog-A-2.out
@@ -40,7 +40,7 @@ c4e1c0a473fa3c5274cbb9a0f2a94ffc22ad29ee3a4d27055338cdce5483d6f8  ./logs/serial-
 4d40403ea9e867d58058eefcf3e7336e05eb9f1d38ddf2efe60a061308bebb2d  ./logs/serial-verify3.log
 705f91cb7458676d303ffa4a202f3e9e09345b6c3452ebd768c2c23d25d23147  ./logs/serial-verify4.log
 6aab5b870176d50afc82e91002b34795d8719c314b868704c9e7e8c3192eca8a  ./logs/vtpm-sysrq-t-all-tasks.txt
-127488555dd73da62ca8c78eeff2f2d98f9717e04f83641b9f8a40df2d1a5247  ./README.md
+78e1ba11a2e0e94925dec630344cce52cc17c3d936c5b12ad603e7f17dd8ba7c  ./README.md
 ae9147d2eac7e0faa7cfff2341cc5c868e69fd1c73be680c8a62a8ce8d6d564d  ./repro/dmesg-sysrq-twostep.txt
 2297066874e5ac0cbb037c06169d23d7c9878006d9271a493ca0d2585cbe3480  ./repro/execprog-twostep-step1.out
 b9740e789ed936ed615ea52351dae844af99f268174055d2251f3960b68c2975  ./repro/repro.kernsight.prog

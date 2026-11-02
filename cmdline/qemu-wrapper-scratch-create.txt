@@ -3,10 +3,11 @@
 # `qemu-img create ... 12G` for each scratch disk before QEMU starts, and
 # passes each image to QEMU with -drive file=...,if=virtio,format=qcow2.
 #
-# The sizes come from the collection policy:
-#   scratch-a, scratch-b: $primary GiB
-#   scratch-c..h, logwrites: $additional_device_gib GiB
-# (policy: additional_device_gib = 12)
+# The sizes come from the collection policy (normal_exit_policy.json):
+#   primary_device_gib      = 16   (default of the wrapper function, $4 empty)
+#   additional_device_gib   = 12
+# So: scratch-a and scratch-b are 16 GiB each;
+#     scratch-c..scratch-h and logwrites are 12 GiB each.
 
   for name in scratch-a scratch-b scratch-c scratch-d scratch-e logwrites scratch-f scratch-g scratch-h; do
       local size="$extra"
