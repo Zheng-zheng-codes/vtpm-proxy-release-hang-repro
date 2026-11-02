@@ -242,6 +242,7 @@ logs/crash-title.txt              crash title
 kernel/kernel-7.3.config          kernel configuration
 cmdline/cmdline-7.3.txt           kernel command line (syzkaller standard set)
 cmdline/cmdline-7.3-retest.txt    verification variant (hung_task_panic=0)
+cmdline/qemu-args-*.txt           QEMU arguments (full layout / bare layout)
 verify.sh                         re-checks the numbers quoted in this report
 MANIFEST.sha256                   sha256 of every file (except itself)
 ```

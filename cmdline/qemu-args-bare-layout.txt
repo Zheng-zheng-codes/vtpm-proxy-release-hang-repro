@@ -1,0 +1,8 @@
+/usr/bin/qemu-system-x86_64 -vga none -m 6144 -smp 4 -display none \
+  -serial file:<serial.log> -no-reboot -name <tag> \
+  -device virtio-rng-pci -accel kvm -cpu host \
+  -device e1000,netdev=net0 \
+  -netdev user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:<PORT>-:22 \
+  -drive file=<root-disk-overlay.qcow2>,if=ide,format=qcow2 \
+  -kernel /workspace/linux-7.3/arch/x86/boot/bzImage \
+  -append '<kernel command line, see cmdline-A-*.txt>'
