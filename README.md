@@ -54,10 +54,19 @@ unknown.
 No TPM changes were made for this testing
 (`drivers/char/tpm/` matches vanilla apart from build artifacts).
 
-Kernel config: `kernel/kernel-7.3.config`.
-Kernel command lines: `cmdline/cmdline-7.3.txt` (syzkaller standard set)
-and `cmdline/cmdline-7.3-retest.txt` (verification variant with
-`hung_task_panic=0` so the hang can be inspected live).
+Kernel config: `kernel/kernel-7.3.config` (12 GiB scratch disks are
+created with `qemu-img create -f qcow2 scratch-X.qcow2 12G` by the QEMU
+wrapper for every VM).
+Command-line files in `cmdline/`:
+- `cmdline-7.3.txt` -- the captured QEMU invocation of a positive run
+  (wrapper arguments; its `-append` value is the guest kernel command
+  line, with `hung_task_panic=1`),
+- `cmdline-7.3-retest.txt` -- the guest kernel command line of the
+  live-inspection runs (`hung_task_panic=0`),
+- `qemu-args-full-layout.txt` / `qemu-args-bare-layout.txt` --
+  sanitized QEMU argument templates of the two layouts (placeholders
+  for run-specific paths/ports; the full-layout template is a verbatim
+  capture including the drive formats and pmem sizes).
 
 ## Observed results
 
@@ -71,21 +80,25 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 | two-step reproduction (state construction, then the crashing testcase; hang at the step-1 executor exit) | `logs/serial-twostep.log`, `logs/execprog-twostep-step1.out`, sysrq-t dump `logs/dmesg-sysrq-twostep.txt` |
 | bare fresh VMs, different command line, no scratch disks / pmem / NUMA layout (4 runs) | no hang recorded (`logs/serial-7.3-bare-no-trigger-*.log`) |
 
-A 2x2 factorial experiment (same 50-program sequence, same kernel,
-`hung_task_panic=0`, fresh VM per run) isolates the two factors:
+A 2x2 factorial experiment (same 50-program single-file sequence,
+same kernel, `hung_task_panic=0`, fresh VM per run) isolates the two
+factors:
 
 | kernel command line | QEMU layout | runs | hang |
 |---|---|---|---|
-| full | full (scratch+pmem+NUMA) | 3 + 1 automated | 4/4 |
+| full | full (scratch+pmem+NUMA) | 3 manual + 1 automated | 4/4 |
 | full | bare (root disk only) | 2 | 0/2 |
 | minimal | full | 2 | 0/2 |
 | minimal | bare | 4 | 0/4 |
 
-Both the full command line and the full device layout were necessary:
-either alone was not sufficient in these runs. Per-run command lines are
-in `cmdline/` and the run logs in `logs/controlled/`. (Small sample; the
+In this test matrix the hang was reproduced only when both the full
+kernel command line and the full device layout were used together;
+neither alone was sufficient in the tested runs. (The 4/4 row counts
+the four 50-program single-file reproductions and does not include the
+separate two-step reproduction.) Per-run command lines are in
+`cmdline/` and the run logs in `logs/controlled/`. Small sample: the
 numbers do not establish stability under the positive configuration
-beyond the runs shown.)
+beyond the runs shown.
 
 ## Reproduction steps
 
@@ -133,7 +146,7 @@ executor process exits.
    (`./syz-execprog -executor=/tmp/syz-executor -procs=1 -repeat=1
    /tmp/repro.prog`); on the already-blocked VM it simply runs and exits.
 
-### Method A (single sequence file, verified 3/3: automated 1/1, manual 2/2)
+### Method A (single sequence file, verified 4/4: automated 1/1, manual 3/3)
 
 Run the full sequence (state construction + crashing testcase as the
 50th program) with a single executor process, one pass:

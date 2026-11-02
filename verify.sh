@@ -61,6 +61,15 @@ for i in 1 2; do
     grep -q "blocked for more than" logs/controlled/serial-A-$i.log && fail "factorial A-$i unexpectedly hung"
     grep -q "blocked for more than" logs/controlled/serial-B-$i.log && fail "factorial B-$i unexpectedly hung"
 done
+# qemu argument templates retain the full device detail
+grep -q "if=virtio,format=qcow2" cmdline/qemu-args-full-layout.txt \
+    || fail "full-layout template: scratch drive format"
+grep -q "size=1G" cmdline/qemu-args-full-layout.txt \
+    || fail "full-layout template: pmem size"
+grep -q "hung_task_panic=1" cmdline/qemu-args-full-layout.txt \
+    || fail "full-layout template: campaign cmdline"
+grep -q "hung_task_panic=0" cmdline/cmdline-7.3-retest.txt \
+    || fail "retest cmdline: hung_task_panic=0"
 # manifest must not contain itself
 grep -q "MANIFEST.sha256" MANIFEST.sha256 && fail "MANIFEST contains itself"
 echo "all checks passed"
