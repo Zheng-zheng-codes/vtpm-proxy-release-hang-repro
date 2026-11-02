@@ -17,6 +17,8 @@ grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3
     || fail "auto-repro hung task line"
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-7.3-manual-repro.log \
     || fail "manual run 1 hung task line"
+grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-verify3.log \
+    || fail "manual replay B (verify3) hung task line"
 grep -q "INFO: task syz.0.33.*blocked for more than 143 seconds" logs/serial-verify4.log \
     || fail "manual run 2 (verify4) hung task line"
 grep -q "blocked for more than 163 seconds" logs/serial-verify4.log || fail "163 s report"

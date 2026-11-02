@@ -66,7 +66,7 @@ and `cmdline/cmdline-7.3-retest.txt` (verification variant with
 | syzkaller campaign, standard QEMU environment (4 instances over a multi-day campaign) | `logs/log-7.3-*.txt`, `logs/report-7.3-*.txt` |
 | automated replay of the stored sequence (`syzkaller -mode repro`); observed hang | `logs/serial-7.3-auto-repro.log` |
 | manual replay A | `logs/serial-7.3-manual-repro.log`, sysrq-t dump `logs/vtpm-sysrq-t-all-tasks.txt` |
-| manual replay B | sysrq-t dump `logs/dmesg-sysrq-verify3.txt` |
+| manual replay B | `logs/serial-verify3.log`, sysrq-t dump `logs/dmesg-sysrq-verify3.txt` |
 | manual replay C | `logs/serial-verify4.log`, syz-execprog output `logs/execprog-verify4.out`, sysrq-t dump `logs/dmesg-sysrq-verify4.txt` |
 | two-step reproduction (state construction, then the crashing testcase; hang at the step-1 executor exit) | `logs/serial-twostep.log`, `logs/execprog-twostep-step1.out`, sysrq-t dump `logs/dmesg-sysrq-twostep.txt` |
 | bare fresh VMs, different command line, no scratch disks / pmem / NUMA layout (4 runs) | no hang recorded (`logs/serial-7.3-bare-no-trigger-*.log`) |
@@ -233,6 +233,7 @@ logs/serial-7.3-auto-repro.log    automated state-primed reproduction
 logs/serial-7.3-manual-repro.log  manual replay, run 1
 logs/serial-verify4.log           manual replay, run 2 (serial)
 logs/serial-twostep.log, logs/execprog-twostep-step1.out  two-step reproduction
+logs/serial-verify3.log           manual replay 2 (serial)
 logs/dmesg-sysrq-twostep.txt      sysrq-t dump of the two-step run
 logs/execprog-verify4.out         syz-execprog stdout ("parsed 50 programs")
 logs/serial-7.3-bare-no-trigger-*.log  4 bare-VM runs (no hang recorded)
