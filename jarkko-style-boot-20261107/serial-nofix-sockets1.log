@@ -1,0 +1,183 @@
+No EFI environment detected.
+early console in extract_kernel
+input_data: 0x000000001681b2c4
+input_len: 0x0000000006cca0b7
+output: 0x0000000001000000
+output_len: 0x0000000015182f48
+kernel_total_size: 0x000000001c52f000
+needed_size: 0x000000001c600000
+trampoline_32bit: 0x000000000009d000
+
+Decompressing Linux... No EFI environment detected.
+Parsing ELF... done.
+Booting the kernel (entry_offset: 0x00000000131f6050).
+[    0.000000][    T0] Linux version 7.3.0-kernsight-kasan (@16486d83ae9f) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP PREEMPT_DYNAMIC Tue Oct 20 12:39:27 UTC 2026
+[    0.000000][    T0] Command line: /usr/bin/qemu-system-x86_64 -vga none -m 6144 -smp 4 -chardev socket,id=SOCKSYZ,server=on,wait=off,host=localhost,port=60093 -mon chardev=SOCKSYZ,mode=control -display none -serial stdio -no-reboot -name VM-0 -device virtio-rng-pci -accel kvm -cpu host -device e1000,netdev=net0 -netdev user,id=net0,restrict=on,hostfwd=tcp:127.0.0.1:27296-:22 -drive file=/workspace/kernsight_workspace_7.3/runs/syzkaller/instance-0/disk.qcow2,if=ide,format=qcow2 -kernel /workspace/linux-7.3/arch/x86/boot/bzImage -append root=/dev/sda console=ttyS0 fstab=no rw earlyprintk=serial net.ifnames=0 oops=panic panic_on_warn=1 panic=86400 hung_task_panic=1 softlockup_panic=1 nmi_watchdog=panic sysctl.kernel.hung_task_all_cpu_backtrace=1 sysctl.kernel.panic_on_rcu_stall=1 sysctl.kernel.max_rcu_stall_to_panic=1 rcupdate.rcu_expedited=1 rcupdate.rcu_cpu_stall_cputime=1 no_hash_pointers page_owner=on sysctl.vm.nr_hugepages=4 sysctl.vm.nr_overcommit_hugepages=4 secretmem.enable=1 msr.allow_writes=off coredump_filter=0xffff v
+[    0.000000][    T0] KERNEL supported cpus:
+[    0.000000][    T0]   Intel GenuineIntel
+[    0.000000][    T0]   AMD AuthenticAMD
+[    0.000000][    T0] BIOS-provided physical RAM map:
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff]  System RAM
+[    0.000000][    T0] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000000a0000-0x00000000000effff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000000100000-0x00000000bffc3fff]  System RAM
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000bffc4000-0x00000000bfffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000c0000000-0x00000000feffbfff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [gap 0x00000000ff000000-0x00000000fffbffff]
+[    0.000000][    T0] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff]  device reserved
+[    0.000000][    T0] BIOS-e820: [mem 0x0000000100000000-0x00000001bfffffff]  System RAM
+[    0.000000][    T0] printk: legacy bootconsole [earlyser0] enabled
+[    0.000000][    T0] Hash pointers mode set to never.
+[    0.000000][    T0] Malformed early option 'vsyscall'
+[    0.000000][    T0] nopcid: PCID feature disabled
+[    0.000000][    T0] NX (Execute Disable) protection: active
+[    0.000000][    T0] APIC: Static calls initialized
+[    0.000000][    T0] DMI: SMBIOS 2.8 present.
+[    0.000000][    T0] DMI: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[    0.000000][    T0] DMI: Memory slots populated: 1/1
+[    0.000000][    T0] Hypervisor detected: KVM
+[    0.000000][    T0] last_pfn = 0xbffc4 max_arch_pfn = 0x10000000000
+[    0.000000][    T0] kvm-clock: Using msrs 4b564d01 and 4b564d00
+[    0.000009][    T0] kvm-clock: using sched offset of 3028128819 cycles
+[    0.000988][    T0] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.003903][    T0] tsc: Detected 2893.200 MHz processor
+[    0.010253][    T0] last_pfn = 0x1c0000 max_arch_pfn = 0x10000000000
+[    0.011416][    T0] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+[    0.012868][    T0] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+[    0.014185][    T0] last_pfn = 0xbffc4 max_arch_pfn = 0x10000000000
+[    0.026729][    T0] found SMP MP-table at [mem 0x000f5b50-0x000f5b5f]
+[    0.027882][    T0] Using GB pages for direct mapping
+[    0.033310][    T0] ACPI: Early table checksum verification disabled
+[    0.034427][    T0] ACPI: RSDP 0x00000000000F5970 000014 (v00 BOCHS )
+[    0.035531][    T0] ACPI: RSDT 0x00000000BFFE1517 000040 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.037090][    T0] ACPI: FACP 0x00000000BFFE0DFD 000074 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.038679][    T0] ACPI: DSDT 0x00000000BFFDF040 001DBD (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.040212][    T0] ACPI: FACS 0x00000000BFFDF000 000040
+[    0.041104][    T0] ACPI: APIC 0x00000000BFFE0E71 000090 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.042664][    T0] ACPI: HPET 0x00000000BFFE0F01 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.044213][    T0] ACPI: SRAT 0x00000000BFFE0F39 000160 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.045766][    T0] ACPI: SSDT 0x00000000BFFE1099 0002BE (v01 BOCHS  NVDIMM   00000001 BXPC 00000001)
+[    0.047323][    T0] ACPI: NFIT 0x00000000BFFE1357 000198 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.048841][    T0] ACPI: WAET 0x00000000BFFE14EF 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+[    0.050372][    T0] ACPI: Reserving FACP table memory at [mem 0xbffe0dfd-0xbffe0e70]
+[    0.051603][    T0] ACPI: Reserving DSDT table memory at [mem 0xbffdf040-0xbffe0dfc]
+[    0.052886][    T0] ACPI: Reserving FACS table memory at [mem 0xbffdf000-0xbffdf03f]
+[    0.054241][    T0] ACPI: Reserving APIC table memory at [mem 0xbffe0e71-0xbffe0f00]
+[    0.055539][    T0] ACPI: Reserving HPET table memory at [mem 0xbffe0f01-0xbffe0f38]
+[    0.056804][    T0] ACPI: Reserving SRAT table memory at [mem 0xbffe0f39-0xbffe1098]
+[    0.058101][    T0] ACPI: Reserving SSDT table memory at [mem 0xbffe1099-0xbffe1356]
+[    0.059369][    T0] ACPI: Reserving NFIT table memory at [mem 0xbffe1357-0xbffe14ee]
+[    0.060611][    T0] ACPI: Reserving WAET table memory at [mem 0xbffe14ef-0xbffe1516]
+[    0.062415][    T0] ACPI: SRAT: Node 0 PXM 0 [mem 0x00000000-0x0009ffff]
+[    0.063552][    T0] ACPI: SRAT: Node 0 PXM 0 [mem 0x00100000-0xbfffffff]
+[    0.064698][    T0] ACPI: SRAT: Node 1 PXM 1 [mem 0x100000000-0x1bfffffff]
+[    0.065864][    T0] ACPI: SRAT: Node 0 PXM 0 [mem 0x200000000-0x23fffffff] non-volatile
+[    0.067187][    T0] ACPI: SRAT: Node 0 PXM 0 [mem 0x1c0000000-0x1ffffffff] non-volatile
+[    0.068523][    T0] ACPI: SRAT: Node 1 PXM 1 [mem 0x1c0000000-0x2bfffffff] hotplug
+[    0.069793][    T0] NUMA: Node 0 [mem 0x00001000-0x0009ffff] + [mem 0x00100000-0xbfffffff] -> [mem 0x00001000-0xbfffffff]
+[    0.071677][    T0] NODE_DATA(0) allocated [mem 0xbffbdf80-0xbffc3fff]
+[    0.072805][    T0] NODE_DATA(1) allocated [mem 0x1bfff7c40-0x1bfffdcbf]
+[    0.844283][    T0] KernelAddressSanitizer initialized (generic)
+[    0.846265][    T0] ACPI: PM-Timer IO Port: 0x608
+[    0.847116][    T0] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.848254][    T0] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+[    0.849504][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.850674][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.851850][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.853090][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.854342][    T0] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.855605][    T0] ACPI: Using ACPI (MADT) for SMP configuration information
+[    0.856767][    T0] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[    0.857736][    T0] TSC deadline timer available
+[    0.858524][    T0] CPU topo: Max. logical packages:   1
+[    0.859407][    T0] CPU topo: Max. logical nodes:      2
+[    0.860258][    T0] CPU topo: Num. nodes per package:  2
+[    0.861137][    T0] CPU topo: Max. logical dies:       1
+[    0.862030][    T0] CPU topo: Max. dies per package:   1
+[    0.862854][    T0] CPU topo: Max. threads per core:   1
+[    0.863752][    T0] CPU topo: Num. cores per package:     4
+[    0.864666][    T0] CPU topo: Num. threads per package:   4
+[    0.865585][    T0] CPU topo: Allowing 4 present CPUs plus 0 hotplug CPUs
+[    0.866878][    T0] kvm-guest: APIC: eoi() replaced with kvm_guest_apic_eoi_write()
+[    0.868250][    T0] kvm-guest: KVM setup pv remote TLB flush
+[    0.869193][    T0] kvm-guest: setup PV sched yield
+[    0.870087][    T0] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+[    0.871420][    T0] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x000fffff]
+[    0.872744][    T0] PM: hibernation: Registered nosave memory: [mem 0xbffc4000-0xffffffff]
+[    0.874110][    T0] [gap 0xc0000000-0xfeffbfff] available for PCI devices
+[    0.875177][    T0] Booting paravirtualized kernel on KVM
+[    0.876046][    T0] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.948770][    T0] Zone ranges:
+[    0.949345][    T0]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.950452][    T0]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+[    0.951545][    T0]   Normal   [mem 0x0000000100000000-0x00000001bfffffff]
+[    0.952628][    T0]   Device   empty
+[    0.953194][    T0] Movable zone start for each node
+[    0.953974][    T0] Early memory node ranges
+[    0.954650][    T0]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.955729][    T0]   node   0: [mem 0x0000000000100000-0x00000000bffc3fff]
+[    0.956836][    T0]   node   1: [mem 0x0000000100000000-0x00000001bfffffff]
+[    0.958008][    T0] Initmem setup node 0 [mem 0x0000000000001000-0x00000000bffc3fff]
+[    0.959253][    T0] Initmem setup node 1 [mem 0x0000000100000000-0x00000001bfffffff]
+[    1.212553][    T0] On node 0, zone DMA: 1 pages in unavailable ranges
+[    1.214037][    T0] On node 0, zone DMA: 97 pages in unavailable ranges
+[    1.326224][    T0] On node 1, zone Normal: 60 pages in unavailable ranges
+[    1.327548][    T0] ------------[ cut here ]------------
+[    1.328447][    T0] strlen: detected buffer overflow: 2049 byte read of buffer size 2048
+[    1.329797][    T0] WARNING: lib/string_helpers.c:1036 at __fortify_report+0x89/0xd0, CPU#0: swapper/0
+[    1.331370][    T0] Modules linked in:
+[    1.332006][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 7.3.0-kernsight-kasan #1 PREEMPT(undef) 
+[    1.333649][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[    1.335169][    T0] RIP: 0010:__fortify_report+0x95/0xd0
+[    1.336082][    T0] Code: 48 c7 c0 a0 93 6c 8c 49 c7 c5 60 93 6c 8c 4c 0f 45 e8 e8 ee a6 c7 fc 48 8d 3d 37 9c 96 0d 49 89 e8 4c 89 e9 4c 89 e2 4c 89 f6 <67> 48 0f b9 3a 5b 5d 41 5c 41 5d 41 5e e9 79 67 d4 06 48 89 de 48
+[    1.339258][    T0] RSP: 0000:ffffffff8fc07e80 EFLAGS: 00010093 ORIG_RAX: 0000000000000000
+[    1.340650][    T0] RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff8c6c9360
+[    1.341958][    T0] RDX: 0000000000000801 RSI: ffffffff8c6c9d80 RDI: ffffffff9297f190
+[    1.343279][    T0] RBP: 0000000000000800 R08: 0000000000000800 R09: fffffbfff1f80fb2
+[    1.344609][    T0] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000801
+[    1.345949][    T0] R13: ffffffff8c6c9360 R14: ffffffff8c6c9d80 R15: 0000000000013bd0
+[    1.347266][    T0] FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
+[    1.348700][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.349816][    T0] CR2: ff110001bffff000 CR3: 000000000fd9a000 CR4: 00000000000010b0
+[    1.351166][    T0] Call Trace:
+[    1.351731][    T0]  <TASK>
+[    1.352218][    T0]  __fortify_panic+0x23/0x30
+[    1.353001][    T0]  setup_command_line+0xad/0x1f0
+[    1.353855][    T0]  start_kernel+0xa0/0x4d0
+[    1.354599][    T0]  x86_64_start_reservations+0x18/0x30
+[    1.355547][    T0]  x86_64_start_kernel+0x141/0x1a0
+[    1.356423][    T0]  common_startup_64+0x13e/0x158
+[    1.357323][    T0]  </TASK>
+[    1.357849][    T0] irq event stamp: 0
+[    1.358511][    T0] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[    1.359691][    T0] hardirqs last disabled at (0): [<0000000000000000>] 0x0
+[    1.360868][    T0] softirqs last  enabled at (0): [<0000000000000000>] 0x0
+[    1.362044][    T0] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[    1.363203][    T0] ---[ end trace 0000000000000000 ]---
+[    1.364595][    T0] ------------[ cut here ]------------
+[    1.365486][    T0] kernel BUG at lib/string_helpers.c:1044!
+PANIC: early exception 0x06 IP 10:ffffffff850155d4 error 0 cr2 0xff110001bffff000
+[    1.371362][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           7.3.0-kernsight-kasan #1 PREEMPT(undef) 
+[    1.373186][    T0] Tainted: [W]=WARN
+[    1.373825][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[    1.375323][    T0] RIP: 0010:__fortify_panic+0x24/0x30
+[    1.376207][    T0] Code: 90 90 90 90 90 90 f3 0f 1e fa 41 54 49 89 d4 55 48 89 f5 53 89 fb e8 7b a6 c7 fc 0f b6 fb 4c 89 e2 48 89 ee e8 fd fe ff ff 90 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90
+[    1.379415][    T0] RSP: 0000:ffffffff8fc07eb0 EFLAGS: 00010093 ORIG_RAX: 0000000000000000
+[    1.380763][    T0] RAX: 0000000000000000 RBX: 0000000000000002 RCX: ffffffff8c6c9360
+[    1.382056][    T0] RDX: 0000000000000801 RSI: ffffffff8c6c9d80 RDI: ffffffff9297f190
+[    1.383350][    T0] RBP: 0000000000000800 R08: 0000000000000800 R09: fffffbfff1f80fb2
+[    1.384613][    T0] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000801
+[    1.385891][    T0] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000013bd0
+[    1.387142][    T0] FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
+[    1.388603][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.389692][    T0] CR2: ff110001bffff000 CR3: 000000000fd9a000 CR4: 00000000000010b0
+[    1.390978][    T0] Call Trace:
+[    1.391495][    T0]  <TASK>
+[    1.391958][    T0]  setup_command_line+0xad/0x1f0
+[    1.392764][    T0]  start_kernel+0xa0/0x4d0
+[    1.393468][    T0]  x86_64_start_reservations+0x18/0x30
+[    1.394399][    T0]  x86_64_start_kernel+0x141/0x1a0
+[    1.395259][    T0]  common_startup_64+0x13e/0x158
+[    1.396107][    T0]  </TASK>
