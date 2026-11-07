@@ -1,0 +1,60 @@
+From d6c27b005dfca356fa33530696e21251d91421b7 Mon Sep 17 00:00:00 2001
+From: Stefan Berger <stefanb@linux.ibm.com>
+Date: Fri, 6 Nov 2026 12:43:56 -0600
+Subject: [PATCH] tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is
+ created
+
+The server-side inode is currently created before the STATE_OPENED_FLAG
+is set. Theoretically, an application could open the server side file
+after anon_inode_getfile() ran in the driver (and udev created the
+device) and then immediately close the file descriptor and clear the still
+unset STATE_OPENED_FLAG that currently gets set after
+anon_inode_getfile(). Therefore, reverse the order so that the flag
+never gets set after it was attempted to be cleared.
+
+If the flag is set while no server-side application responds to requests,
+the client-side may wait for a response until timeout.
+
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+---
+ drivers/char/tpm/tpm_vtpm_proxy.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index b81fd2a537df..245a8f959bc7 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -197,10 +197,8 @@ static __poll_t vtpm_proxy_fops_poll(struct file *filp, poll_table *wait)
+  *
+  * Called when setting up the anonymous file descriptor
+  */
+-static void vtpm_proxy_fops_open(struct file *filp)
++static void vtpm_proxy_fops_open(struct proxy_dev *proxy_dev)
+ {
+-	struct proxy_dev *proxy_dev = filp->private_data;
+-
+ 	proxy_dev->state |= STATE_OPENED_FLAG;
+ }
+ 
+@@ -550,6 +548,9 @@ static struct file *vtpm_proxy_create_device(
+ 		goto err_delete_proxy_dev;
+ 	}
+ 
++	/* simulate an open() on the server side */
++	vtpm_proxy_fops_open(proxy_dev);
++
+ 	file = anon_inode_getfile("[vtpms]", &vtpm_proxy_fops, proxy_dev,
+ 				  O_RDWR);
+ 	if (IS_ERR(file)) {
+@@ -558,8 +559,6 @@ static struct file *vtpm_proxy_create_device(
+ 	}
+ 
+ 	/* from now on we can unwind with put_unused_fd() + fput() */
+-	/* simulate an open() on the server side */
+-	vtpm_proxy_fops_open(file);
+ 
+ 	if (proxy_dev->flags & VTPM_PROXY_FLAG_TPM2)
+ 		proxy_dev->chip->flags |= TPM_CHIP_FLAG_TPM2;
+-- 
+2.56.0
+

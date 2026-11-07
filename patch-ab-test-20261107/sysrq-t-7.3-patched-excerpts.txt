@@ -1,0 +1,42 @@
+Patched-kernel sysrq-t excerpts (captured live during the blocked window,
+t≈460s, before the VM was torn down; full serial log: serial-patched.log)
+==========================================================================
+
+Running chip-register work (kworker, D state):
+
+[  460.221288] [  T12988] Workqueue: tpm-vtpm vtpm_proxy_work
+[  460.222425] [  T12988] Call Trace:
+[  460.222445] [  T12988]  <TASK>
+[  460.222677] [  T12988]  schedule+0xec/0x2d0
+[  460.222771] [  T12988]  schedule_hrtimeout_range_clock+0x11d/0x310
+[  460.222977] [  T12988]  ? __pfx_vtpm_proxy_tpm_req_canceled+0x10/0x10
+[  460.223011] [  T12988]  tpm_transmit+0x4bf/0xb90
+[  460.223129] [  T12988]  tpm_transmit_cmd+0x62/0x1f0
+[  460.223159] [  T12988]  vtpm_proxy_request_locality+0x140/0x280
+[  460.223222] [  T12988]  tpm_chip_start+0x18f/0x340
+[  460.223252] [  T12988]  tpm_chip_bootstrap+0x80/0x1c0
+[  460.223283] [  T12988]  tpm_chip_register+0x27/0x4d0
+[  460.223319] [  T12988]  vtpm_proxy_work+0x41/0x100
+
+Workqueue backlog:
+
+[  460.315579] [  T12988] workqueue tpm-vtpm: flags=0x40108
+[  460.315658] [  T12988]   pwq 10: cpus=2 node=1 flags=0x0 nice=0 active=1 refcnt=67
+[  460.315700] [  T12988]     in-flight: 9688:vtpm_proxy_work for 72s
+[  460.315749] [  T12988]     inactive: 64*vtpm_proxy_work BAR(12249)
+[  460.316289] [  T12988]   pwq 14: cpus=3 node=1 flags=0x0 nice=0 active=1 refcnt=65
+[  460.316326] [  T12988]     in-flight: 2029:vtpm_proxy_work for 72s
+[  460.316371] [  T12988]     inactive: 4*vtpm_proxy_work BAR(10773), 58*vtpm_proxy_work
+
+Blocked release task (excerpt, same dump):
+
+[  460.237430] [  T12988]  vtpm_proxy_fops_release+0xa8/0x1d0
+[  460.239027] [  T12988]  __fput+0x408/0xb60
+[  460.239106] [  T12988]  task_work_run+0x170/0x260
+
+Notes:
+- vtpm_proxy_tpm_req_canceled() IS registered as the transmit wait's cancel
+  callback (visible as __pfx_vtpm_proxy_tpm_req_canceled under tpm_transmit),
+  yet the wait persists.
+- Guest serial shows repeated "tpm tpmN: Operation Timed out" lines while
+  the release is blocked.

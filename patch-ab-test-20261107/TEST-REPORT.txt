@@ -1,0 +1,104 @@
+==========================================================================
+ vTPM hang 补丁 A/B 测试报告 (2026-11-07)
+ ==========================================================================
+ 目的: 验证 Stefan Berger 的补丁
+   0001-tpm-tpm_vtpm_proxy-Set-STATE_OPENED_FLAG-before-inod.patch
+   ("tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is created",
+    Jarkko Sakkinen 11/1 转发)
+ 是否能修复 INFO: task hung in vtpm_proxy_fops_release
+
+ 一、构建
+ --------------------------------------------------------------------------
+ - 补丁干净应用于 vanilla 7.3.0 的 drivers/char/tpm/tpm_vtpm_proxy.c
+   (唯一源码改动)
+ - 配置不变 (kernel/kernel-7.3.config, KASAN/KCOV)
+ - 在 kernsight 容器内 gcc 11.4.0 (Ubuntu 22.04) 增量编译
+ - 产物: 7.3.0-kernsight-kasan #3
+   /data/zhengzheng/kernsight/vtpm-patched-test/ 下:
+     bzImage-patched-7.3     补丁内核
+     bzImage-unpatched-7.3   原始 #1 内核 (对照, 编译于 10月25)
+
+ 二、A/B 运行 (同一会话、同一布局、同一二进制)
+ --------------------------------------------------------------------------
+ 环境: kernsight 容器, QEMU 6.2.0, SeaBIOS 1.15.0-1
+ 布局: 与仓库 qemu-args-full-layout.txt 相同的完整布局
+       (root overlay + 2x16G/6x12G/12G scratch + 2x1G pmem + NUMA 0-1/2-3)
+ cmdline: cmdline-7.3-retest.txt (hung_task_panic=0)
+ 方法: 两步法 (repro.priming.prog, 49 个程序, procs=1, repeat=1)
+
+ [A] 补丁内核 #3
+     - priming 正常退出 EXIT:0
+     - t=414s: INFO: task syz.0.26:10773 blocked for more than 143 seconds.
+       t=434s: 同任务 163 秒报告
+       阻塞栈: vtpm_proxy_fops_release+0xa8 -> __flush_work+0x6ab
+               <- __fput <- task_work_run (executor 退出释放 server fd)
+     - t=460s sysrq-t:
+       * 在跑的 work: vtpm_proxy_work -> tpm_chip_register ->
+         tpm_chip_bootstrap -> tpm_chip_start ->
+         vtpm_proxy_request_locality -> tpm_transmit_cmd -> tpm_transmit
+         (schedule_hrtimeout 睡眠; 栈中可见
+          __pfx_vtpm_proxy_tpm_req_canceled —— cancel 回调已注册但等待仍在)
+       * workqueue tpm-vtpm 积压:
+           pwq10 (cpu2): in-flight 9688:vtpm_proxy_work for 72s
+                         inactive: 64*vtpm_proxy_work BAR(12249)
+           pwq14 (cpu3): in-flight 2029:vtpm_proxy_work for 72s
+                         inactive: 4*vtpm_proxy_work BAR(10773),
+                                   58*vtpm_proxy_work
+       * serial: "tpm tpmN: Operation Timed out" 反复出现
+     - 结论: 补丁内核 1/1 复现 hang
+
+ [B] 未打补丁 #1 (对照)
+     - t=387s: INFO: task syz.0.26:10732 blocked for more than 143 seconds.
+       阻塞栈与 A 完全一致 (release -> __flush_work)
+     - sysrq-t: in-flight 993:vtpm_proxy_work for 11s,
+       inactive: 63*vtpm_proxy_work BAR(12193)
+       (worker 栈已滚出 ring buffer, 与历史 run B 相同)
+     - 结论: 对照 1/1 复现 hang
+
+ 结论: Stefan 的 STATE_OPENED_FLAG 补丁在本环境不改变结果 (A=B=1/1 hang)。
+ 复现用例从未从其他进程打开 server 端 anon-inode fd (仅 create+exit),
+ udev 竞态与本 stall 无关。release 阻塞的直接原因是 flush_work() 等待的
+ chip-register work 在从不响应的 client 上按 TPM 超时反复重试, 且后面
+ 排着 60+ 个同类 work。
+
+ 三、7.4-rc1 验证 (2026-11-07)
+ --------------------------------------------------------------------------
+ 内核: 7.4.0-rc1-kernsight-kasan+ #3 (11月4日构建)
+ 驱动: drivers/char/tpm/tpm_vtpm_proxy.c 与 7.3.0 vanilla 完全一致 (diff 为空)
+ 环境: 与 7.3 测试相同的完整布局 + cmdline-7.3-retest.txt + 两步法
+ 结果: **1/1 复现同样的 hang** (产物: /data/zhengzheng/kernsight/vtpm-74-test/)
+   - t=376s: tpm tpm0: Operation Timed out
+   - t=402s: INFO: task syz.0.26:10737 blocked for more than 143 seconds.
+     阻塞栈: vtpm_proxy_fops_release+0xa8 -> __flush_work (与 7.3 相同)
+   - sysrq-t (t=438s): vtpm_proxy_work -> tpm_chip_register ->
+     tpm_chip_bootstrap -> tpm_chip_start -> vtpm_proxy_request_locality ->
+     tpm_transmit (req_canceled 在栈上); backlog:
+     pwq6 (cpu1): in-flight 11130:vtpm_proxy_work for 0s
+                  inactive: 43*vtpm_proxy_work BAR(12151)
+   - 注: 早期 7.4-rc1 外部验证 (external_repro_20261105, 跑了 ~30h 未命中)
+     使用的是 bare 布局 (仅 disk.qcow2), 按 2x2 结论 bare 布局本就不复现,
+     故那次阴性结果不构成反证; 本次为完整布局下的严格对照。
+
+ 四、Jarkko 遇到的启动失败 (llc-sibling topology warning)
+ --------------------------------------------------------------------------
+ "sched: CPU #2's llc-sibling CPU #0 is not on the same node!"
+ - 成因: i440FX + 平铺 -smp 4 (1 socket × 4 cores) + NUMA split
+   (cpus=0-1 / 2-3) -> LLC sibling 跨节点 -> topology_sane() 警告;
+   本身无害, 但建议 cmdline 含 panic_on_warn=1, 在他的 QEMU 上直接终止启动
+ - 本机两次运行 (QEMU 6.2.0/SeaBIOS 1.15) serial 均无此警告
+   (grep llc-sibling/topology_sane = 0) —— QEMU 版本间拓扑枚举行为不同
+ - 建议: -smp 4 改为 -smp 4,sockets=2,cores=2,threads=1 (LLC 落在同一
+   NUMA 节点内), 或 boot-only 时去掉 panic_on_warn=1; 其余布局不要动
+   (2x2 实验: 完整布局+完整 cmdline 才复现)
+
+ 五、产物清单 (/data/zhengzheng/kernsight/vtpm-patched-test/)
+ --------------------------------------------------------------------------
+ serial-patched.log                  补丁内核运行 serial (两份 hung 报告)
+ results-patched-sysrq-excerpts.txt  补丁内核 sysrq 片段 (worker 栈+backlog)
+ serial-unpatched-ctrl.log           对照运行 serial
+ results-unpatched-sysrq-t-dump.txt  对照 sysrq-t dump
+ bzImage-patched-7.3 / bzImage-unpatched-7.3
+ 0001-tpm-tpm_vtpm_proxy-Set-STATE_OPENED_FLAG-before-inod.patch
+ 注意: 与历史一致, 所有日志窗口结束时 release 任务仍处于阻塞态,
+ 未能捕获 release 最终是否完成 —— 不声称永久死锁。
+==========================================================================
