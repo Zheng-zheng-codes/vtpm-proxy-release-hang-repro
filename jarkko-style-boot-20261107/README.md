@@ -22,8 +22,11 @@ the exact guest command lines from cmdline/):
 
    Result: no topology warning, boot proceeds (log ends mid-boot; the
    warning count is 0). On QEMU 6.2 the kernel does not see cross-node LLC
-   siblings at all — the warning is a property of newer QEMU's cache
-   topology enumeration, not of the bug and not of the guest command line.
+   siblings at all, so the warning cannot be triggered there regardless of
+   the -smp shape; whether newer QEMU alone is enough to produce it is
+   examined in qemu26-parity-20261107/ (it was not, on our host). We did
+   not reproduce the warning on our side and cannot determine its exact
+   cause; it may be specific to Jarkko's host environment.
 
 2. serial-fix-topology.log + sysrq-t-fix-topology.txt — boot with the
    suggested fix `-smp 4,sockets=2,cores=2,threads=1` (each socket's LLC

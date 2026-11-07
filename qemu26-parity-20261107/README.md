@@ -20,11 +20,13 @@ full device layout and the original suggested guest command line
    byte-for-byte ("Hardware name: QEMU Ubuntu 26.04 PC (i440FX + PIIX,
    1996), BIOS 1.17.0-debian-1.17.0-1ubuntu..."). Combined with the
    earlier check (jarkko-style-boot-20261107/): forcing the cross-node
-   LLC condition explicitly on QEMU 6.2 also produces no warning. The
-   warning is therefore specific to his host platform's enumeration
-   (host CPU model / KVM behavior with -cpu host), not to the suggested
-   command line and not to the bug. The one-line mitigation
-   ("-smp 4,sockets=2,cores=2,threads=1") makes it host-independent.
+   LLC condition explicitly on QEMU 6.2 also produces no warning. Since
+   we could not reproduce the warning even with matching QEMU/BIOS
+   versions, we cannot determine its exact cause from our side; it may
+   be specific to his host environment (host CPU / KVM behavior with
+   "-cpu host"), but we cannot verify that from here. The one-line
+   mitigation ("-smp 4,sockets=2,cores=2,threads=1") boots clean on our
+   hosts and is a reasonable thing to try.
 
 2. The hang reproduces on his exact QEMU version anyway, and — because
    the suggested command line has hung_task_panic=1 — the guest panics
