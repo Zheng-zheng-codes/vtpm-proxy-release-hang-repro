@@ -8,21 +8,28 @@ command line fails on his side with a CPU-topology warning:
     Hardware name: QEMU Ubuntu 26.04 PC (i440FX + PIIX, 1996),
                    BIOS 1.17.0-debian-1.17.0-1ubuntu1
 
-We built his exact QEMU stack — Ubuntu 26.04.1 container, QEMU 10.2.1
-(Debian 1:10.2.1+ds-1ubuntu3.3), seabios 1.17.0-1ubuntu1 — and re-ran his
-attempt verbatim: unpatched 7.3.0-kernsight-kasan #1, flat "-smp 4", the
-full device layout and the original suggested guest command line
-(cmdline-7.3.txt, i.e. hung_task_panic=1). Two results:
+We built a QEMU stack as close to his as visible from his report — Ubuntu
+26.04.1 container, QEMU 10.2.1 (Debian 1:10.2.1+ds-1ubuntu3.3, the version
+currently shipped by the 26.04 archive), seabios 1.17.0-1ubuntu1 — and
+re-ran his attempt verbatim: unpatched 7.3.0-kernsight-kasan #1, flat
+"-smp 4", the full device layout and the original suggested guest command
+line (cmdline-7.3.txt, i.e. hung_task_panic=1). Note his exact QEMU
+micro-version is not visible in his report: the "Hardware name" string
+pins the distro (Ubuntu 26.04) and the BIOS version string pins seabios
+1.17.0-1ubuntu1 (identical to ours), but not the QEMU package version.
+Two results:
 
 1. The topology warning does NOT appear on our host: the guest boots
    clean (no "llc-sibling" / topology_sane messages anywhere in the
    serial log) even though QEMU and BIOS now match his versions
    byte-for-byte ("Hardware name: QEMU Ubuntu 26.04 PC (i440FX + PIIX,
-   1996), BIOS 1.17.0-debian-1.17.0-1ubuntu..."). Combined with the
+   1996), BIOS 1.17.0-debian-1.17.0-1ubuntu..."), so distro and BIOS
+   match his report (his exact QEMU micro-version is unknown). Combined
+   with the
    earlier check (jarkko-style-boot-20261107/): forcing the cross-node
    LLC condition explicitly on QEMU 6.2 also produces no warning. Since
-   we could not reproduce the warning even with matching QEMU/BIOS
-   versions, we cannot determine its exact cause from our side; it may
+   we could not reproduce the warning even with this QEMU stack, we
+   cannot determine its exact cause from our side; it may
    be specific to his host environment (host CPU / KVM behavior with
    "-cpu host"), but we cannot verify that from here. The one-line
    mitigation ("-smp 4,sockets=2,cores=2,threads=1") boots clean on our
