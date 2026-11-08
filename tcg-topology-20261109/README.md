@@ -1,9 +1,10 @@
 # TCG (no KVM) reproduces the reported boot failure exactly (2026-11-09)
 
-Follow-up to jarkko-style-boot-20261107/ and qemu26-parity-20261107/,
-which could not reproduce Jarkko Sakkinen's boot failure on our host with
-KVM and ended with "may be specific to his host environment". The missing
-variable turned out to be the accelerator, not the host:
+While trying to reproduce Jarkko Sakkinen's boot failure (reported
+2026-11-01) we first ran the same stack WITH KVM acceleration — QEMU 6.2
+and QEMU 10.2.1 (Ubuntu 26.04), full layout, same command lines — and it
+never appeared (clean boots every time). The missing variable turned out
+to be the accelerator, not the host:
 
   KVM  (-accel kvm -cpu host):  boots clean, no topology warning
   TCG  (-accel tcg,thread=multi -cpu max):  the warning appears
@@ -55,4 +56,4 @@ Update (same day): this TCG condition is the concrete reproduction of the report
 
 Scratch disks were omitted in these boot-only tests (the warning fires
 during SMP bringup, long before any block device matters); everything
-else matches qemu26-parity-20261107/.
+else matches the full layout used by the scripts in ../scripts/.
