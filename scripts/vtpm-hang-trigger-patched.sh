@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
 # ============================================================================
-# vtpm-hang-trigger-patched.sh — 跑【带补丁】内核的 vTPM hang 触发脚本
+# vtpm-hang-trigger-patched.sh — trigger script for the PATCHED kernel
 #
-# 内核: 7.3.0-kernsight-kasan #3 (已应用 Stefan Berger 的补丁
-#       "tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is created")
-# 参考: A/B 测试结论 —— 补丁内核同样触发 hang (1/1, t=414s), 补丁不修复本现象
+# Same as vtpm-hang-trigger.sh, but the KIMG default points at the patched
+# build: 7.3.0-kernsight-kasan #3 (Stefan Berger's patch
+# "tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is created",
+# kept in ../patch-ab-test-20261107/). A/B result: the hang still
+# reproduces on the patched kernel (1/1 run, t=414s / t=453s) — the patch
+# does not change the outcome.
 #
-# 其余参数/行为与 vtpm-hang-trigger.sh 完全一致, 直接透传:
-#   bash vtpm-hang-trigger-patched.sh        # 容器模式, 保留 VM
-#   bash vtpm-hang-trigger-patched.sh -k     # 结束后自动关 VM
-#   MODE=native KIMG=... GIMG=... KEY=... SYZDIR=... PROG=... bash ...
-#   PORT=12750 PANIC=1 MONITOR_MIN=20 bash ...
-# (native 模式下 KIMG 请指向你自己的补丁内核)
+# !!! PATHS YOU MUST REVIEW / EDIT — same as the main script !!!
+# The KIMG default below is the ORIGINAL TEST HOST's container-visible
+# path (/workspace/... = host dir /data/zhengzheng/kernsight). On any
+# other machine override it, e.g.:
+#   MODE=container KIMG=/workspace/your/bzImage bash vtpm-hang-trigger-patched.sh
+#   MODE=native    KIMG=$PWD/arch/x86/boot/bzImage GIMG=... KEY=... \
+#                  SYZDIR=... bash vtpm-hang-trigger-patched.sh
+# All other options/behavior are identical to vtpm-hang-trigger.sh and are
+# passed through (-k, PORT=, PANIC=1, MONITOR_MIN=, MODE=...).
 # ============================================================================
-DIR=$(cd "$(dirname "$0")" && pwd)
-export KERNEL=${KERNEL:-/workspace/vtpm-patched-test/bzImage-patched-7.3}
+DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+export KIMG=${KIMG:-/workspace/vtpm-patched-test/bzImage-patched-7.3}  # <- EDIT on other machines
 exec bash "$DIR/vtpm-hang-trigger.sh" "$@"
