@@ -75,7 +75,6 @@ grep -q "hung_task_panic=0" cmdline/cmdline-7.3-retest.txt \
     || fail "retest cmdline: hung_task_panic=0"
 # manifest must not contain itself
 grep -q "MANIFEST.sha256" MANIFEST.sha256 && fail "MANIFEST contains itself"
-echo "all checks passed"
 
 # follow-up investigations (2026-11)
 grep -q "INFO: task syz.0.26:10773 blocked for more than 143 seconds" \
@@ -90,7 +89,7 @@ grep -q "INFO: task syz.0.26:10737 blocked for more than 143 seconds" \
 grep -q "llc-sibling CPU #0 is not on the same node" \
     tcg-topology-20261109/serial-tcg-hit.log \
     || fail "TCG topology warning line"
-grep -q "Kernel panic - not syncing: hung_task" \
+grep -q "Kernel panic - not syncing: kernel: panic_on_warn set" \
     tcg-topology-20261109/serial-tcg-hit.log \
     || fail "TCG panic line"
 grep -q "llc-sibling CPU #0 is not on the same node" \
