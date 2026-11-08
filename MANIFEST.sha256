@@ -56,7 +56,7 @@ b9740e789ed936ed615ea52351dae844af99f268174055d2251f3960b68c2975  ./repro/repro.
 8a94326b234221f4a9e27617a4c2a834129a2d2781fd93d1dfe83e76753ce6bb  ./repro/repro.priming.prog
 df5edf90f66e7fa66f34ac65576f6a856ad40e461fdb00dfb1b16e16b241bfe3  ./repro/repro.prog
 51ce94fcd3b61e890b22732c4e9ecf8e790e723ce022eacd0e34f050283e9571  ./repro/serial-twostep.log
-ccf86d3e34a68c7705dbda48ced5ceba9af82369a9141ddef6ba1152b64c228b  ./tcg-topology-20261109/README.md
+f9cde5bb9a5435b69c9e49c4067c71c7c725c5ca2f1f9cee5ffad8845898087d  ./tcg-topology-20261109/README.md
 fb88eb1a2100a68b7a5061b9bb8833695cf7c9c06905ca04c29ddf01492b5948  ./tcg-topology-20261109/boot-tcg-fixed.sh
 a5001a1469748ead505dd55498553336e4eb1a488402eecd120c39d3961e5189  ./tcg-topology-20261109/boot-tcg.sh
 fcd0935f3ecfecee634b21df9f3365eaf0f472ba6543bd686769c2d32b7d4fc8  ./tcg-topology-20261109/serial-tcg-fixed-topology.log

@@ -3,9 +3,10 @@
 While trying to reproduce Stefan Berger's boot failure (reported
 2026-11-01) we first ran the same stack WITH KVM acceleration — QEMU 6.2
 and QEMU 10.2.1 (Ubuntu 26.04), full layout, same command lines — and it
-never appeared (clean boots every time; those KVM runs' logs are not
-part of this repository — only the TCG logs below are archived). The
-missing variable turned out to be the accelerator, not the host:
+never showed the warning in their serial logs (those KVM runs' logs are
+not part of this repository — only the TCG logs below are archived). A
+sufficient condition for reproducing the failure turned out to be
+running without KVM acceleration:
 
   KVM  (-accel kvm -cpu host):  boots clean, no topology warning
   TCG  (-accel tcg,thread=multi -cpu max):  the warning appears
@@ -68,4 +69,4 @@ Update (same day): this TCG condition is the concrete reproduction of the report
 
 Scratch disks were omitted in these boot-only tests (the warning fires
 during SMP bringup, long before any block device matters); everything
-else matches the full layout used by the scripts in ../scripts/.
+else matches the full layout described in ../cmdline/qemu-args-full-layout.txt.
