@@ -113,11 +113,14 @@ executor process exits.
    inspect the hang live). The guest needs no extra setup.
 
 2. From the host, copy the executor binaries and the reproducer programs
-   into the guest (all files below are in this repository, see
-   `MANIFEST.sha256`):
+   into the guest. The reproducer programs are in this repository
+   (`repro/`, see `MANIFEST.sha256`); the syzkaller binaries
+   syz-execprog / syz-executor are NOT shipped and must be prepared
+   separately (build them from a syzkaller checkout for the target):
 
    ```bash
-   scp syz-execprog syz-executor repro.priming.prog repro.prog root@guest:/tmp/
+   scp /path/to/syz-execprog /path/to/syz-executor \
+       repro/repro.priming.prog repro/repro.prog root@guest:/tmp/
    ssh root@guest
    cd /tmp && chmod +x syz-execprog syz-executor
    ```

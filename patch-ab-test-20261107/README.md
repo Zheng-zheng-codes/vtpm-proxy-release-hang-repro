@@ -9,7 +9,8 @@ layout / kernel command line as the main report:
 1. Does Stefan Berger's patch
    "tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is created"
    (`0001-tpm-tpm_vtpm_proxy-Set-STATE_OPENED_FLAG-before-inod.patch`,
-   forwarded by Jarkko Sakkinen on 2026-11-01) fix the hang?
+   authored by Stefan Berger, dated 2026-11-06, attached to the thread
+   following Stefan's 2026-11-01 reply) fix the hang?
 2. Is v7.4-rc1 affected as well?
 
 ## Results

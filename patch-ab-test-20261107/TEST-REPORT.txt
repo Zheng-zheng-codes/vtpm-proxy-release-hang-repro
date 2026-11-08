@@ -4,7 +4,7 @@
  目的: 验证 Stefan Berger 的补丁
    0001-tpm-tpm_vtpm_proxy-Set-STATE_OPENED_FLAG-before-inod.patch
    ("tpm: tpm_vtpm_proxy: Set STATE_OPENED_FLAG before inode is created",
-    Jarkko Sakkinen 11/1 转发)
+    Stefan Berger 2026-11-06 提供, 附于 Stefan Berger 2026-11-01 回复之后)
  是否能修复 INFO: task hung in vtpm_proxy_fops_release
 
  一、构建
@@ -82,19 +82,19 @@
      使用的是 bare 布局 (仅 disk.qcow2), 按 2x2 结论 bare 布局本就不复现,
      故那次阴性结果不构成反证; 本次为完整布局下的严格对照。
 
- 四、Jarkko 遇到的启动失败 (llc-sibling topology warning)
+ 四、Stefan 遇到的启动失败 (llc-sibling topology warning)
  --------------------------------------------------------------------------
  "sched: CPU #2's llc-sibling CPU #0 is not on the same node!"
- - [UPDATE 2026-11-09: 见仓库 tcg-topology-20261109 —— 无 KVM (TCG) 下逐字复现]
- - [UPDATE 2026-11-09: 见 tcg-topology-20261109 —— 无 KVM (TCG) 下逐字复现]
- - 成因: i440FX + 平铺 -smp 4 (1 socket × 4 cores) + NUMA split
-   (cpus=0-1 / 2-3) -> LLC sibling 跨节点 -> topology_sane() 警告;
-   本身无害, 但建议 cmdline 含 panic_on_warn=1, 在他的 QEMU 上直接终止启动
- - 本机两次运行 (QEMU 6.2.0/SeaBIOS 1.15) serial 均无此警告
-   (grep llc-sibling/topology_sane = 0) —— QEMU 版本间拓扑枚举行为不同
- - 建议: -smp 4 改为 -smp 4,sockets=2,cores=2,threads=1 (LLC 落在同一
-   NUMA 节点内), 或 boot-only 时去掉 panic_on_warn=1; 其余布局不要动
-   (2x2 实验: 完整布局+完整 cmdline 才复现)
+ - [结论 (2026-11-09, 见 tcg-topology-20261109): 无 KVM 加速 (TCG,
+   -cpu max) 下逐字复现该警告并 panic; KVM (-cpu host) 下多次尝试均不出现。
+   早期"QEMU 版本差异"的解释不成立 —— 决定因素是加速器/CPUID 来源
+   (KVM 透传宿主机 CPU vs TCG 由 QEMU 合成), 而非 QEMU 版本本身]
+ - 当时的观察: i440FX + 平铺 -smp 4 (1 socket × 4 cores) + NUMA split
+   (cpus=0-1 / 2-3) 会构成跨节点 LLC sibling 组合, topology_sane() 警告
+   本身无害, 但 cmdline 含 panic_on_warn=1 时直接终止启动
+ - 缓解 (KVM 与 TCG 双模式均已验证): -smp 4 改为
+   -smp 4,sockets=2,cores=2,threads=1 (LLC 落在同一 NUMA 节点内);
+   其余布局不要动 (2x2 实验: 完整布局+完整 cmdline 才复现 hang)
 
  五、产物清单 (/data/zhengzheng/kernsight/vtpm-patched-test/)
  --------------------------------------------------------------------------

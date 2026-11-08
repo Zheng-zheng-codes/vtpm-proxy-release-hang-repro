@@ -1,5 +1,9 @@
 #!/bin/bash
 # Re-checks the numbers quoted in the bug report.
+# Scope: (a) semantic checks on the original campaign evidence (repro/,
+# logs/) and the follow-up evidence (patch-ab-test-20261107/,
+# tcg-topology-20261109/), and (b) an integrity check of every tracked
+# file via MANIFEST.sha256 (regenerate it whenever files change).
 set -u
 cd "$(dirname "$0")"
 fail() { echo "MISMATCH: $*"; exit 1; }
@@ -95,4 +99,6 @@ grep -q "Kernel panic - not syncing: kernel: panic_on_warn set" \
 grep -q "llc-sibling CPU #0 is not on the same node" \
     tcg-topology-20261109/serial-tcg-fixed-topology.log \
     && fail "TCG fixed-topology boot still warns"
+# integrity of every tracked file (MANIFEST excludes itself and .git/)
+sha256sum -c MANIFEST.sha256 --quiet || fail "MANIFEST verification"
 echo "all checks passed"
