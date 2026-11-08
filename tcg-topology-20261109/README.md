@@ -9,6 +9,12 @@ to be the accelerator, not the host:
   KVM  (-accel kvm -cpu host):  boots clean, no topology warning
   TCG  (-accel tcg,thread=multi -cpu max):  the warning appears
 
+Note the two runs differ in BOTH the accelerator and the CPU model:
+the KVM runs used "-cpu host" (CPUID mostly passed through from our host
+CPU) while the TCG run used "-cpu max" (QEMU-synthesized CPUID), so the
+experiment isolates the accelerator+CPU-model pair, not the accelerator
+alone.
+
 Both runs below use the same QEMU 10.2.1 (Ubuntu 26.04) stack, the same
 unpatched 7.3.0-kernsight-kasan #1 kernel, the same i440FX + NUMA split
 (cpuk 0-1 / 2-3 on node 0 / 1) and the same guest command line

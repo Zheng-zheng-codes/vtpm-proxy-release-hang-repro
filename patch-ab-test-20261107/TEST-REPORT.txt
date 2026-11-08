@@ -37,7 +37,8 @@
          tpm_chip_bootstrap -> tpm_chip_start ->
          vtpm_proxy_request_locality -> tpm_transmit_cmd -> tpm_transmit
          (schedule_hrtimeout 睡眠; 栈中可见
-          __pfx_vtpm_proxy_tpm_req_canceled —— cancel 回调已注册但等待仍在)
+          __pfx_vtpm_proxy_tpm_req_canceled —— cancel 回调已随等待注册;
+          栈中符号仅能证明注册, 不能证明其执行过)
        * workqueue tpm-vtpm 积压:
            pwq10 (cpu2): in-flight 9688:vtpm_proxy_work for 72s
                          inactive: 64*vtpm_proxy_work BAR(12249)
@@ -55,7 +56,9 @@
        (worker 栈已滚出 ring buffer, 与历史 run B 相同)
      - 结论: 对照 1/1 复现 hang
 
- 结论: Stefan 的 STATE_OPENED_FLAG 补丁在本环境不改变结果 (A=B=1/1 hang)。
+ 结论: Stefan 的 STATE_OPENED_FLAG 补丁未消除本次挂起 (A=B=1/1 hang);
+ 本次复现没有给 udev/STATE_OPENED_FLAG 竞态提供证据 (用例从不从其他
+ 进程打开 server 端 fd), 但不能排除其他时序。
  复现用例从未从其他进程打开 server 端 anon-inode fd (仅 create+exit),
  udev 竞态与本 stall 无关。release 阻塞的直接原因是 flush_work() 等待的
  chip-register work 在从不响应的 client 上按 TPM 超时反复重试, 且后面
@@ -82,6 +85,8 @@
  四、Jarkko 遇到的启动失败 (llc-sibling topology warning)
  --------------------------------------------------------------------------
  "sched: CPU #2's llc-sibling CPU #0 is not on the same node!"
+ - [UPDATE 2026-11-09: 见仓库 tcg-topology-20261109 —— 无 KVM (TCG) 下逐字复现]
+ - [UPDATE 2026-11-09: 见 tcg-topology-20261109 —— 无 KVM (TCG) 下逐字复现]
  - 成因: i440FX + 平铺 -smp 4 (1 socket × 4 cores) + NUMA split
    (cpus=0-1 / 2-3) -> LLC sibling 跨节点 -> topology_sane() 警告;
    本身无害, 但建议 cmdline 含 panic_on_warn=1, 在他的 QEMU 上直接终止启动

@@ -261,3 +261,14 @@ cmdline/qemu-args-*.txt           QEMU arguments (full layout / bare layout)
 verify.sh                         re-checks the numbers quoted in this report
 MANIFEST.sha256                   sha256 of every file (except itself)
 ```
+
+## Follow-up investigations
+
+- `patch-ab-test-20261107/` — A/B test of the STATE_OPENED_FLAG patch
+  (Stefan Berger): the hang still reproduces on the patched kernel
+  (1/1), the unpatched control hangs identically, and v7.4-rc1 is
+  affected as well. See its README for the results table.
+- `tcg-topology-20261109/` — the topology warning reported in the
+  2026-11-01 review reproduces without KVM acceleration (TCG) on the
+  same QEMU stack, and the `-smp 4,sockets=2,cores=2,threads=1`
+  mitigation is verified in both KVM and TCG. See its README.

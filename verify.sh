@@ -76,3 +76,24 @@ grep -q "hung_task_panic=0" cmdline/cmdline-7.3-retest.txt \
 # manifest must not contain itself
 grep -q "MANIFEST.sha256" MANIFEST.sha256 && fail "MANIFEST contains itself"
 echo "all checks passed"
+
+# follow-up investigations (2026-11)
+grep -q "INFO: task syz.0.26:10773 blocked for more than 143 seconds" \
+    patch-ab-test-20261107/serial-7.3-patched.log \
+    || fail "patched A/B hung task line"
+grep -q "INFO: task syz.0.26:10732 blocked for more than 143 seconds" \
+    patch-ab-test-20261107/serial-7.3-unpatched-ctrl.txt \
+    || fail "unpatched control A/B hung task line"
+grep -q "INFO: task syz.0.26:10737 blocked for more than 143 seconds" \
+    patch-ab-test-20261107/serial-7.4-rc1.log \
+    || fail "v7.4-rc1 hung task line"
+grep -q "llc-sibling CPU #0 is not on the same node" \
+    tcg-topology-20261109/serial-tcg-hit.log \
+    || fail "TCG topology warning line"
+grep -q "Kernel panic - not syncing: hung_task" \
+    tcg-topology-20261109/serial-tcg-hit.log \
+    || fail "TCG panic line"
+grep -q "llc-sibling CPU #0 is not on the same node" \
+    tcg-topology-20261109/serial-tcg-fixed-topology.log \
+    && fail "TCG fixed-topology boot still warns"
+echo "all checks passed"

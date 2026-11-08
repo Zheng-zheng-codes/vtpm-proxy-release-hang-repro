@@ -23,8 +23,10 @@ layout / kernel command line as the main report:
 All three runs hung with the same signature: the executor process exits,
 `__fput()` -> `vtpm_proxy_fops_release()` -> `__flush_work()` blocks,
 the chip-register work keeps sleeping in `tpm_transmit()` (<-
-`vtpm_proxy_request_locality()`, with `vtpm_proxy_tpm_req_canceled()`
-present as the transmit wait's cancel callback), behind a workqueue
+`vtpm_proxy_request_locality()`, with `__pfx_vtpm_proxy_tpm_req_canceled`
+visible in the stack - the cancel callback is registered for the transmit
+wait (the stack alone does not tell whether or how often it executed),
+behind a workqueue
 backlog of dozens of `vtpm_proxy_work` instances, while the serial log
 shows repeated `tpm tpmN: Operation Timed out`.
 
@@ -33,9 +35,10 @@ shows repeated `tpm tpmN: Operation Timed out`.
 - v7.4-rc1 run:    t=376s `tpm tpm0: Operation Timed out`,
                    t=402s first hung-task report (143 s)
 
-Conclusion: the STATE_OPENED_FLAG / udev race does not explain this stall
-(the reproducer never opens the server-side anon-inode fd from another
-process), the patch does not change the outcome, and the current mainline
+Conclusion: the patch does not eliminate this hang. Our reproducer gives
+no evidence that the udev / STATE_OPENED_FLAG race is involved in this run
+(it never opens the server-side anon-inode fd from another process),
+though other orderings cannot be ruled out. The current mainline
 (v7.4-rc1) is affected as well. `drivers/char/tpm/tpm_vtpm_proxy.c` is
 byte-identical between v7.3.0 and v7.4-rc1 (empty diff).
 
