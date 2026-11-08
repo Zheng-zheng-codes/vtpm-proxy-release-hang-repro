@@ -26,7 +26,7 @@ the exact guest command lines from cmdline/):
    the -smp shape; whether newer QEMU alone is enough to produce it is
    examined in qemu26-parity-20261107/ (it was not, on our host). We did
    not reproduce the warning on our side and cannot determine its exact
-   cause; it may be specific to Jarkko's host environment.
+   cause; it may be specific to Jarkko's host environment (later resolved: see tcg-topology-20261109/ — the failure reproduces under TCG, without KVM acceleration).
 
 2. serial-fix-topology.log + sysrq-t-fix-topology.txt — boot with the
    suggested fix `-smp 4,sockets=2,cores=2,threads=1` (each socket's LLC

@@ -30,8 +30,8 @@ Two results:
    LLC condition explicitly on QEMU 6.2 also produces no warning. Since
    we could not reproduce the warning even with this QEMU stack, we
    cannot determine its exact cause from our side; it may
-   be specific to his host environment (host CPU / KVM behavior with
-   "-cpu host"), but we cannot verify that from here. The one-line
+   be specific to his host environment. UPDATE (2026-11-09): reproduced
+   without KVM acceleration - see tcg-topology-20261109/. The one-line
    mitigation ("-smp 4,sockets=2,cores=2,threads=1") boots clean on our
    hosts and is a reasonable thing to try.
 
