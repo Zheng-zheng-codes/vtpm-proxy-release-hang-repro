@@ -1,0 +1,35 @@
+[2026-11-08 21:19:20] 前置检查通过: mode=container port=12740 work=/data/zhengzheng/kernsight/vtpm-trigger-20261108-211919
+[2026-11-08 21:19:22] 磁盘布局完成 (root overlay + 2x16G + 7x12G + 2x1G pmem)
+[2026-11-08 21:19:30] QEMU 已启动, 等待 guest ssh (约 2 分钟)...
+[2026-11-08 21:22:42] guest ssh 已通
+Warning: Permanently added '[127.0.0.1]:12740' (ED25519) to the list of known hosts.
+Warning: Permanently added '[127.0.0.1]:12740' (ED25519) to the list of known hosts.
+[2026-11-08 21:23:01] 开始跑状态构造序列 (49 个程序, 正常应 ~20s-3min 且 PRIMING_EXIT:0)
+Warning: Permanently added '[127.0.0.1]:12740' (ED25519) to the list of known hosts.
+2026/11/08 13:23:34 parsed 78 programs
+2026/11/08 13:23:34 serving rpc on tcp://46029
+mkswap: error: swap area needs to be at least 40 KiB
+2026/11/08 13:23:53 executed programs: 0
+  PRIMING_EXIT:0
+[2026-11-08 21:25:38] priming 已退出, executor 释放 vtpm fd —— 开始监控 serial (15 分钟)
+[2026-11-08 21:25:53] 监控 1/60: hung-report=0 tpm-timeout=0
+[2026-11-08 21:26:08] 监控 2/60: hung-report=0 tpm-timeout=2
+[2026-11-08 21:26:23] 监控 3/60: hung-report=0 tpm-timeout=2
+[2026-11-08 21:26:38] 监控 4/60: hung-report=0 tpm-timeout=2
+[2026-11-08 21:26:53] 监控 5/60: hung-report=1 tpm-timeout=2
+[2026-11-08 21:26:53] ================= PHENOMENON CONFIRMED =================
+  [  437.633268][   T46] INFO: task syz.0.26:10767 blocked for more than 143 seconds.
+  [  437.633376][   T46]       Not tainted 7.3.0-kernsight-kasan #1
+  [  437.633388][   T46]       Blocked by coredump.
+  [  437.633394][   T46] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+Warning: Permanently added '[127.0.0.1]:12740' (ED25519) to the list of known hosts.
+[2026-11-08 21:26:57] --- 在跑的 chip-register work 栈 (sysrq-t) ---
+  [  449.800852] [  T12700] Workqueue: tpm-vtpm vtpm_proxy_work
+[2026-11-08 21:26:57] --- tpm-vtpm workqueue 积压 ---
+  [  449.848316] [  T12700] workqueue tpm-vtpm: flags=0x40108
+  [  449.848401] [  T12700]   pwq 2: cpus=0 node=0 flags=0x0 nice=0 active=1 refcnt=18
+  [  449.848438] [  T12700]     in-flight: 10:vtpm_proxy_work for 54s
+  [  449.848480] [  T12700]     inactive: 15*vtpm_proxy_work BAR(10767)
+  [  449.848741] [  T12700]   pwq 6: cpus=1 node=0 flags=0x0 nice=0 active=1 refcnt=64
+[2026-11-08 21:26:57] 证据文件: serial=/data/zhengzheng/kernsight/vtpm-trigger-20261108-211919/vm/serial.log  sysrq=/data/zhengzheng/kernsight/vtpm-trigger-20261108-211919/sysrq-t-dump.txt
+[2026-11-08 21:26:57] VM 已关闭 (证据保留在 /data/zhengzheng/kernsight/vtpm-trigger-20261108-211919)
