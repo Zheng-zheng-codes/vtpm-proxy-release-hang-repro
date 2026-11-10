@@ -113,3 +113,12 @@ grep -q "vtpm_proxy_fops_release+0xa8" \
 grep -q "all 4 server fds closed (total 0s)" \
     minimal-c-repro/explicit-close-log.txt \
     || fail "explicit-close no-block evidence"
+grep -q "INFO: task vtpm-hang-minim:9397 blocked for more than 143 seconds" \
+    minimal-c-repro/serial-N32-run2.log \
+    || fail "N=32 run 1 hung task line"
+grep -q "blocked for more than 286 seconds" \
+    minimal-c-repro/serial-N32-run3.log \
+    || fail "N=32 still-blocked-at-286s line"
+grep -q "blocked for more than" \
+    minimal-c-repro/serial-N32-run3.log \
+    || fail "N=32 rerun hung task line"
