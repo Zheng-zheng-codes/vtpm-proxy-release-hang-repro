@@ -120,7 +120,7 @@ grep -q "blocked for more than 286 seconds" \
     minimal-c-repro/n32-auto-hang/serial-N32-run3.log \
     || fail "N=32 still-blocked-at-286s line"
 grep -q "blocked for more than" \
-    minimal-c-repro/serial-N32-run3.log \
+    minimal-c-repro/n32-auto-hang/serial-N32-run3.log \
     || fail "N=32 rerun hung task line"
 grep -q "INFO: task vtpm-hang-minim:9492 blocked for more than 143 seconds" \
     minimal-c-repro/n32-auto-hang/serial-final-autosplit.log \
