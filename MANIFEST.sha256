@@ -45,6 +45,7 @@ c4e1c0a473fa3c5274cbb9a0f2a94ffc22ad29ee3a4d27055338cdce5483d6f8  ./logs/serial-
 7c14a9b458d19ef9f23058adb8485bd479419fe9bd04f358efe1d34de6be26ed  ./minimal-c-repro/N32-run3-sysrq.txt
 b9a1bd027e80e829a06b50d5187f6ab8874c3723e13885d80e0d530dfbf6be4f  ./minimal-c-repro/README.md
 99d1d871872d3b30c79abcf4907fa8cacc0dbe861db063ddaceda4177b3d9652  ./minimal-c-repro/explicit-close-log.txt
+0d152a0034fe5ed4c8fbd049af62370e8e281c6f8618647bf9427a6ce3f85f54  ./minimal-c-repro/serial-N32-run1.log
 96eefa24764c82f999cb1423f32c676c02e053aede0760e46dab74d459710cdc  ./minimal-c-repro/serial-N32-run2.log
 4cc5967c3ec657747f868a38f687608991d05a062e08e25aad77ac42525eb28a  ./minimal-c-repro/serial-N32-run3.log
 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./minimal-c-repro/serial-explicit-close.log
