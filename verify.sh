@@ -108,7 +108,7 @@ grep -q "INFO: task vtpm-hang-minim:9364 blocked for more than 143 seconds" \
     minimal-c-repro/n4-auto-hang/serial-minimal-c.log \
     || fail "minimal C hung task line"
 grep -q "vtpm_proxy_fops_release+0xa8" \
-    minimal-c-repro/serial-minimal-c.log \
+    minimal-c-repro/n4-auto-hang/serial-minimal-c.log \
     || fail "minimal C release stack line"
 grep -q "all 4 server fds closed (total 0s)" \
     minimal-c-repro/explicit-close/explicit-close-N4-log.txt \
