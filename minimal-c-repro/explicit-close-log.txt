@@ -1,0 +1,17 @@
+# captured console output of the explicit-close run (run B):
+# /tmp/vtpm-hang-minimal 4 close  (guest shell, nohup; the guest was
+# shut down shortly after, so the file is reproduced from the session log)
+[1794280664] created vtpm0 (server fd 4, client 10:224)
+[1794280664] created vtpm1 (server fd 5, client 253:1)
+[1794280664] created vtpm2 (server fd 6, client 253:2)
+[1794280664] created vtpm3 (server fd 7, client 253:3)
+[1794280664] explicitly closing 4 server fds (each close() may block in flush_work)
+[1794280664] closing server fd 4
+[1794280664] closed server fd 4 (close took 0s)
+[1794280664] closing server fd 5
+[1794280664] closed server fd 5 (close took 0s)
+[1794280664] closing server fd 6
+[1794280664] closed server fd 6 (close took 0s)
+[1794280664] closing server fd 7
+[1794280664] closed server fd 7 (close took 0s)
+[1794280664] all 4 server fds closed (total 0s)

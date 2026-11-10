@@ -102,3 +102,14 @@ grep -q "llc-sibling CPU #0 is not on the same node" \
 # integrity of every tracked file (MANIFEST excludes itself and .git/)
 sha256sum -c MANIFEST.sha256 --quiet || fail "MANIFEST verification"
 echo "all checks passed"
+
+# minimal C reproducer evidence
+grep -q "INFO: task vtpm-hang-minim:9364 blocked for more than 143 seconds" \
+    minimal-c-repro/serial-minimal-c.log \
+    || fail "minimal C hung task line"
+grep -q "vtpm_proxy_fops_release+0xa8" \
+    minimal-c-repro/serial-minimal-c.log \
+    || fail "minimal C release stack line"
+grep -q "all 4 server fds closed (total 0s)" \
+    minimal-c-repro/explicit-close-log.txt \
+    || fail "explicit-close no-block evidence"

@@ -41,6 +41,12 @@ c4e1c0a473fa3c5274cbb9a0f2a94ffc22ad29ee3a4d27055338cdce5483d6f8  ./logs/serial-
 4d40403ea9e867d58058eefcf3e7336e05eb9f1d38ddf2efe60a061308bebb2d  ./logs/serial-verify3.log
 705f91cb7458676d303ffa4a202f3e9e09345b6c3452ebd768c2c23d25d23147  ./logs/serial-verify4.log
 6aab5b870176d50afc82e91002b34795d8719c314b868704c9e7e8c3192eca8a  ./logs/vtpm-sysrq-t-all-tasks.txt
+3ce422b2933ea09c640a0bfe0f63a2fd34e39011b79ba89271fc2a76e2c1838b  ./minimal-c-repro/README.md
+99d1d871872d3b30c79abcf4907fa8cacc0dbe861db063ddaceda4177b3d9652  ./minimal-c-repro/explicit-close-log.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./minimal-c-repro/serial-explicit-close.log
+73ab7d77954a199822ca3890dea85918c9066a66a2cc4eb3a1f86fe604333bdb  ./minimal-c-repro/serial-minimal-c.log
+e4ca3eec4b9c63fa159ee7d14d5aa0600a9e143ee9043abead2e7f347de94c0d  ./minimal-c-repro/sysrq-t-minimal.txt
+e99ac5c73c7858f070c6b86cb5f11ed7fd5643ed7cd546a1d4ffd224a7bfb397  ./minimal-c-repro/vtpm-hang-minimal.c
 9d7b8c4e1e1293f93fd1b934559c7e71725f3ef09820bdc9e3c8fc82f2784ff3  ./patch-ab-test-20261107/0001-tpm-tpm_vtpm_proxy-Set-STATE_OPENED_FLAG-before-inod.patch
 71a9d0fa0853218ff31649841a03e2e597c58333887badb132ce93908c5f779d  ./patch-ab-test-20261107/README.md
 1358a3592e94c252b318e2ecf5fec98140e749d7eb3940e89a511fa79fdaf699  ./patch-ab-test-20261107/TEST-REPORT.txt
@@ -61,4 +67,4 @@ fb88eb1a2100a68b7a5061b9bb8833695cf7c9c06905ca04c29ddf01492b5948  ./tcg-topology
 a5001a1469748ead505dd55498553336e4eb1a488402eecd120c39d3961e5189  ./tcg-topology-20261109/boot-tcg.sh
 fcd0935f3ecfecee634b21df9f3365eaf0f472ba6543bd686769c2d32b7d4fc8  ./tcg-topology-20261109/serial-tcg-fixed-topology.log
 43752ef64f125b31318f5220d7a6bb82f24b602abffa77a073a03a73405e26d0  ./tcg-topology-20261109/serial-tcg-hit.log
-927b34ea2af41ce80440b3820a9f05290d5e0b6709c1757ce89f2966cbe43dce  ./verify.sh
+d6e2a302a6c7db92eb4128215f60607683f68be25126f52cd47c49a495cad118  ./verify.sh
