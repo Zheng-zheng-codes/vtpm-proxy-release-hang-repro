@@ -11,13 +11,8 @@
  *       (vtpm_proxy_fops_release() -> vtpm_proxy_work_stop() ->
  *       flush_work()) runs at process exit.
  *
- *   ./vtpm-hang-minimal N close    (explicit-close mode)
- *       create N devices, then close() each server-side fd explicitly,
- *       printing a timestamped line before and after every close.
- *       close() itself blocks in the same flush_work() — this answers
- *       the question "does explicitly closing the ioctl-returned server
- *       fd still block?" and shows whether the wait eventually ends
- *       (bounded stall) or never does (deadlock).
+ *   The explicit-close CONTROL experiment (closing every ioctl-returned
+ *   server fd and timing each close()) lives in vtpm-close-minimal.c.
  *
  * Expected behavior on affected kernels: the chip-register work
  * (vtpm_proxy_work -> tpm_chip_register) keeps talking to the client
@@ -31,7 +26,13 @@
  * is needed.
  *
  * Build:   gcc -O2 -static -o vtpm-hang-minimal vtpm-hang-minimal.c
- * Run:     ./vtpm-hang-minimal [N] [close]     (N devices, default 4)
+ * Run:     ./vtpm-hang-minimal [N] [close]     (N devices, default 32)
+ *
+ * Reliable trigger: use N >= 16 (default 32). The hang needs the
+ * exit-time release to overlap a register work that is inside its
+ * transmit wait; with small N (1-2) the release can complete before
+ * that overlap happens (empirically: N=4 hung 1/1, N=1/N=2 missed,
+ * N=32 hangs reliably - see minimal-c-repro/README.md).
  */
 
 #include <errno.h>
@@ -58,14 +59,12 @@ static long now(void) { return time(NULL); }
 
 int main(int argc, char **argv)
 {
-	int n = (argc > 1) ? atoi(argv[1]) : 4;
-	int explicit_close = (argc > 2 && strcmp(argv[2], "close") == 0);
+	int n = (argc > 1) ? atoi(argv[1]) : 32;
 	int ctl, i, created = 0;
 	int *fds;
-	long t0;
 
 	if (n < 1 || n > 4096) {
-		fprintf(stderr, "usage: %s [N] [close]  (N devices, default 4)\n",
+		fprintf(stderr, "usage: %s [N]  (N devices, default 32)\n",
 			argv[0]);
 		return 1;
 	}
@@ -99,35 +98,9 @@ int main(int argc, char **argv)
 	}
 	close(ctl);
 
-	if (!explicit_close) {
-		printf("[%ld] %d devices created; exiting without closing "
-		       "them - the release path will now flush the pending "
-		       "chip-register work\n", now(), created);
-		fflush(stdout);
-		free(fds);
-		return 0;
-	}
-
-	/* explicit-close mode: answer the question "does closing the
-	 * ioctl-returned server fd still block in the same flush_work()?"
-	 * and record how long each close() takes (bounded stall vs. deadlock) */
-	printf("[%ld] explicitly closing %d server fds (each close() may "
-	       "block in flush_work)\n", now(), created);
-	fflush(stdout);
-	t0 = now();
-	for (i = 0; i < created; i++) {
-		long c0 = now();
-		printf("[%ld] closing server fd %d\n", c0, fds[i]);
-		fflush(stdout);
-		if (close(fds[i]) < 0)
-			fprintf(stderr, "close(%d): %s\n", fds[i],
-				strerror(errno));
-		printf("[%ld] closed server fd %d (close took %lds)\n",
-		       now(), fds[i], now() - c0);
-		fflush(stdout);
-	}
-	printf("[%ld] all %d server fds closed (total %lds)\n",
-	       now(), created, now() - t0);
+	printf("[%ld] %d devices created; exiting without closing them - "
+	       "the release path will now flush the pending chip-register "
+	       "work\n", now(), created);
 	fflush(stdout);
 	free(fds);
 	return 0;

@@ -1,0 +1,98 @@
+[1794289954] created vtpm0 (server fd 4, client 10:224)
+[1794289954] created vtpm1 (server fd 5, client 253:1)
+[1794289954] created vtpm2 (server fd 6, client 253:2)
+[1794289954] created vtpm3 (server fd 7, client 253:3)
+[1794289954] created vtpm4 (server fd 8, client 253:4)
+[1794289954] created vtpm5 (server fd 9, client 253:5)
+[1794289954] created vtpm6 (server fd 10, client 253:6)
+[1794289954] created vtpm7 (server fd 11, client 253:7)
+[1794289954] created vtpm8 (server fd 12, client 253:8)
+[1794289954] created vtpm9 (server fd 13, client 253:9)
+[1794289954] created vtpm10 (server fd 14, client 253:10)
+[1794289954] created vtpm11 (server fd 15, client 253:11)
+[1794289954] created vtpm12 (server fd 16, client 253:12)
+[1794289954] created vtpm13 (server fd 17, client 253:13)
+[1794289954] created vtpm14 (server fd 18, client 253:14)
+[1794289954] created vtpm15 (server fd 19, client 253:15)
+[1794289954] created vtpm16 (server fd 20, client 253:16)
+[1794289954] created vtpm17 (server fd 21, client 253:17)
+[1794289954] created vtpm18 (server fd 22, client 253:18)
+[1794289954] created vtpm19 (server fd 23, client 253:19)
+[1794289954] created vtpm20 (server fd 24, client 253:20)
+[1794289954] created vtpm21 (server fd 25, client 253:21)
+[1794289954] created vtpm22 (server fd 26, client 253:22)
+[1794289954] created vtpm23 (server fd 27, client 253:23)
+[1794289954] created vtpm24 (server fd 28, client 253:24)
+[1794289954] created vtpm25 (server fd 29, client 253:25)
+[1794289954] created vtpm26 (server fd 30, client 253:26)
+[1794289954] created vtpm27 (server fd 31, client 253:27)
+[1794289954] created vtpm28 (server fd 32, client 253:28)
+[1794289954] created vtpm29 (server fd 33, client 253:29)
+[1794289954] created vtpm30 (server fd 34, client 253:30)
+[1794289954] created vtpm31 (server fd 35, client 253:31)
+[1794289954] explicitly closing 32 server fds (each close() may block in flush_work)
+[1794289954] closing server fd 4
+[1794289954] closed server fd 4 (close took 0s)
+[1794289954] closing server fd 5
+[1794289954] closed server fd 5 (close took 0s)
+[1794289954] closing server fd 6
+[1794289954] closed server fd 6 (close took 0s)
+[1794289954] closing server fd 7
+[1794289954] closed server fd 7 (close took 0s)
+[1794289954] closing server fd 8
+[1794289954] closed server fd 8 (close took 0s)
+[1794289954] closing server fd 9
+[1794289954] closed server fd 9 (close took 0s)
+[1794289954] closing server fd 10
+[1794289954] closed server fd 10 (close took 0s)
+[1794289954] closing server fd 11
+[1794289954] closed server fd 11 (close took 0s)
+[1794289954] closing server fd 12
+[1794289954] closed server fd 12 (close took 0s)
+[1794289954] closing server fd 13
+[1794289954] closed server fd 13 (close took 0s)
+[1794289954] closing server fd 14
+[1794289954] closed server fd 14 (close took 0s)
+[1794289954] closing server fd 15
+[1794289954] closed server fd 15 (close took 0s)
+[1794289954] closing server fd 16
+[1794289954] closed server fd 16 (close took 0s)
+[1794289954] closing server fd 17
+[1794289954] closed server fd 17 (close took 0s)
+[1794289954] closing server fd 18
+[1794289954] closed server fd 18 (close took 0s)
+[1794289954] closing server fd 19
+[1794289954] closed server fd 19 (close took 0s)
+[1794289954] closing server fd 20
+[1794289954] closed server fd 20 (close took 0s)
+[1794289954] closing server fd 21
+[1794289954] closed server fd 21 (close took 0s)
+[1794289954] closing server fd 22
+[1794289954] closed server fd 22 (close took 0s)
+[1794289954] closing server fd 23
+[1794289954] closed server fd 23 (close took 0s)
+[1794289954] closing server fd 24
+[1794289954] closed server fd 24 (close took 0s)
+[1794289954] closing server fd 25
+[1794289954] closed server fd 25 (close took 0s)
+[1794289954] closing server fd 26
+[1794289954] closed server fd 26 (close took 0s)
+[1794289954] closing server fd 27
+[1794289954] closed server fd 27 (close took 0s)
+[1794289954] closing server fd 28
+[1794289954] closed server fd 28 (close took 0s)
+[1794289954] closing server fd 29
+[1794289954] closed server fd 29 (close took 0s)
+[1794289954] closing server fd 30
+[1794289954] closed server fd 30 (close took 0s)
+[1794289954] closing server fd 31
+[1794289954] closed server fd 31 (close took 0s)
+[1794289954] closing server fd 32
+[1794289954] closed server fd 32 (close took 0s)
+[1794289954] closing server fd 33
+[1794289954] closed server fd 33 (close took 0s)
+[1794289954] closing server fd 34
+[1794289954] closed server fd 34 (close took 0s)
+[1794289954] closing server fd 35
+[1794289954] closed server fd 35 (close took 0s)
+[1794289954] all 32 server fds closed (total 0s)

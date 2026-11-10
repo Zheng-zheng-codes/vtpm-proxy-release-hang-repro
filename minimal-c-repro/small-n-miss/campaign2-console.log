@@ -1,0 +1,6 @@
+[2026-11-10 11:03:58] boot qemu (container /tmp/minimal-c, no -no-reboot: guest reboots in place)
+[2026-11-10 11:05:49] guest ssh up
+[2026-11-10 11:05:50] === E1-auto-N1-run1 (baseline=0) ===
+[2026-11-10 11:13:55] E1-auto-N1-run1: result=0 (baseline=0)
+[2026-11-10 11:15:38] guest rebooted, ssh up
+[2026-11-10 11:15:38] === E1-auto-N1-run2 (baseline=0) ===
